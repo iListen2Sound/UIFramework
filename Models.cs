@@ -67,10 +67,11 @@ namespace UIFramework
 		}
 		public interface ITabbable
 		{
+			public List<IModelable> SubModels { get; set; }
 			public string Name {get;}
 			public GameObject GetNewUIInstance();
 			public void SaveAction();
-			public void AddEntry();
+			public void AddSubModel();
 		}
 
 		public class ModelMod : ModelBase, ITabbable
@@ -127,7 +128,7 @@ namespace UIFramework
 				PrefCat.SaveToFile();
 			}
 
-			public void AddEntry (IEntry model)
+			public void AddSubModel (IEntry model)
 			{
 				SubModels.Add((IModelable)model);
 			}
@@ -256,4 +257,5 @@ namespace UIFramework
 		}
 		#endregion
 	}
+
 }

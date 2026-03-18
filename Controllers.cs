@@ -162,10 +162,10 @@ namespace UIFramework
 
 
 
-					IModelListable ViewController; //ut= uiElement.GetComponent<UIFController.IModelListable>();
+					IModelListable ViewController; 
 
-					//Retrieve the appropriate game object controller component depending on the model type
-					
+					//Retrieve the appropriate game object controller component depending on the model type. 
+					//Switch statement could be unnecessary if interface was replaced with an abstract class
 					switch (model)
 					{
 						case UIFModel.ITabbable tabModel:
@@ -215,7 +215,7 @@ namespace UIFramework
 
 		}
 		/// <summary>
-		/// 
+		/// Main body of the UI. Lists individual preferences
 		/// </summary>
 		[RegisterTypeInIl2Cpp]
 
@@ -238,13 +238,13 @@ namespace UIFramework
 		//protected override GameObject UIPrefab { get { return Prefabs.TextPrefab; } }
 		public class TabButtonController : MonoBehaviour, IModelListable
 		{
-			protected UIFModel.ModelBase _model;
-			public virtual UIFModel.IModelable Model
+			protected UIFModel.ITabbable _model;
+			public virtual UIFModel.ITabbable Model
 			{
 				get { return _model; }
 				set
 				{
-					_model = (UIFModel.ModelBase) value;
+					_model = (UIFModel.ITabbable) value;
 					Label = _model.Name;
 
 				}
