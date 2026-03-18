@@ -65,7 +65,15 @@ namespace UIFramework
 
 
 		}
-		public class ModelMod : ModelBase
+		public interface ITabbable
+		{
+			public string Name {get;}
+			public GameObject GetNewUIInstance();
+			public void SaveAction();
+			public void AddEntry();
+		}
+
+		public class ModelMod : ModelBase, ITabbable
 		{
 			public MelonMod Instance { get; set; }
 			//public string ModName => Instance.Info.Name;
@@ -91,14 +99,6 @@ namespace UIFramework
 				return GameObject.Instantiate(Prefabs.ModTab);
 			}
 
-		}
-
-		public interface ITabbable
-		{
-			public string Name {get;}
-			public GameObject GetNewUIInstance();
-			public void SaveAction();
-			public void AddEntry();
 		}
 
 		public class ModelCategory : ModelBase, ITabbable

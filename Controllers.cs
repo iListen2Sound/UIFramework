@@ -168,12 +168,10 @@ namespace UIFramework
 					
 					switch (model)
 					{
-						case UIFModel.ModelMod modModel:
-						case UIFModel.ModelCategory catModel:
+						case UIFModel.ITabbable tabModel:
 							ViewController = uiElement.GetComponent<UIFController.TabButtonController>();
 							break;
-						case UIFModel.ModelEntry entryModel:
-						case UIFModel.ButtonEntry buttonEntry:
+						case UIFModel.IEntry entryModel 
 							ViewController = uiElement.GetComponent<UIFController.PreferenceEntry>();
 							break;
 						default:
