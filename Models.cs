@@ -20,19 +20,48 @@ namespace UIFramework
 	/// </summary>
 	public class UIFModel
 	{
+		/// <summary>
+		/// Implemented by all models
+		/// </summary>
 		public interface IModelable
 		{
-			public List<IModelable> SubModels { get; set; }
+			/// <summary>
+			/// Name
+			/// </summary>
 			public string Name { get; }
+			/// <summary>
+			/// 
+			/// </summary>
+			/// <returns> UI Game Object</returns>
 			public GameObject GetNewUIInstance();
+			/// <summary>
+			/// Should be called when save button is pressed
+			/// </summary>
 			public void SaveAction();
-
+			/// <summary>
+			/// Describes the parent for where the parent container should be
+			/// </summary>
+			public UIPanel TargetParent { get; }
 		}
-		public abstract class ModelBase : IModelable
+		/// <summary>
+		/// Models that contain submodels. Generally these are mods and categories representing tabs
+		/// </summary>
+		public interface IHoldSubmodels : IModelable
+		{
+			public List<IModelable> SubModels { get; set; }
+			//public string Name {get;}
+			//public GameObject GetNewUIInstance();
+			//public void SaveAction();
+			//public void AddSubModel();
+
+			
+		}
+		public abstract class ModelBase : IHoldSubmodels
 		{
 			public List<IModelable> SubModels { get; set; } = new();
 			public abstract string Name { get; }
 			public abstract GameObject GetNewUIInstance();
+
 			public virtual void SaveAction()
 			{
 
@@ -42,7 +71,7 @@ namespace UIFramework
 				return SubModels.FirstOrDefault(m => m.Name == name);
 			}
 
-
+			public abstract UIPanel TargetParent { get; }
 		}
 
 		public class RootModel : ModelBase
@@ -62,19 +91,10 @@ namespace UIFramework
 				throw new NotImplementedException();
 			}
 
-
-
-		}
-		public interface ITabbable
-		{
-			public List<IModelable> SubModels { get; set; }
-			public string Name {get;}
-			public GameObject GetNewUIInstance();
-			public void SaveAction();
-			public void AddSubModel();
+			public override UIPanel TargetParent { get => UIPanel.Window; }
 		}
 
-		public class ModelMod : ModelBase, ITabbable
+		public class ModelMod : ModelBase, IHoldSubmodels
 		{
 			public MelonMod Instance { get; set; }
 			//public string ModName => Instance.Info.Name;
@@ -100,9 +120,16 @@ namespace UIFramework
 				return GameObject.Instantiate(Prefabs.ModTab);
 			}
 
+			public void AddSubmodel(IModelable model)
+			{
+				SubModels.Add(model);
+			}
+
+
+			public override UIPanel TargetParent => UIPanel.Sidebar;
 		}
 
-		public class ModelCategory : ModelBase, ITabbable
+		public class ModelCategory : ModelBase, IHoldSubmodels
 		{
 			public MelonPreferences_Category PrefCat;
 			public override string Name => PrefCat.Identifier;
@@ -132,20 +159,25 @@ namespace UIFramework
 			{
 				SubModels.Add((IModelable)model);
 			}
+
+			public override UIPanel TargetParent => UIPanel.Topbar;
 		}
-		public interface IEntry
+		public interface IEntry : IModelable
 		{
 			public string Name { get; }
 			public string Description { get; }
 			public void SaveAction();
 			//public string DisplayName { get; }
 			public object BoxedValue { get; set; }
+
+			
 		}
 		/// <summary>
 		/// 
 		/// </summary>
 		public class ModelEntry : ModelBase, IEntry
 		{
+			public override UIPanel TargetParent { get => UIPanel.EntryPanel; }
 			public MelonPreferences_Entry PrefEntry;
 			public override string Name => PrefEntry.Identifier;
 
@@ -223,9 +255,20 @@ namespace UIFramework
 
 		}
 
+
+
+
+
+
+
+
+
+
 		#region customs
 		public class ButtonEntry : ModelBase, IEntry
 		{
+			public override UIPanel TargetParent => UIPanel.EntryPanel;
+
 			private string _name;
 			public override string Name => _name;
 
@@ -238,6 +281,7 @@ namespace UIFramework
 			/// This is only to satisfy the contract for IEntry. 
 			/// </summary>
 			public object BoxedValue { get; set; }
+			
 
 			public Action<IEntry> OnClick;
 			public ButtonEntry(string name, string description = "", string displayName = "")
@@ -256,6 +300,21 @@ namespace UIFramework
 
 		}
 		#endregion
+
+
+
+
+
+
+
+#pragma warning disable CS1591
+		public enum UIPanel 
+		{
+			Window,
+			Sidebar,
+			Topbar,
+			EntryPanel,
+		}
 	}
 
 }

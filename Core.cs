@@ -34,7 +34,7 @@ namespace UIFramework
 
 		internal string CurrentScene = "";
 		internal bool isFirstLoad = true;
-		/// <summary></summary>
+#pragma warning disable CS1591
 		public override void OnInitializeMelon()
 		{
 
@@ -48,10 +48,10 @@ namespace UIFramework
 			UIFModel.ModelMod ModModel = UIFramework.Register(this, Preferences.CatUIFramework, Preferences.Experimental, Preferences.TestBooleans);
 			UIFModel.IModelable tester = ModModel.GetSubmodel(Preferences.TestBooleans.Identifier);
 			UIFModel.ButtonEntry testButton = new UIFModel.ButtonEntry("CustomButton");
-			((UIFModel.ModelCategory)tester).AddEntry(testButton);
+			((UIFModel.ModelCategory)tester).AddSubModel(testButton);
 
 		}
-		/// <summary></summary>
+
 		public override void OnUpdate()
 		{
 			DiffLog($"");
@@ -66,6 +66,7 @@ namespace UIFramework
 
 		public override void OnSceneWasLoaded(int buildIndex, string sceneName)
 		{
+#pragma warning restore CS1591
 			CurrentScene = sceneName.ToNormal();
 			if (CurrentScene == "loader")
 			{

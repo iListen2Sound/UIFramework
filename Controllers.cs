@@ -25,8 +25,13 @@ namespace UIFramework
 	/// <remarks>I may have gone a little crazy with inheritance</remarks>
 	public class UIFController
 	{
-		//[RegisterTypeInIl2Cpp]
-		public interface IModelListable
+		/// <summary>
+		/// Controllers for models that can be submodels of other models. 
+		/// Preference Entries
+		/// Mod Buttons
+		/// Category Buttons
+		/// </summary>
+		public interface IChildable
 		{
 			/// <summary>
 			/// Reference to the model the controller works from.  
@@ -48,7 +53,7 @@ namespace UIFramework
 			public PrefList PrefRegistryPanel;
 			public Button MainActionButton;
 
-			
+
 
 			void Awake()
 			{
@@ -73,7 +78,7 @@ namespace UIFramework
 			public virtual void BuildModList()
 			{
 				ModRegistryPanel.ContainerReset();
-				
+
 				CatRegistryPanel.GetComponent<TopBar>().ContainerReset();
 				PrefRegistryPanel.GetComponent<PrefList>().ContainerReset();
 
@@ -91,7 +96,7 @@ namespace UIFramework
 			/// </remarks>
 			public virtual void SaveButtonClick()
 			{
-				
+
 				for (int i = PrefRegistryPanel.gameObject.transform.childCount - 1; i >= 0; i--)
 				{
 					PreferenceEntry entry = PrefRegistryPanel.gameObject.transform.GetChild(i).gameObject.GetComponent<PreferenceEntry>();
@@ -106,6 +111,16 @@ namespace UIFramework
 		}
 
 
+
+
+
+
+
+
+
+
+
+
 		#region List Areas
 		/// <summary>
 		/// Areas where UI elements are shown to the user. 
@@ -115,8 +130,8 @@ namespace UIFramework
 		/// </summary>
 		public class ListArea : MonoBehaviour
 		{
-			protected UIFModel.ModelBase _model;
-			public UIFModel.IModelable Model => _model;
+			protected UIFModel.IHoldSubmodels _model;
+			public UIFModel.IHoldSubmodels Model => _model;
 			public virtual void ContainerReset()
 			{
 				_model = null;
@@ -142,7 +157,7 @@ namespace UIFramework
 			/// operations may depend on the newly set model.
 			/// </remarks>
 			/// <param name="model">The model to associate with this instance. Cannot be null.</param>
-			public virtual void SetModel(UIFModel.ModelBase model)
+			public virtual void SetModel(UIFModel.IHoldSubmodels model)
 			{
 				_model = model;
 				BuildFromModelList();
@@ -154,7 +169,7 @@ namespace UIFramework
 			public void BuildFromModelList()
 			{
 				Infanticide();
-				foreach (UIFModel.ModelBase model in Model.SubModels)
+				foreach (UIFModel.IModelable model in Model.SubModels)
 				{
 					GameObject uiElement = model.GetNewUIInstance();//GameObject.Instantiate(GetUIPrefabForModel(model), this.gameObject.transform);
 					uiElement.SetActive(true);
@@ -162,23 +177,24 @@ namespace UIFramework
 
 
 
-					IModelListable ViewController; 
+					IChildable ViewController;
 
 					//Retrieve the appropriate game object controller component depending on the model type. 
 					//Switch statement could be unnecessary if interface was replaced with an abstract class
+
 					switch (model)
 					{
-						case UIFModel.ITabbable tabModel:
-							ViewController = uiElement.GetComponent<UIFController.TabButtonController>();
-							break;
-						case UIFModel.IEntry entryModel 
+						case UIFModel.IEntry entryModel:
 							ViewController = uiElement.GetComponent<UIFController.PreferenceEntry>();
+							break;
+						case UIFModel.IHoldSubmodels tabModel:
+							ViewController = uiElement.GetComponent<UIFController.TabButtonController>();
 							break;
 						default:
 							Warning($"No view found for model type {model.GetType()}");
 							continue;
 					}
-					
+
 					if (ViewController != null)
 					{
 						ViewController.Model = model;
@@ -234,17 +250,28 @@ namespace UIFramework
 		}
 		#endregion
 
+
+
+
+
+
+
+
+
+
+
 		#region TabButtons
+
 		//protected override GameObject UIPrefab { get { return Prefabs.TextPrefab; } }
-		public class TabButtonController : MonoBehaviour, IModelListable
+		public class TabButtonController : MonoBehaviour, IChildable
 		{
-			protected UIFModel.ITabbable _model;
-			public virtual UIFModel.ITabbable Model
+			protected UIFModel.IHoldSubmodels _model;
+			public virtual UIFModel.IModelable Model
 			{
 				get { return _model; }
 				set
 				{
-					_model = (UIFModel.ITabbable) value;
+					_model = (UIFModel.IHoldSubmodels)value;
 					Label = _model.Name;
 
 				}
@@ -263,16 +290,23 @@ namespace UIFramework
 			public virtual void SelectTargetPanel()
 			{
 				WindowController ParentWindow = gameObject.transform.parent.parent.parent.parent.parent.gameObject.GetComponent<WindowController>();
-				switch (this)
+				if (_model.SubModels.Count > 0)
 				{
-					case Mod mod:
-						TargetContainer = ParentWindow.CatRegistryPanel;//Prefabs.CatDisplayList.GetComponent<TopBar>();
-						ParentWindow.PrefRegistryPanel.ContainerReset();
-						break;
-					case Category cat:
-						TargetContainer = ParentWindow.PrefRegistryPanel;
-						break;
+					switch (_model.SubModels[0].TargetParent)
+					{
+						case UIFModel.UIPanel.Topbar:
+							TargetContainer = ParentWindow.CatRegistryPanel;//Prefabs.CatDisplayList.GetComponent<TopBar>();
+							ParentWindow.PrefRegistryPanel.ContainerReset();
+							break;
+						case UIFModel.UIPanel.Sidebar:
+							TargetContainer = ParentWindow.PrefRegistryPanel;
+							break;
+						default:
+							TargetContainer = ParentWindow.PrefRegistryPanel;
+							break;
+					}
 				}
+
 				TargetContainer.SetModel(_model);
 			}
 
@@ -289,12 +323,12 @@ namespace UIFramework
 
 		}
 
-		
+
 		/// <summary>
 		/// 
 		/// </summary>
 		[RegisterTypeInIl2Cpp]
-		public class Mod : TabButtonController, IModelListable
+		public class Mod : TabButtonController, IChildable
 		{
 
 			public string ModName { get; set; }
@@ -305,10 +339,20 @@ namespace UIFramework
 		/// 
 		/// </summary>
 		[RegisterTypeInIl2Cpp]
-		public class Category : TabButtonController, IModelListable
+		public class Category : TabButtonController, IChildable
 		{
 		}
 		#endregion
+
+
+
+
+
+
+
+
+
+
 
 		#region Entries
 		/*/// <summary>
@@ -316,7 +360,7 @@ namespace UIFramework
 		/// Unfortunately can't be successfully retrieved with GetComponent in the current setup
 		/// Will move to making PreferenceEntry the required base class
 		/// </summary>
-		public interface ISettingEntry : IModelListable
+		public interface ISettingEntry : IChildable
 		{
 			public string DescriptionText { set; }
 			public string IdentifierText { set; }
@@ -327,12 +371,12 @@ namespace UIFramework
 		/// <summary>
 		/// Inherit this class to create your own custom entry controllers for your own input controls.
 		/// </summary>
-		public class PreferenceEntry : MonoBehaviour, IModelListable
+		public abstract class PreferenceEntry : MonoBehaviour, IChildable
 		{
 			protected UIFModel.IEntry _model;
 			public virtual UIFModel.IModelable Model
 			{
-				get { return (UIFModel.IModelable) _model; }
+				get { return (UIFModel.IModelable)_model; }
 				set
 				{
 
@@ -342,11 +386,11 @@ namespace UIFramework
 					ModelSet();
 				}
 			}
-			
+
 			/// <summary>
 			/// Runs when the model property has been set. 
 			/// </summary>
-			public virtual void ModelSet(){}
+			public virtual void ModelSet() { }
 			/// <summary>
 			/// Sets the description text
 			/// </summary>
@@ -369,10 +413,10 @@ namespace UIFramework
 
 			}
 
-			
+
 		}
 
-		
+
 		/// <summary>
 		/// Base controller for text fields 
 		/// </summary>
@@ -443,7 +487,7 @@ namespace UIFramework
 				}
 			}
 		}
-	
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -536,7 +580,14 @@ namespace UIFramework
 
 			void OnDestroy()
 			{
-				ButtonGo.GetComponent<Button>().onClick.RemoveAllListeners();
+				try
+				{
+					ButtonGo.GetComponent<Button>().onClick.RemoveAllListeners();
+				}
+				catch (Exception ex)
+				{
+					Debug.Warning($"Can't find ButtonGo in OnDestroy {ex.Message}");
+				}
 			}
 		}
 		#region no support

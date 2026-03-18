@@ -10,7 +10,15 @@
             </summary>
             <remarks>I may have gone a little crazy with inheritance</remarks>
         </member>
-        <member name="P:UIFramework.UIFController.IModelListable.Model">
+        <member name="T:UIFramework.UIFController.IChildable">
+            <summary>
+            Controllers for models that can be submodels of other models. 
+            Preference Entries
+            Mod Buttons
+            Category Buttons
+            </summary>
+        </member>
+        <member name="P:UIFramework.UIFController.IChildable.Model">
             <summary>
             Reference to the model the controller works from.  
             </summary>
@@ -43,7 +51,7 @@
             
             </summary>
         </member>
-        <member name="M:UIFramework.UIFController.ListArea.SetModel(UIFramework.UIFModel.ModelBase)">
+        <member name="M:UIFramework.UIFController.ListArea.SetModel(UIFramework.UIFModel.IHoldSubmodels)">
             <summary>
             Sets the underlying data model for the current instance.
             </summary>
@@ -75,7 +83,7 @@
         </member>
         <member name="T:UIFramework.UIFController.PrefList">
             <summary>
-            
+            Main body of the UI. Lists individual preferences
             </summary>
         </member>
         <member name="M:UIFramework.UIFController.PrefList.SaveAction">
@@ -219,12 +227,6 @@
             
             </summary>
         </member>
-        <member name="M:UIFramework.Core.OnInitializeMelon">
-            <summary></summary>
-        </member>
-        <member name="M:UIFramework.Core.OnUpdate">
-            <summary></summary>
-        </member>
         <member name="M:UIFramework.Debug.DiffLog(System.String,System.Boolean,System.Int32)">
             <summary>
             Call in OnUpdate to monitor variables per frame but only logs if they change
@@ -293,6 +295,37 @@
             More options will eventually be available: sliders, dropdowns, multi checkboxes, radio buttons, etc.
             
             Those will be developed after the default model is functional
+            </summary>
+        </member>
+        <member name="T:UIFramework.UIFModel.IModelable">
+            <summary>
+            Implemented by all models
+            </summary>
+        </member>
+        <member name="P:UIFramework.UIFModel.IModelable.Name">
+            <summary>
+            Name
+            </summary>
+        </member>
+        <member name="M:UIFramework.UIFModel.IModelable.GetNewUIInstance">
+            <summary>
+            
+            </summary>
+            <returns> UI Game Object</returns>
+        </member>
+        <member name="M:UIFramework.UIFModel.IModelable.SaveAction">
+            <summary>
+            Should be called when save button is pressed
+            </summary>
+        </member>
+        <member name="P:UIFramework.UIFModel.IModelable.TargetParent">
+            <summary>
+            Describes the parent for where the parent container should be
+            </summary>
+        </member>
+        <member name="T:UIFramework.UIFModel.IHoldSubmodels">
+            <summary>
+            Models that contain submodels. Generally these are mods and categories representing tabs
             </summary>
         </member>
         <member name="T:UIFramework.UIFModel.ModelEntry">
