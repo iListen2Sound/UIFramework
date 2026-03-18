@@ -93,7 +93,15 @@ namespace UIFramework
 
 		}
 
-		public class ModelCategory : ModelBase
+		public interface ITabbable
+		{
+			public string Name {get;}
+			public GameObject GetNewUIInstance();
+			public void SaveAction();
+			public void AddEntry();
+		}
+
+		public class ModelCategory : ModelBase, ITabbable
 		{
 			public MelonPreferences_Category PrefCat;
 			public override string Name => PrefCat.Identifier;
@@ -128,7 +136,8 @@ namespace UIFramework
 		{
 			public string Name { get; }
 			public string Description { get; }
-			public string DisplayName { get; }
+			public void SaveAction();
+			//public string DisplayName { get; }
 			public object BoxedValue { get; set; }
 		}
 		/// <summary>
