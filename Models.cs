@@ -53,12 +53,10 @@ namespace UIFramework
 			//public GameObject GetNewUIInstance();
 			//public void SaveAction();
 			//public void AddSubModel();
-
-			
 		}
-		public abstract class ModelBase : IHoldSubmodels
+		public abstract class ModelBase
 		{
-			public List<IModelable> SubModels { get; set; } = new();
+			
 			public abstract string Name { get; }
 			public abstract GameObject GetNewUIInstance();
 
@@ -74,8 +72,9 @@ namespace UIFramework
 			public abstract UIPanel TargetParent { get; }
 		}
 
-		public class RootModel : ModelBase
+		public class RootModel : ModelBase, IHoldSubmodels
 		{
+			public List<IModelable> SubModels { get; set; } = new();
 			private string _name = string.Empty;
 			public override string Name => _name;
 			public void SetName(string name)
@@ -96,6 +95,7 @@ namespace UIFramework
 
 		public class ModelMod : ModelBase, IHoldSubmodels
 		{
+			public List<IModelable> SubModels { get; set; } = new();
 			public MelonMod Instance { get; set; }
 			//public string ModName => Instance.Info.Name;
 
@@ -131,6 +131,7 @@ namespace UIFramework
 
 		public class ModelCategory : ModelBase, IHoldSubmodels
 		{
+			public List<IModelable> SubModels { get; set; } = new();
 			public MelonPreferences_Category PrefCat;
 			public override string Name => PrefCat.Identifier;
 
