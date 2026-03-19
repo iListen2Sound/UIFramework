@@ -49,12 +49,8 @@ namespace UIFramework
 		public interface IHoldSubmodels : IModelable
 		{
 			public List<IModelable> SubModels { get; set; }
-			//public string Name {get;}
-			//public GameObject GetNewUIInstance();
-			//public void SaveAction();
-			//public void AddSubModel();
 		}
-		public abstract class ModelBase
+		public abstract class ModelBase, IModelable
 		{
 			
 			public abstract string Name { get; }
@@ -72,9 +68,26 @@ namespace UIFramework
 			public abstract UIPanel TargetParent { get; }
 		}
 
+		public abstract class ModelSideTab : ModelBase, IHoldSubmodels
+		{
+			public virtual List<IModelable> SubModels { get; set; } = new();
+			public override GameObject GetNewUIInstance()
+			{
+				return GameObject.Instantiate(Prefabs.ModTab);
+			}
+		}
+		public abstract class ModelTopTab : ModelBase, IHoldSubmodels
+		{
+			public virtual List<IModelable> SubModels { get; set; } = new();
+			public override GameObject GetNewUIInstance()
+			{
+				return GameObject.Instantiate(Prefabs.CatTab);
+			}
+		}
+
 		public class RootModel : ModelBase, IHoldSubmodels
 		{
-			public List<IModelable> SubModels { get; set; } = new();
+			public virtual List<IModelable> SubModels { get; set; } = new();
 			private string _name = string.Empty;
 			public override string Name => _name;
 			public void SetName(string name)
@@ -93,9 +106,9 @@ namespace UIFramework
 			public override UIPanel TargetParent { get => UIPanel.Window; }
 		}
 
-		public class ModelMod : ModelBase, IHoldSubmodels
+		public class ModelMod : ModelSideTab, IHoldSubmodels
 		{
-			public List<IModelable> SubModels { get; set; } = new();
+			//public List<IModelable> SubModels { get; set; } = new();
 			public MelonMod Instance { get; set; }
 			//public string ModName => Instance.Info.Name;
 
@@ -129,7 +142,7 @@ namespace UIFramework
 			public override UIPanel TargetParent => UIPanel.Sidebar;
 		}
 
-		public class ModelCategory : ModelBase, IHoldSubmodels
+		public class ModelCategory : ModelTopTab, IHoldSubmodels
 		{
 			public List<IModelable> SubModels { get; set; } = new();
 			public MelonPreferences_Category PrefCat;
