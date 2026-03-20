@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Events;
 using static UIFramework.UIFController;
 
 namespace UIFramework
@@ -53,11 +54,12 @@ namespace UIFramework
 		{
 			public List<IModelable> SubModels { get; set; }
 			public IModelable GetSubmodel(string identifier);
+			public void AddSubmodel(IModelable model);
 		}
 		/// <summary>
 		/// Goes on the main panel. Contains controls for manipulating preferences or just general UI controls
 		/// </summary>
-		public interface IEntry : IModelable
+		public interface IEntry
 		{
 			public string Identifier { get; }
 			public string Description { get; }
@@ -65,7 +67,7 @@ namespace UIFramework
 			/// If the 
 			/// </summary>
 			public void SaveAction();
-			//public string DisplayName { get; }
+			public string DisplayName { get; }
 			//public object BoxedValue { get; set; }
 
 
@@ -96,7 +98,9 @@ namespace UIFramework
 
 			}
 		}
-
+		/// <summary>
+		/// Models that become buttons on the sidebar and topbar
+		/// </summary>
 		public abstract class SelectableModelBase : ModelBase, IHoldSubmodels
 		{
 			public virtual List<IModelable> SubModels { get; set; } = new();
@@ -104,6 +108,20 @@ namespace UIFramework
 			{
 				return SubModels.FirstOrDefault(m => m.Identifier == name);
 			}
+			public virtual void AddSubmodel(IModelable submodel)
+			{
+				SubModels.Add(submodel);
+			}
+			public virtual void AddSubmodel(params IModelable[] submodel)
+			{
+				SubModels.AddRange(submodel);
+			}
+
+			public virtual void AddSubmodel(List<IModelable> submodels)
+			{
+				SubModels.AddRange(submodels);
+			}
+
 		}
 
 		public abstract class ModelModItem : SelectableModelBase
@@ -125,7 +143,7 @@ namespace UIFramework
 
 		public abstract class ModelEntryItem : ModelBase, IEntry
 		{
-			public abstract string Description {get; }
+			public abstract string Description { get; }
 
 
 		}
@@ -148,18 +166,18 @@ namespace UIFramework
 		{
 
 			public virtual List<IModelable> SubModels { get; set; } = new();
-			
+
 			private string _name = string.Empty;
-			
+
 			public string Identifier => _name;
 			public string DisplayName => _name;
-			
+
 			public void SetName(string name)
 			{
 				_name = name;
 			}
-			
-			public void AddModModel(ModelMod mod)
+
+			public void AddSubmodel(IModelable mod)
 			{
 				SubModels.Add(mod);
 			}
@@ -194,6 +212,10 @@ namespace UIFramework
 				{
 					SubModels.Add(new ModelMelonCategory(cat));
 				}
+			}
+			public ModelMod(MelonMod instance)
+			{
+				Instance = instance;
 			}
 
 
@@ -243,13 +265,13 @@ namespace UIFramework
 		/// <summary>
 		/// 
 		/// </summary>
-		public class ModelMelonEntry : IModelable, IEntry
+		public class ModelMelonEntry : ModelEntryItem
 		{
 			public UIPanel TargetParent { get => UIPanel.EntryPanel; }
 			public MelonPreferences_Entry PrefEntry;
-			public string Identifier => PrefEntry.Identifier;
-			public string DisplayName => PrefEntry.DisplayName.Trim() == "" ? PrefEntry.Identifier : PrefEntry.DisplayName;
-			public virtual string Description => PrefEntry.Description;
+			public override string Identifier => PrefEntry.Identifier;
+			public override string DisplayName => PrefEntry.DisplayName.Trim() == "" ? PrefEntry.Identifier : PrefEntry.DisplayName;
+			public override string Description => PrefEntry.Description;
 
 			public object BoxedValue
 			{
@@ -282,7 +304,7 @@ namespace UIFramework
 			/// If a custom one is provided, it will return an instance of that instead
 			/// </summary>
 			/// <returns></returns>
-			public GameObject GetNewUIInstance()
+			public override GameObject GetNewUIInstance()
 			{
 				if (_uiPrefabSource == null)
 				{
@@ -332,17 +354,39 @@ namespace UIFramework
 
 
 		#region customs
-		public class ButtonEntry : IModelable, IEntry
+		/// <summary>
+		/// 
+		/// </summary>
+		public class EmptyCategory : ModelCategoryItem
+		{
+			private string _displayName;
+			public override string DisplayName => _displayName;
+			private string _identifier;
+			public override string Identifier => _identifier;
+
+			public EmptyCategory( string identifier, string displayName)
+			{
+				_identifier = identifier;
+				_displayName = displayName;
+			}
+			public EmptyCategory(string identifier)
+			{
+				_identifier = identifier;
+				_displayName = identifier;
+			}
+		}
+
+		public class ButtonEntry : ModelEntryItem
 		{
 
 			private string _name;
-			public string Identifier => _name;
+			public override string Identifier => _name;
 
 			private string _description;
-			public string Description => _description;
+			public override string Description => _description;
 
 			private string _displayName;
-			public string DisplayName => _displayName;
+			public override string DisplayName => _displayName;
 			/// <summary>
 			/// This is only to satisfy the contract for IEntry. 
 			/// </summary>
@@ -350,20 +394,18 @@ namespace UIFramework
 
 			public void SaveAction() { }
 
-			public Action<IEntry> OnClick;
-			public ButtonEntry(string name, string description = "", string displayName = "")
+			public Action<UIFController.ButtonEntry> OnClick;
+
+
+			public ButtonEntry(Action<UIFController.ButtonEntry> onClick, string name, string description ="", string displayName="")
 			{
 				_name = name;
 				_description = description;
-				_displayName = displayName;
+				_displayName = displayName == "" ? name : displayName;
+				OnClick += onClick;
 			}
 
-			public GameObject GetNewUIInstance() => UIFramework.GetPrefab(InputType.Button);
-			public virtual void OnClickRelay()
-			{
-				OnClick?.Invoke(this);
-			}
-
+			public override GameObject GetNewUIInstance() => UIFramework.GetPrefab(InputType.Button);
 
 
 		}

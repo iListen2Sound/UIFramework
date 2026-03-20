@@ -48,9 +48,8 @@ namespace UIFramework
 			Preferences.InitializePrefs();
 			UIFModel.ModelMod ModModel = UIFramework.Register(this, Preferences.CatUIFramework, Preferences.Experimental, Preferences.TestBooleans, Preferences.TestEmptyDisplayName);
 			UIFModel.IModelable tester = ModModel.GetSubmodel(Preferences.TestBooleans.Identifier);
-			UIFModel.ButtonEntry testButton = new UIFModel.ButtonEntry("CustomButton");
+			UIFModel.ButtonEntry testButton = new UIFModel.ButtonEntry(CustomClick, "CustomButton", "just a test", "Custom Button");
 			((UIFModel.ModelMelonCategory)tester).AddSubModel(testButton);
-
 		}
 
 		public override void OnUpdate()
@@ -102,6 +101,11 @@ namespace UIFramework
 		public void MelPrefsSaved(string s)
 		{
 			Debug.Deb("MelPrefsSaved called " + s);
+		}
+
+		public void CustomClick(UIFController.Entry button)
+		{
+			Debug.Log($"Clicked: {button.DisplayName} ");
 		}
 	}
 }	

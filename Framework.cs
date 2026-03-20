@@ -31,7 +31,13 @@ namespace UIFramework
 		public static UIFModel.ModelMod Register(MelonMod modInstance, params MelonPreferences_Category[] categories)
 		{
 			UIFModel.ModelMod NewModModel = new(modInstance, categories.ToList());
-			ModelInstance.AddModModel(NewModModel);
+			ModelInstance.AddSubmodel(NewModModel);
+			return NewModModel;
+		}
+		public static UIFModel.ModelMod Register(MelonMod modInstance)
+		{
+			UIFModel.ModelMod NewModModel = new(modInstance);
+			ModelInstance.AddSubmodel(NewModModel);
 			return NewModModel;
 		}
 
