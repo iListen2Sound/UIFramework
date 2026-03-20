@@ -40,15 +40,16 @@ namespace UIFramework
 
 			LoggerInstance.Msg("Initialized.");
 			Instance = this;
+			MelonPreferences.OnPreferencesSaved.Subscribe(MelPrefsSaved);
 			
 		}
 		public override void OnLateInitializeMelon()
 		{
 			Preferences.InitializePrefs();
-			UIFModel.ModelMod ModModel = UIFramework.Register(this, Preferences.CatUIFramework, Preferences.Experimental, Preferences.TestBooleans);
+			UIFModel.ModelMod ModModel = UIFramework.Register(this, Preferences.CatUIFramework, Preferences.Experimental, Preferences.TestBooleans, Preferences.TestEmptyDisplayName);
 			UIFModel.IModelable tester = ModModel.GetSubmodel(Preferences.TestBooleans.Identifier);
 			UIFModel.ButtonEntry testButton = new UIFModel.ButtonEntry("CustomButton");
-			((UIFModel.ModelCategory)tester).AddSubModel(testButton);
+			((UIFModel.ModelMelonCategory)tester).AddSubModel(testButton);
 
 		}
 
@@ -75,11 +76,17 @@ namespace UIFramework
 
 			if (CurrentScene == "gym" && isFirstLoad) FirstGymLoad();
 
-			if(!isFirstLoad)
-				UIFramework.MainWindow.SetActive(false); 
-			
-			
+			if (!isFirstLoad)
+			{
+				if(UIFramework.MainWindow.activeSelf)
+				{
+					UIFramework.MainWindow.SetActive(!Preferences.AutoHideOnSceneLoad.Value);
+				}
+			}
 		}
+			
+			
+		
 
 		internal void FirstGymLoad()
 		{
@@ -92,6 +99,9 @@ namespace UIFramework
 			UIFramework.MainWindow.SetActive(false);
 		}
 
-
+		public void MelPrefsSaved(string s)
+		{
+			Debug.Deb("MelPrefsSaved called " + s);
+		}
 	}
 }	

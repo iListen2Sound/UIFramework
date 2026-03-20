@@ -1,121 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="UIFramework.UIFController">
-    <Position X="0.5" Y="2" Width="1.5" />
-    <Compartments>
-      <Compartment Name="Nested Types" Collapsed="false" />
-    </Compartments>
-    <NestedTypes>
-      <Class Name="UIFramework.UIFController.PrefBool" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Controllers.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="UIFramework.UIFController.PrefText" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Controllers.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Interface Name="UIFramework.UIFController.IChildable" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Controllers.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Interface>
-      <Class Name="UIFramework.UIFController.ButtonEntry" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Controllers.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="UIFramework.UIFController.Mod" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Controllers.cs</NewMemberFileName>
-        </TypeIdentifier>
-        <Lollipop Position="0.2" />
-      </Class>
-      <Class Name="UIFramework.UIFController.ListArea" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Controllers.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="UIFramework.UIFController.PreferenceEntry">
-        <TypeIdentifier>
-          <NewMemberFileName>Controllers.cs</NewMemberFileName>
-        </TypeIdentifier>
-        <Lollipop Position="0.2" />
-      </Class>
-      <Class Name="UIFramework.UIFController.Category" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Controllers.cs</NewMemberFileName>
-        </TypeIdentifier>
-        <Lollipop Position="0.2" />
-      </Class>
-      <Class Name="UIFramework.UIFController.PrefDropDown" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Controllers.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="UIFramework.UIFController.PrefFloat">
-        <TypeIdentifier>
-          <NewMemberFileName>Controllers.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="UIFramework.UIFController.TextInputEntry" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Controllers.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="UIFramework.UIFController.PrefList" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Controllers.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="UIFramework.UIFController.WindowController" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Controllers.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="UIFramework.UIFController.TopBar" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Controllers.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="UIFramework.UIFController.PrefSlider" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Controllers.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="UIFramework.UIFController.PrefInt" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Controllers.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="UIFramework.UIFController.PrefMulti" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Controllers.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="UIFramework.UIFController.TabButtonController" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Controllers.cs</NewMemberFileName>
-        </TypeIdentifier>
-        <Lollipop Position="0.2" />
-      </Class>
-      <Class Name="UIFramework.UIFController.PrefDouble" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Controllers.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="UIFramework.UIFController.Sidebar" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Controllers.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-    </NestedTypes>
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Controllers.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="UIFramework.BuildInfo" Collapsed="true">
     <Position X="5.75" Y="2" Width="1.5" />
     <TypeIdentifier>
@@ -131,7 +15,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="UIFramework.Debug">
-    <Position X="5.25" Y="8.5" Width="1.5" />
+    <Position X="9.5" Y="6" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAgAAAAAAAQCAAAAAABAAAAgABAAAAAAAAAEAAAA=</HashCode>
       <FileName>debugHelpers.cs</FileName>
@@ -158,77 +42,10 @@
       <FileName>Helpers.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="UIFramework.UIFModel">
-    <Position X="2.5" Y="2" Width="1.5" />
-    <Compartments>
-      <Compartment Name="Nested Types" Collapsed="false" />
-    </Compartments>
-    <NestedTypes>
-      <Class Name="UIFramework.UIFModel.ModelCategory" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Models.cs</NewMemberFileName>
-        </TypeIdentifier>
-        <Lollipop Position="0.2" />
-      </Class>
-      <Class Name="UIFramework.UIFModel.ModelEntry" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Models.cs</NewMemberFileName>
-        </TypeIdentifier>
-        <Lollipop Position="0.2" />
-      </Class>
-      <Interface Name="UIFramework.UIFModel.IHoldSubmodels" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Models.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Interface>
-      <Interface Name="UIFramework.UIFModel.IModelable" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Models.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Interface>
-      <Interface Name="UIFramework.UIFModel.IEntry">
-        <TypeIdentifier>
-          <NewMemberFileName>Models.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Interface>
-      <Class Name="UIFramework.UIFModel.ModelMod" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Models.cs</NewMemberFileName>
-        </TypeIdentifier>
-        <Lollipop Position="0.2" />
-      </Class>
-      <Class Name="UIFramework.UIFModel.RootModel" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Models.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Enum Name="UIFramework.UIFModel.TargetParent" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Models.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Enum>
-      <Class Name="UIFramework.UIFModel.ButtonEntry" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Models.cs</NewMemberFileName>
-        </TypeIdentifier>
-        <Lollipop Position="0.2" />
-      </Class>
-      <Class Name="UIFramework.UIFModel.ModelBase" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Models.cs</NewMemberFileName>
-        </TypeIdentifier>
-        <Lollipop Position="0.2" />
-      </Class>
-    </NestedTypes>
+  <Class Name="UIFramework.Preferences">
+    <Position X="11.75" Y="8.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Models.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="UIFramework.Preferences" Collapsed="true">
-    <Position X="8" Y="8.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAABAEABAAAAIAAAAAAARAAAAAAAMAgIAHgAAAAABAA=</HashCode>
+      <HashCode>AAABAAABAIAAIAAAAAAARAAAAAAAMAgIAHiAAAAABAA=</HashCode>
       <FileName>Preferences.cs</FileName>
     </TypeIdentifier>
   </Class>

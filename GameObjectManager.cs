@@ -46,7 +46,9 @@ namespace UIFramework
 		internal static GameObject FloatPrefab;
 		internal static GameObject DoublePrefab;
 
+
 		internal static GameObject ButtonPrefab;
+
 		internal static Button MainActionButton;
 
 		internal static void LoadAssetBundle()

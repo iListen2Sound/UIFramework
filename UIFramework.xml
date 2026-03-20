@@ -121,7 +121,7 @@
             Sets the description text
             </summary>
         </member>
-        <member name="P:UIFramework.UIFController.PreferenceEntry.IdentifierText">
+        <member name="P:UIFramework.UIFController.PreferenceEntry.DisplayName">
             <summary>
             Sets the identifier text
             </summary>
@@ -135,6 +135,11 @@
         <member name="T:UIFramework.UIFController.TextInputEntry">
             <summary>
             Base controller for text fields 
+            </summary>
+        </member>
+        <member name="P:UIFramework.UIFController.TextInputEntry._prefModel">
+            <summary>
+            TODO: This is jank. Deal with this by creating a base class for preference entries that aren't based on melonloader.
             </summary>
         </member>
         <member name="P:UIFramework.UIFController.TextInputEntry.textField">
@@ -289,7 +294,7 @@
         <member name="T:UIFramework.UIFModel">
             <summary>
             Models define how the UI is built. The heirarchy is simple and follows melonpreferences basic structure
-            ModelMod ->  ModelCategory -> ModelEntry
+            ModelMod ->  ModelMelonCategory -> ModelMelonEntry
             Modders can use the default model just by calling UIF.Register(modInstance, categories) in their OnLateInitializeMelon. 
             The default model will use simple input methods: bools will be toggles, strings will be text input fields and so would numerics.
             More options will eventually be available: sliders, dropdowns, multi checkboxes, radio buttons, etc.
@@ -302,25 +307,20 @@
             Implemented by all models
             </summary>
         </member>
-        <member name="P:UIFramework.UIFModel.IModelable.Name">
+        <member name="P:UIFramework.UIFModel.IModelable.Identifier">
             <summary>
-            Name
+            Identifier
             </summary>
         </member>
         <member name="M:UIFramework.UIFModel.IModelable.GetNewUIInstance">
             <summary>
-            
+            Instantiates a new Game object associated with them model
             </summary>
             <returns> UI Game Object</returns>
         </member>
         <member name="M:UIFramework.UIFModel.IModelable.SaveAction">
             <summary>
-            Should be called when save button is pressed
-            </summary>
-        </member>
-        <member name="P:UIFramework.UIFModel.IModelable.TargetParent">
-            <summary>
-            Describes the parent for where the parent container should be
+            Should be called when save button is pressed. Runs after all ancestor's save actions have been run
             </summary>
         </member>
         <member name="T:UIFramework.UIFModel.IHoldSubmodels">
@@ -328,12 +328,22 @@
             Models that contain submodels. Generally these are mods and categories representing tabs
             </summary>
         </member>
-        <member name="T:UIFramework.UIFModel.ModelEntry">
+        <member name="T:UIFramework.UIFModel.IEntry">
+            <summary>
+            Goes on the main panel. Contains controls for manipulating preferences or just general UI controls
+            </summary>
+        </member>
+        <member name="M:UIFramework.UIFModel.IEntry.SaveAction">
+            <summary>
+            If the 
+            </summary>
+        </member>
+        <member name="T:UIFramework.UIFModel.ModelMelonEntry">
             <summary>
             
             </summary>
         </member>
-        <member name="M:UIFramework.UIFModel.ModelEntry.SetUIPrefabSource(UnityEngine.GameObject)">
+        <member name="M:UIFramework.UIFModel.ModelMelonEntry.SetUIPrefabSource(UnityEngine.GameObject)">
             <summary>
             Use this function to provide your own prefab for this entry. 
             The prefab must have a component that implements IUIFrameworkEntry and properly handles the value changes and saving. 
@@ -343,7 +353,7 @@
             </summary>
             <param name="prefab"></param>
         </member>
-        <member name="M:UIFramework.UIFModel.ModelEntry.GetNewUIInstance">
+        <member name="M:UIFramework.UIFModel.ModelMelonEntry.GetNewUIInstance">
             <summary>
             Returns an instance of the game object associated with the MelonPreferences_Entry type.
             If a custom one is provided, it will return an instance of that instead

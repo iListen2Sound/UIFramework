@@ -5,13 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using static UIFramework.UIFController;
 
 namespace UIFramework
 {
-
+	//TODO: Too much repitition Reinstate base model classq
 	/// <summary>
 	/// Models define how the UI is built. The heirarchy is simple and follows melonpreferences basic structure
-	/// ModelMod ->  ModelCategory -> ModelEntry
+	/// ModelMod ->  ModelMelonCategory -> ModelMelonEntry
 	/// Modders can use the default model just by calling UIF.Register(modInstance, categories) in their OnLateInitializeMelon. 
 	/// The default model will use simple input methods: bools will be toggles, strings will be text input fields and so would numerics.
 	/// More options will eventually be available: sliders, dropdowns, multi checkboxes, radio buttons, etc.
@@ -20,28 +21,30 @@ namespace UIFramework
 	/// </summary>
 	public class UIFModel
 	{
+		#region Interfaces
 		/// <summary>
 		/// Implemented by all models
 		/// </summary>
 		public interface IModelable
 		{
 			/// <summary>
-			/// Name
+			/// Identifier
 			/// </summary>
-			public string Name { get; }
+			public string Identifier { get; }
+			public string DisplayName { get; }
 			/// <summary>
-			/// 
+			/// Instantiates a new Game object associated with them model
 			/// </summary>
 			/// <returns> UI Game Object</returns>
 			public GameObject GetNewUIInstance();
 			/// <summary>
-			/// Should be called when save button is pressed
+			/// Should be called when save button is pressed. Runs after all ancestor's save actions have been run
 			/// </summary>
 			public void SaveAction();
 			/// <summary>
 			/// Describes the parent for where the parent container should be
 			/// </summary>
-			public UIPanel TargetParent { get; }
+			//public UIPanel TargetParent { get; }
 		}
 		/// <summary>
 		/// Models that contain submodels. Generally these are mods and categories representing tabs
@@ -49,71 +52,154 @@ namespace UIFramework
 		public interface IHoldSubmodels : IModelable
 		{
 			public List<IModelable> SubModels { get; set; }
+			public IModelable GetSubmodel(string identifier);
 		}
-		public abstract class ModelBase, IModelable
+		/// <summary>
+		/// Goes on the main panel. Contains controls for manipulating preferences or just general UI controls
+		/// </summary>
+		public interface IEntry : IModelable
 		{
-			
-			public abstract string Name { get; }
+			public string Identifier { get; }
+			public string Description { get; }
+			/// <summary>
+			/// If the 
+			/// </summary>
+			public void SaveAction();
+			//public string DisplayName { get; }
+			//public object BoxedValue { get; set; }
+
+
+		}
+		#endregion
+
+
+
+
+
+
+
+
+
+
+
+		#region Abstracts
+		/*public abstract class ModelBase : IModelable
+		{
+
+			public abstract string Identifier { get; }
 			public abstract GameObject GetNewUIInstance();
 
 			public virtual void SaveAction()
 			{
 
 			}
-			public virtual IModelable GetSubmodel(string name)
+		}
+		*/
+		public abstract class SelectableModelBase : IModelable, IHoldSubmodels
+		{
+			public abstract string Identifier { get; }
+			public abstract string DisplayName { get; }
+
+			public virtual List<IModelable> SubModels { get; set; } = new();
+
+			
+
+			public IModelable GetSubmodel(string name)
 			{
-				return SubModels.FirstOrDefault(m => m.Name == name);
+				return SubModels.FirstOrDefault(m => m.Identifier == name);
 			}
 
-			public abstract UIPanel TargetParent { get; }
+			public virtual void SaveAction() { }
+			public abstract GameObject GetNewUIInstance();
 		}
-
-		public abstract class ModelSideTab : ModelBase, IHoldSubmodels
+		public abstract class ModelModItem : SelectableModelBase
 		{
-			public virtual List<IModelable> SubModels { get; set; } = new();
+
 			public override GameObject GetNewUIInstance()
 			{
 				return GameObject.Instantiate(Prefabs.ModTab);
 			}
+
 		}
-		public abstract class ModelTopTab : ModelBase, IHoldSubmodels
+		public abstract class ModelCategoryItem : SelectableModelBase
 		{
-			public virtual List<IModelable> SubModels { get; set; } = new();
 			public override GameObject GetNewUIInstance()
 			{
 				return GameObject.Instantiate(Prefabs.CatTab);
 			}
 		}
 
-		public class RootModel : ModelBase, IHoldSubmodels
+		public abstract class ModelEntryItem : IEntry
 		{
+			public abstract string Identifier { get; }
+
+
+			public abstract string Description {get; }
+
+
+			public abstract string DisplayName { get; }
+
+			//public object BoxedValue
+
+			public abstract GameObject GetNewUIInstance();
+
+			public abstract void SaveAction();
+
+
+		}
+
+		#endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+		public class RootModel : IHoldSubmodels
+		{
+
 			public virtual List<IModelable> SubModels { get; set; } = new();
+			
 			private string _name = string.Empty;
-			public override string Name => _name;
+			
+			public string Identifier => _name;
+			public string DisplayName => _name;
+			
 			public void SetName(string name)
 			{
 				_name = name;
 			}
+			
 			public void AddModModel(ModelMod mod)
 			{
 				SubModels.Add(mod);
 			}
-			public override GameObject GetNewUIInstance()
-			{
-				throw new NotImplementedException();
-			}
 
-			public override UIPanel TargetParent { get => UIPanel.Window; }
+			public IModelable GetSubmodel(string name)
+			{
+				return SubModels.FirstOrDefault(m => m.Identifier == name);
+			}
+			public GameObject GetNewUIInstance() { return null; }
+
+			public void SaveAction() { }
+
 		}
 
-		public class ModelMod : ModelSideTab, IHoldSubmodels
+		public class ModelMod : ModelModItem
 		{
 			//public List<IModelable> SubModels { get; set; } = new();
 			public MelonMod Instance { get; set; }
-			//public string ModName => Instance.Info.Name;
+			//public string ModName => Instance.Info.Identifier;
 
-			public override string Name => Instance.Info.Name;
-
+			public override string Identifier => Instance.Info.Name;
+			public override string DisplayName => Identifier;
 
 			//internal List<ModelBase> catModelList = new();
 
@@ -124,44 +210,36 @@ namespace UIFramework
 
 				foreach (MelonPreferences_Category cat in catList)
 				{
-					SubModels.Add(new ModelCategory(cat));
+					SubModels.Add(new ModelMelonCategory(cat));
 				}
 			}
 
-			public override GameObject GetNewUIInstance()
-			{
-				return GameObject.Instantiate(Prefabs.ModTab);
-			}
 
 			public void AddSubmodel(IModelable model)
 			{
 				SubModels.Add(model);
 			}
 
-
-			public override UIPanel TargetParent => UIPanel.Sidebar;
 		}
 
-		public class ModelCategory : ModelTopTab, IHoldSubmodels
+
+
+
+		public class ModelMelonCategory : ModelCategoryItem
 		{
-			public List<IModelable> SubModels { get; set; } = new();
+			//public List<IModelable> SubModels { get; set; }
 			public MelonPreferences_Category PrefCat;
-			public override string Name => PrefCat.Identifier;
+			public override string Identifier => PrefCat.Identifier;
+			public override string DisplayName => PrefCat.DisplayName.Trim() == "" ? PrefCat.Identifier : PrefCat.DisplayName;
 
-
-			public ModelCategory(MelonPreferences_Category cat)
+			public ModelMelonCategory(MelonPreferences_Category cat)
 			{
 				PrefCat = cat;
 				foreach (MelonPreferences_Entry entry in PrefCat.Entries)
 				{
-					SubModels.Add(new ModelEntry(entry));
+					SubModels.Add(new ModelMelonEntry(entry));
 				}
 
-			}
-
-			public override GameObject GetNewUIInstance()
-			{
-				return GameObject.Instantiate(Prefabs.CatTab);
 			}
 
 			public override void SaveAction()
@@ -169,41 +247,34 @@ namespace UIFramework
 				PrefCat.SaveToFile();
 			}
 
-			public void AddSubModel (IEntry model)
+			public void AddSubModel(IEntry model)
 			{
 				SubModels.Add((IModelable)model);
 			}
 
-			public override UIPanel TargetParent => UIPanel.Topbar;
 		}
-		public interface IEntry : IModelable
-		{
-			public string Name { get; }
-			public string Description { get; }
-			public void SaveAction();
-			//public string DisplayName { get; }
-			public object BoxedValue { get; set; }
 
-			
-		}
+
+
+
+
 		/// <summary>
 		/// 
 		/// </summary>
-		public class ModelEntry : ModelBase, IEntry
+		public class ModelMelonEntry : IModelable, IEntry
 		{
-			public override UIPanel TargetParent { get => UIPanel.EntryPanel; }
+			public UIPanel TargetParent { get => UIPanel.EntryPanel; }
 			public MelonPreferences_Entry PrefEntry;
-			public override string Name => PrefEntry.Identifier;
-
+			public string Identifier => PrefEntry.Identifier;
+			public string DisplayName => PrefEntry.DisplayName.Trim() == "" ? PrefEntry.Identifier : PrefEntry.DisplayName;
 			public virtual string Description => PrefEntry.Description;
-			public virtual string DisplayName => PrefEntry.DisplayName;
 
-			public object BoxedValue 
+			public object BoxedValue
 			{
 				get => PrefEntry.BoxedValue;
 				set => PrefEntry.BoxedValue = value;
 			}
-			public ModelEntry(MelonPreferences_Entry prefEntry)
+			public ModelMelonEntry(MelonPreferences_Entry prefEntry)
 			{
 				PrefEntry = prefEntry;
 
@@ -229,7 +300,7 @@ namespace UIFramework
 			/// If a custom one is provided, it will return an instance of that instead
 			/// </summary>
 			/// <returns></returns>
-			public override GameObject GetNewUIInstance()
+			public GameObject GetNewUIInstance()
 			{
 				if (_uiPrefabSource == null)
 				{
@@ -261,7 +332,7 @@ namespace UIFramework
 				}
 			}
 
-			public override void SaveAction()
+			public void SaveAction()
 			{
 
 			}
@@ -279,12 +350,11 @@ namespace UIFramework
 
 
 		#region customs
-		public class ButtonEntry : ModelBase, IEntry
+		public class ButtonEntry : IModelable, IEntry
 		{
-			public override UIPanel TargetParent => UIPanel.EntryPanel;
 
 			private string _name;
-			public override string Name => _name;
+			public string Identifier => _name;
 
 			private string _description;
 			public string Description => _description;
@@ -295,7 +365,8 @@ namespace UIFramework
 			/// This is only to satisfy the contract for IEntry. 
 			/// </summary>
 			public object BoxedValue { get; set; }
-			
+
+			public void SaveAction() { }
 
 			public Action<IEntry> OnClick;
 			public ButtonEntry(string name, string description = "", string displayName = "")
@@ -305,11 +376,12 @@ namespace UIFramework
 				_displayName = displayName;
 			}
 
-			public override GameObject GetNewUIInstance() => UIFramework.GetPrefab(InputType.Button);
+			public GameObject GetNewUIInstance() => UIFramework.GetPrefab(InputType.Button);
 			public virtual void OnClickRelay()
 			{
 				OnClick?.Invoke(this);
 			}
+
 
 
 		}
@@ -322,7 +394,7 @@ namespace UIFramework
 
 
 #pragma warning disable CS1591
-		public enum UIPanel 
+		public enum UIPanel
 		{
 			Window,
 			Sidebar,

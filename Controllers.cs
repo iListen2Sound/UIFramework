@@ -45,7 +45,7 @@ namespace UIFramework
 		public class WindowController : MonoBehaviour
 		{
 			protected UIFModel.RootModel _model;
-			public UIFModel.ModelBase Model { get { return _model; } }
+			public UIFModel.IModelable Model { get { return _model; } }
 
 			public GameObject MainCanvas;
 			public Sidebar ModRegistryPanel;
@@ -237,7 +237,7 @@ namespace UIFramework
 
 		public class PrefList : ListArea
 		{
-			public UIFModel.ModelCategory SelectedCategory => Model as UIFModel.ModelCategory;
+			public UIFModel.ModelMelonCategory SelectedCategory => Model as UIFModel.ModelMelonCategory;
 			/// <summary>
 			/// When the save button is clicked, the selected category save action will be called. The model is now in charge of what that means
 			/// </summary>
@@ -272,7 +272,7 @@ namespace UIFramework
 				set
 				{
 					_model = (UIFModel.IHoldSubmodels)value;
-					Label = _model.Name;
+					Label = _model.DisplayName;
 
 				}
 			}
@@ -292,13 +292,13 @@ namespace UIFramework
 				WindowController ParentWindow = gameObject.transform.parent.parent.parent.parent.parent.gameObject.GetComponent<WindowController>();
 				if (_model.SubModels.Count > 0)
 				{
-					switch (_model.SubModels[0].TargetParent)
+					switch (_model.SubModels[0])
 					{
-						case UIFModel.UIPanel.Topbar:
+						case UIFModel.ModelCategoryItem:
 							TargetContainer = ParentWindow.CatRegistryPanel;//Prefabs.CatDisplayList.GetComponent<TopBar>();
 							ParentWindow.PrefRegistryPanel.ContainerReset();
 							break;
-						case UIFModel.UIPanel.Sidebar:
+						case UIFModel.IEntry:
 							TargetContainer = ParentWindow.PrefRegistryPanel;
 							break;
 						default:
@@ -363,7 +363,7 @@ namespace UIFramework
 		public interface ISettingEntry : IChildable
 		{
 			public string DescriptionText { set; }
-			public string IdentifierText { set; }
+			public string DisplayName { set; }
 			//override this function to create your own validation check
 			public bool ValidationCheck();
 			
@@ -380,9 +380,9 @@ namespace UIFramework
 				set
 				{
 
-					_model = (UIFModel.IEntry)value;
+					_model = (UIFModel.ModelMelonEntry)value;
 					DescriptionText = _model.Description;
-					IdentifierText = _model.Name;
+					DisplayName = _model.DisplayName;
 					ModelSet();
 				}
 			}
@@ -398,7 +398,7 @@ namespace UIFramework
 			/// <summary>
 			/// Sets the identifier text
 			/// </summary>
-			public virtual string IdentifierText { set { this.gameObject.transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = value; } }
+			public virtual string DisplayName { set { this.gameObject.transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = value; } }
 
 			public virtual bool ValidationCheck()
 			{
@@ -423,6 +423,10 @@ namespace UIFramework
 		public abstract class TextInputEntry : PreferenceEntry
 		{
 			/// <summary>
+			/// TODO: This is jank. Deal with this by creating a base class for preference entries that aren't based on melonloader.
+			/// </summary>
+			protected UIFModel.ModelMelonEntry _prefModel => (UIFModel.ModelMelonEntry)_model;
+			/// <summary>
 			/// Returns the textfield
 			/// </summary>
 			public TMP_InputField textField => this.gameObject.transform.Find("Panel/InputField (TMP)").gameObject.GetComponent<TMP_InputField>();
@@ -433,7 +437,7 @@ namespace UIFramework
 			/// <inheritdoc/>
 			public override void ModelSet()
 			{
-				PlaceHolderText = _model.BoxedValue.ToString();
+				PlaceHolderText = _prefModel.BoxedValue.ToString();
 			}
 		}
 
@@ -455,7 +459,7 @@ namespace UIFramework
 				{
 					if (Value.Trim() != "")
 					{
-						_model.BoxedValue = Value;
+						_prefModel.BoxedValue = Value;
 					}
 				}
 				catch (Exception ex)
@@ -478,7 +482,7 @@ namespace UIFramework
 				{
 					if (textField.text.Trim() != "")
 					{
-						_model.BoxedValue = int.Parse(textField.text.Trim());
+						_prefModel.BoxedValue = int.Parse(textField.text.Trim());
 					}
 				}
 				catch (Exception ex)
@@ -502,7 +506,7 @@ namespace UIFramework
 				{
 					if (textField.text.Trim() != "")
 					{
-						_model.BoxedValue = float.Parse(textField.text.Trim());
+						_prefModel.BoxedValue = float.Parse(textField.text.Trim());
 					}
 				}
 				catch (Exception ex)
@@ -525,7 +529,7 @@ namespace UIFramework
 				{
 					if (textField.text.Trim() != "")
 					{
-						_model.BoxedValue = double.Parse(textField.text.Trim());
+						_prefModel.BoxedValue = double.Parse(textField.text.Trim());
 					}
 				}
 				catch (Exception ex)
@@ -541,12 +545,13 @@ namespace UIFramework
 		[RegisterTypeInIl2Cpp]
 		public class PrefBool : PreferenceEntry
 		{
+			protected UIFModel.ModelMelonEntry _prefModel => (UIFModel.ModelMelonEntry)_model;
 			public bool Value => this.gameObject.transform.Find("Panel/Toggle").gameObject.GetComponent<Toggle>().isOn;
 			/// <inheritdoc/>
 			public override void ModelSet()
 			{
 				base.ModelSet();
-				this.gameObject.transform.Find("Panel/Toggle").gameObject.GetComponent<Toggle>().isOn = (bool)_model.BoxedValue;
+				this.gameObject.transform.Find("Panel/Toggle").gameObject.GetComponent<Toggle>().isOn = (bool)_prefModel.BoxedValue;
 
 			}
 			/// <inheritdoc/>
@@ -554,7 +559,7 @@ namespace UIFramework
 			{
 				try
 				{
-					_model.BoxedValue = Value;
+					_prefModel.BoxedValue = Value;
 				}
 				catch (Exception ex)
 				{
@@ -568,7 +573,20 @@ namespace UIFramework
 		[RegisterTypeInIl2Cpp]
 		public class ButtonEntry : PreferenceEntry
 		{
+			
 			public GameObject ButtonGo;
+			public virtual UIFModel.IModelable Model
+			{
+				get { return (UIFModel.IModelable)_model; }
+				set
+				{
+
+					_model = (UIFModel.IEntry)value;
+					DescriptionText = _model.Description;
+					DisplayName = _model.Identifier;
+					ModelSet();
+				}
+			}
 			public override void ModelSet()
 			{
 				base.ModelSet();
@@ -582,7 +600,7 @@ namespace UIFramework
 			{
 				try
 				{
-					ButtonGo.GetComponent<Button>().onClick.RemoveAllListeners();
+					//ButtonGo.GetComponent<Button>().onClick.RemoveAllListeners();
 				}
 				catch (Exception ex)
 				{
