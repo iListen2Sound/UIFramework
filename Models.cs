@@ -83,35 +83,29 @@ namespace UIFramework
 
 
 		#region Abstracts
-		/*public abstract class ModelBase : IModelable
+		public abstract class ModelBase : IModelable
 		{
 
 			public abstract string Identifier { get; }
 			public abstract GameObject GetNewUIInstance();
+			public abstract string DisplayName { get; }
+
 
 			public virtual void SaveAction()
 			{
 
 			}
 		}
-		*/
-		public abstract class SelectableModelBase : IModelable, IHoldSubmodels
+
+		public abstract class SelectableModelBase : ModelBase, IHoldSubmodels
 		{
-			public abstract string Identifier { get; }
-			public abstract string DisplayName { get; }
-
 			public virtual List<IModelable> SubModels { get; set; } = new();
-
-			
-
 			public IModelable GetSubmodel(string name)
 			{
 				return SubModels.FirstOrDefault(m => m.Identifier == name);
 			}
-
-			public virtual void SaveAction() { }
-			public abstract GameObject GetNewUIInstance();
 		}
+
 		public abstract class ModelModItem : SelectableModelBase
 		{
 
@@ -129,21 +123,9 @@ namespace UIFramework
 			}
 		}
 
-		public abstract class ModelEntryItem : IEntry
+		public abstract class ModelEntryItem : ModelBase, IEntry
 		{
-			public abstract string Identifier { get; }
-
-
 			public abstract string Description {get; }
-
-
-			public abstract string DisplayName { get; }
-
-			//public object BoxedValue
-
-			public abstract GameObject GetNewUIInstance();
-
-			public abstract void SaveAction();
 
 
 		}

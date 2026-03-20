@@ -65,10 +65,10 @@ namespace UIFramework
 			public virtual void SetModel(UIFModel.RootModel model)
 			{
 				MainCanvas = this.gameObject;
-				ModRegistryPanel = MainCanvas.transform.Find("Root/ModRegistry/Viewport/ModRegCont").gameObject.GetComponent<Sidebar>();
-				CatRegistryPanel = MainCanvas.transform.Find("Root/CatRegistry/Viewport/CatRegCont").gameObject.GetComponent<TopBar>();
-				PrefRegistryPanel = MainCanvas.transform.Find("Root/PrefRegistry/Viewport/PrefRegCont").gameObject.GetComponent<PrefList>();
-				MainActionButton = MainCanvas.transform.Find("Root/SaveActionButton").gameObject.GetComponent<Button>();
+				ModRegistryPanel = MainCanvas.transform.Find("Root/Body/ModRegistry/Viewport/ModRegCont").gameObject.GetComponent<Sidebar>();
+				CatRegistryPanel = MainCanvas.transform.Find("Root/Body/CatRegistry/Viewport/CatRegCont").gameObject.GetComponent<TopBar>();
+				PrefRegistryPanel = MainCanvas.transform.Find("Root/Body/PrefRegistry/Viewport/PrefRegCont").gameObject.GetComponent<PrefList>();
+				MainActionButton = MainCanvas.transform.Find("Root/Body/SaveActionButton").gameObject.GetComponent<Button>();
 
 				MainActionButton.onClick.AddListener((UnityAction)SaveButtonClick);
 				_model = model;
@@ -289,7 +289,7 @@ namespace UIFramework
 			/// </summary>
 			public virtual void SelectTargetPanel()
 			{
-				WindowController ParentWindow = gameObject.transform.parent.parent.parent.parent.parent.gameObject.GetComponent<WindowController>();
+				WindowController ParentWindow = gameObject.transform.parent.parent.parent.parent.parent.parent.gameObject.GetComponent<WindowController>();
 				if (_model.SubModels.Count > 0)
 				{
 					switch (_model.SubModels[0])
@@ -394,11 +394,11 @@ namespace UIFramework
 			/// <summary>
 			/// Sets the description text
 			/// </summary>
-			public virtual string DescriptionText { set { this.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = value; } }
+			public virtual string DescriptionText { set { this.gameObject.transform.Find("Description").gameObject.GetComponent<TextMeshProUGUI>().text = value; } }
 			/// <summary>
 			/// Sets the identifier text
 			/// </summary>
-			public virtual string DisplayName { set { this.gameObject.transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = value; } }
+			public virtual string DisplayName { set { this.gameObject.gameObject.transform.Find("Data/Label").gameObject.GetComponent<TextMeshProUGUI>().text = value; } }
 
 			public virtual bool ValidationCheck()
 			{
@@ -429,11 +429,11 @@ namespace UIFramework
 			/// <summary>
 			/// Returns the textfield
 			/// </summary>
-			public TMP_InputField textField => this.gameObject.transform.Find("Panel/InputField (TMP)").gameObject.GetComponent<TMP_InputField>();
+			public TMP_InputField textField => this.gameObject.transform.Find("Data/Control").gameObject.GetComponent<TMP_InputField>();
 			/// <summary>
 			/// Sets the placeholder text in the textField
 			/// </summary>
-			public string PlaceHolderText { set { this.gameObject.transform.Find("Panel/InputField (TMP)/Text Area/Placeholder").gameObject.GetComponent<TextMeshProUGUI>().text = value; } }
+			public string PlaceHolderText { set { this.gameObject.transform.Find("Data/Control/Text Area/Placeholder").gameObject.GetComponent<TextMeshProUGUI>().text = value; } }
 			/// <inheritdoc/>
 			public override void ModelSet()
 			{
@@ -546,12 +546,12 @@ namespace UIFramework
 		public class PrefBool : PreferenceEntry
 		{
 			protected UIFModel.ModelMelonEntry _prefModel => (UIFModel.ModelMelonEntry)_model;
-			public bool Value => this.gameObject.transform.Find("Panel/Toggle").gameObject.GetComponent<Toggle>().isOn;
+			public bool Value => this.gameObject.transform.Find("Data/Toggle").gameObject.GetComponent<Toggle>().isOn;
 			/// <inheritdoc/>
 			public override void ModelSet()
 			{
 				base.ModelSet();
-				this.gameObject.transform.Find("Panel/Toggle").gameObject.GetComponent<Toggle>().isOn = (bool)_prefModel.BoxedValue;
+				this.gameObject.transform.Find("Data/Toggle").gameObject.GetComponent<Toggle>().isOn = (bool)_prefModel.BoxedValue;
 
 			}
 			/// <inheritdoc/>
@@ -590,7 +590,7 @@ namespace UIFramework
 			public override void ModelSet()
 			{
 				base.ModelSet();
-				ButtonGo = this.gameObject.transform.Find("Panel/Panel/Button").gameObject;
+				ButtonGo = this.gameObject.transform.Find("Data/Button").gameObject;
 				ButtonGo.GetComponent<Button>().onClick.AddListener((UnityAction)((UIFModel.ButtonEntry)_model).OnClickRelay);
 
 
