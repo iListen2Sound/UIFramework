@@ -29,6 +29,12 @@
             Runs when the model property has been set. 
             </summary>
         </member>
+        <member name="M:UIFramework.UIFController.Entry.SaveAction">
+            <summary>
+            This is called when the Save button is pressed. Override to create custom behaviour.
+            </summary>
+            <remarks>Generally MelonPreferences are saved from the category, not the indivial entries.</remarks>
+        </member>
         <member name="T:UIFramework.UIFController.MelonEntry">
             <summary>
             Inherit this class to create your own custom entry controllers for your own input controls.
@@ -39,13 +45,6 @@
         </member>
         <member name="M:UIFramework.UIFController.MelonEntry.ValidationCheck">
             <inheritdoc/>
-        </member>
-        <member name="M:UIFramework.UIFController.MelonEntry.SaveAction">
-            <summary>
-            This is called when the Save button is pressed. Override to create custom behaviour.
-            </summary>
-            <remarks>Generally MelonPreferences are saved from the category, not the indivial entries.</remarks>
-            
         </member>
         <member name="T:UIFramework.UIFController.TextInputEntry">
             <summary>
@@ -114,6 +113,11 @@
         </member>
         <member name="M:UIFramework.UIFController.PrefBool.SaveAction">
             <inheritdoc/>
+        </member>
+        <member name="T:UIFramework.UIFController.PrefDropDown">
+            <summary>
+            
+            </summary>
         </member>
         <member name="T:UIFramework.UIFController.ListArea">
             <summary>
@@ -298,6 +302,33 @@
             Those will be developed after the default model is functional
             </summary>
         </member>
+        <member name="P:UIFramework.UIFModel.ModelBase.Identifier">
+            <inheritdoc/>
+        </member>
+        <member name="M:UIFramework.UIFModel.ModelBase.GetNewUIInstance">
+            <inheritdoc/>
+        </member>
+        <member name="P:UIFramework.UIFModel.ModelBase.DisplayName">
+            <inheritdoc/>
+        </member>
+        <member name="T:UIFramework.UIFModel.SelectableModelBase">
+            <summary>
+            Models that become buttons on the sidebar and topbar
+            </summary>
+        </member>
+        <member name="P:UIFramework.UIFModel.ModelEntryItem.OnUICreated">
+            <inheritdoc/>
+        </member>
+        <member name="T:UIFramework.UIFModel.EmptyCategory">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:UIFramework.UIFModel.ButtonEntry.BoxedValue">
+            <summary>
+            This is only to satisfy the contract for IEntry. 
+            </summary>
+        </member>
         <member name="T:UIFramework.UIFModel.IModelable">
             <summary>
             Implemented by all models
@@ -305,7 +336,12 @@
         </member>
         <member name="P:UIFramework.UIFModel.IModelable.Identifier">
             <summary>
-            Identifier
+            Name for the model
+            </summary>
+        </member>
+        <member name="P:UIFramework.UIFModel.IModelable.DisplayName">
+            <summary>
+            User-facing display name. Should return Identifier if not assigned to a value
             </summary>
         </member>
         <member name="M:UIFramework.UIFModel.IModelable.GetNewUIInstance">
@@ -324,6 +360,24 @@
             Models that contain submodels. Generally these are mods and categories representing tabs
             </summary>
         </member>
+        <member name="P:UIFramework.UIFModel.IHoldSubmodels.SubModels">
+            <summary>
+            A list of submodels
+            </summary>
+        </member>
+        <member name="M:UIFramework.UIFModel.IHoldSubmodels.GetSubmodel(System.String)">
+            <summary>
+            Finds submodel by identifier
+            </summary>
+            <param name="identifier"></param>
+            <returns></returns>
+        </member>
+        <member name="M:UIFramework.UIFModel.IHoldSubmodels.AddSubmodel(UIFramework.UIFModel.IModelable)">
+            <summary>
+            Adds a new submodel to the SubModels list
+            </summary>
+            <param name="model"></param>
+        </member>
         <member name="T:UIFramework.UIFModel.IEntry">
             <summary>
             Goes on the main panel. Contains controls for manipulating preferences or just general UI controls
@@ -334,9 +388,10 @@
             If the 
             </summary>
         </member>
-        <member name="T:UIFramework.UIFModel.SelectableModelBase">
+        <member name="P:UIFramework.UIFModel.IEntry.OnUICreated">
             <summary>
-            Models that become buttons on the sidebar and topbar
+            Called when the Entry has been created.
+            Useful when you wanna change specific elements after creation
             </summary>
         </member>
         <member name="T:UIFramework.UIFModel.ModelMelonEntry">
@@ -360,16 +415,6 @@
             If a custom one is provided, it will return an instance of that instead
             </summary>
             <returns></returns>
-        </member>
-        <member name="T:UIFramework.UIFModel.EmptyCategory">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:UIFramework.UIFModel.ButtonEntry.BoxedValue">
-            <summary>
-            This is only to satisfy the contract for IEntry. 
-            </summary>
         </member>
         <member name="T:UIFramework.Preferences">
             <summary>

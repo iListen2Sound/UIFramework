@@ -79,6 +79,9 @@ namespace UIFramework
 				case InputType.Button:
 					selectedPrefab = GameObject.Instantiate(Prefabs.ButtonPrefab);
 					break;
+				case InputType.Dropdown:
+					selectedPrefab = GameObject.Instantiate(Prefabs.DropDownPrefab);
+					break;
 				default:
 					selectedPrefab = GameObject.Instantiate(Prefabs.TextPrefab);
 					break;
@@ -97,8 +100,8 @@ namespace UIFramework
 		NumericFloat,
 		NumericDouble,
 		Button,
-		/*Slider,
 		Dropdown,
+		/*Slider,
 		MultiCheckbox,
 		RadioButton*/
 	}

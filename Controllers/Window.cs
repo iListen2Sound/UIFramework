@@ -6,7 +6,7 @@ using MelonLoader;
 using MelonLoader.Logging;
 using MonoMod.ModInterop;
 using System;
-using System.Collections.Generic;
+//using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -53,14 +53,14 @@ namespace UIFramework
 			public TopBar CatRegistryPanel;
 			public PrefList PrefRegistryPanel;
 			public Button MainActionButton;
-
+			public Button MinimizeButton;
 
 
 			void Awake()
 			{
 				Log("WindowController Awake", true, 1);
 
-				//_model = new UIFModel.RootModel();
+				//EntryModel = new UIFModel.RootModel();
 			}
 
 			public virtual void SetModel(UIFModel.RootModel model)
@@ -70,8 +70,13 @@ namespace UIFramework
 				CatRegistryPanel = MainCanvas.transform.Find("Root/Body/CatRegistry/Viewport/CatRegCont").gameObject.GetComponent<TopBar>();
 				PrefRegistryPanel = MainCanvas.transform.Find("Root/Body/PrefRegistry/Viewport/PrefRegCont").gameObject.GetComponent<PrefList>();
 				MainActionButton = MainCanvas.transform.Find("Root/Body/SaveActionButton").gameObject.GetComponent<Button>();
+				MinimizeButton = MainCanvas.transform.Find("Root/Ribbon/Minimize").gameObject.GetComponent<Button>();
+
 
 				MainActionButton.onClick.AddListener((UnityAction)SaveButtonClick);
+				
+				MinimizeButton.onClick.AddListener((UnityAction)(() => MainCanvas.SetActive(false)));
+
 				_model = model;
 				BuildModList();
 				Deb("Main Window Full Path: " + Helpers.HierarchyUtility.GetGameObjectPath(this.gameObject));
@@ -100,9 +105,9 @@ namespace UIFramework
 
 				for (int i = PrefRegistryPanel.gameObject.transform.childCount - 1; i >= 0; i--)
 				{
-					MelonEntry entry = PrefRegistryPanel.gameObject.transform.GetChild(i).gameObject.GetComponent<MelonEntry>();
+					Entry entry = PrefRegistryPanel.gameObject.transform.GetChild(i).gameObject.GetComponent<MelonEntry>();
 					entry.SaveAction();
-
+					entry.EntryModel.SaveAction();
 				}
 				PrefRegistryPanel.SaveAction();
 				PrefRegistryPanel.Infanticide();

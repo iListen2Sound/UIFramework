@@ -1,22 +1,19 @@
 ﻿using AssetsTools.NET.Extra;
 using Il2CppInterop.Runtime;
-//using Il2CppSystem.Collections.Generic;
 using Il2CppTMPro;
 using MelonLoader;
 using MelonLoader.Logging;
 using MonoMod.ModInterop;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+//using System;
+/*using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading.Tasks;*/
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
-//using static UIFramework.UIFController;
 using static Unity.Collections.AllocatorManager;
 using static UIFramework.Debug;
-using System.Globalization;
+using Il2CppSystem.Collections.Generic;
 namespace UIFramework
 {
 	public partial class UIFController
@@ -54,20 +51,32 @@ namespace UIFramework
 			/// <summary>
 			/// Runs when the model property has been set. 
 			/// </summary>
-			public virtual void ModelSet() { }
+			public virtual void ModelSet() 
+			{
+				EntryModel.OnUICreated?.Invoke(this);
+			}
 
-			protected UIFModel.IEntry _model;
+			public UIFModel.IEntry EntryModel;
 			public virtual UIFModel.IModelable Model
 			{
-				get { return (UIFModel.IModelable)_model; }
+				get { return (UIFModel.IModelable)EntryModel; }
 				set
 				{
 
-					_model = (UIFModel.IEntry)value;
-					DescriptionText = _model.Description;
-					DisplayName = _model.DisplayName;
+					EntryModel = (UIFModel.IEntry)value;
+					DescriptionText = EntryModel.Description;
+					DisplayName = EntryModel.DisplayName;
+
 					ModelSet();
 				}
+			}
+			/// <summary>
+			/// This is called when the Save button is pressed. Override to create custom behaviour.
+			/// </summary>
+			/// <remarks>Generally MelonPreferences are saved from the category, not the indivial entries.</remarks>
+			public virtual void SaveAction()
+			{
+				EntryModel.SaveAction();
 			}
 		}
 		/// <summary>
@@ -86,15 +95,6 @@ namespace UIFramework
 			{
 				return true;
 			}
-			/// <summary>
-			/// This is called when the Save button is pressed. Override to create custom behaviour.
-			/// </summary>
-			/// <remarks>Generally MelonPreferences are saved from the category, not the indivial entries.</remarks>
-			/// 
-			public virtual void SaveAction()
-			{
-
-			}
 
 
 		}
@@ -108,7 +108,7 @@ namespace UIFramework
 			/// <summary>
 			/// TODO: This is jank. Deal with this by creating a base class for preference entries that aren't based on melonloader.
 			/// </summary>
-			protected UIFModel.ModelMelonEntry _prefModel => (UIFModel.ModelMelonEntry)_model;
+			protected UIFModel.ModelMelonEntry _prefModel => (UIFModel.ModelMelonEntry)EntryModel;
 			/// <summary>
 			/// Returns the textfield
 			/// </summary>
@@ -121,6 +121,7 @@ namespace UIFramework
 			public override void ModelSet()
 			{
 				PlaceHolderText = _prefModel.BoxedValue.ToString();
+				base.ModelSet();
 			}
 		}
 
@@ -228,13 +229,13 @@ namespace UIFramework
 		[RegisterTypeInIl2Cpp]
 		public class PrefBool : MelonEntry
 		{
-			protected UIFModel.ModelMelonEntry _prefModel => (UIFModel.ModelMelonEntry)_model;
+			protected UIFModel.ModelMelonEntry _prefModel => (UIFModel.ModelMelonEntry)EntryModel;
 			public bool Value => this.gameObject.transform.Find("Data/Toggle").gameObject.GetComponent<Toggle>().isOn;
 			/// <inheritdoc/>
 			public override void ModelSet()
 			{
-				base.ModelSet();
 				this.gameObject.transform.Find("Data/Toggle").gameObject.GetComponent<Toggle>().isOn = (bool)_prefModel.BoxedValue;
+				base.ModelSet();
 
 			}
 			/// <inheritdoc/>
@@ -260,28 +261,28 @@ namespace UIFramework
 			public GameObject ButtonGo;
 			public virtual UIFModel.IModelable Model
 			{
-				get { return (UIFModel.IModelable)_model; }
+				get { return (UIFModel.IModelable)EntryModel; }
 				set
 				{
 
-					_model = (UIFModel.IEntry)value;
-					DescriptionText = _model.Description;
-					DisplayName = _model.Identifier;
+					EntryModel = (UIFModel.IEntry)value;
+					DescriptionText = EntryModel.Description;
+					DisplayName = EntryModel.Identifier;
 					ModelSet();
 				}
 			}
 			public override void ModelSet()
 			{
-				base.ModelSet();
 				ButtonGo = this.gameObject.transform.Find("Data/Button").gameObject;
 				ButtonGo.GetComponent<Button>().onClick.AddListener((UnityAction)OnClickRelay);
+				base.ModelSet();
 
 
 			}
 
 			public void OnClickRelay()
 			{
-				((UIFModel.ButtonEntry)_model).OnClick?.Invoke(this);
+				((UIFModel.ButtonEntry)EntryModel).OnClick?.Invoke(this);
 			}
 
 			void OnDestroy()
@@ -295,6 +296,46 @@ namespace UIFramework
 					Debug.Warning($"Can't find ButtonGo in OnDestroy {ex.Message}");
 				}
 			}
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		[RegisterTypeInIl2Cpp]
+		public class PrefDropDown : MelonEntry
+		{
+			protected UIFModel.ModelMelonEntry _prefModel => (UIFModel.ModelMelonEntry)EntryModel;
+			public TMP_Dropdown dropdown;
+
+			public Type prefEnum;
+			public override void ModelSet()
+			{
+				base.ModelSet();
+				dropdown = this.gameObject.transform.Find("Data/Dropdown").GetComponent<TMP_Dropdown>();
+				prefEnum = _prefModel.PrefEntry.BoxedValue.GetType();
+
+				string[] enumValues = Enum.GetNames(prefEnum);
+				
+				//Uhhh... Guess I have to do this? someone figure it out for me later
+				Il2CppSystem.Collections.Generic.List<string> valueList = new();
+				foreach (string value in enumValues)
+				{
+					valueList.Add(value);
+				}
+
+
+				dropdown.ClearOptions();
+				dropdown.AddOptions(valueList);
+
+				dropdown.value = (int)_prefModel.BoxedValue;
+
+				base.ModelSet();
+			}
+
+			public override void SaveAction()
+			{
+				_prefModel.PrefEntry.BoxedValue = Enum.Parse(prefEnum, dropdown.value.ToString());
+			}
+
 		}
 		#region no support
 
@@ -314,14 +355,7 @@ namespace UIFramework
 		{
 
 		}
-		/// <summary>
-		/// 
-		/// </summary>
-		[RegisterTypeInIl2Cpp]
-		public class PrefDropDown : MelonEntry
-		{
-
-		}*/
+		*/
 	}
 		#endregion
 }

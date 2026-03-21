@@ -20,148 +20,8 @@ namespace UIFramework
 	/// 
 	/// Those will be developed after the default model is functional
 	/// </summary>
-	public class UIFModel
+	public partial class UIFModel
 	{
-		#region Interfaces
-		/// <summary>
-		/// Implemented by all models
-		/// </summary>
-		public interface IModelable
-		{
-			/// <summary>
-			/// Identifier
-			/// </summary>
-			public string Identifier { get; }
-			public string DisplayName { get; }
-			/// <summary>
-			/// Instantiates a new Game object associated with them model
-			/// </summary>
-			/// <returns> UI Game Object</returns>
-			public GameObject GetNewUIInstance();
-			/// <summary>
-			/// Should be called when save button is pressed. Runs after all ancestor's save actions have been run
-			/// </summary>
-			public void SaveAction();
-			/// <summary>
-			/// Describes the parent for where the parent container should be
-			/// </summary>
-			//public UIPanel TargetParent { get; }
-		}
-		/// <summary>
-		/// Models that contain submodels. Generally these are mods and categories representing tabs
-		/// </summary>
-		public interface IHoldSubmodels : IModelable
-		{
-			public List<IModelable> SubModels { get; set; }
-			public IModelable GetSubmodel(string identifier);
-			public void AddSubmodel(IModelable model);
-		}
-		/// <summary>
-		/// Goes on the main panel. Contains controls for manipulating preferences or just general UI controls
-		/// </summary>
-		public interface IEntry
-		{
-			public string Identifier { get; }
-			public string Description { get; }
-			/// <summary>
-			/// If the 
-			/// </summary>
-			public void SaveAction();
-			public string DisplayName { get; }
-			//public object BoxedValue { get; set; }
-
-
-		}
-		#endregion
-
-
-
-
-
-
-
-
-
-
-
-		#region Abstracts
-		public abstract class ModelBase : IModelable
-		{
-
-			public abstract string Identifier { get; }
-			public abstract GameObject GetNewUIInstance();
-			public abstract string DisplayName { get; }
-
-
-			public virtual void SaveAction()
-			{
-
-			}
-		}
-		/// <summary>
-		/// Models that become buttons on the sidebar and topbar
-		/// </summary>
-		public abstract class SelectableModelBase : ModelBase, IHoldSubmodels
-		{
-			public virtual List<IModelable> SubModels { get; set; } = new();
-			public IModelable GetSubmodel(string name)
-			{
-				return SubModels.FirstOrDefault(m => m.Identifier == name);
-			}
-			public virtual void AddSubmodel(IModelable submodel)
-			{
-				SubModels.Add(submodel);
-			}
-			public virtual void AddSubmodel(params IModelable[] submodel)
-			{
-				SubModels.AddRange(submodel);
-			}
-
-			public virtual void AddSubmodel(List<IModelable> submodels)
-			{
-				SubModels.AddRange(submodels);
-			}
-
-		}
-
-		public abstract class ModelModItem : SelectableModelBase
-		{
-
-			public override GameObject GetNewUIInstance()
-			{
-				return GameObject.Instantiate(Prefabs.ModTab);
-			}
-
-		}
-		public abstract class ModelCategoryItem : SelectableModelBase
-		{
-			public override GameObject GetNewUIInstance()
-			{
-				return GameObject.Instantiate(Prefabs.CatTab);
-			}
-		}
-
-		public abstract class ModelEntryItem : ModelBase, IEntry
-		{
-			public abstract string Description { get; }
-
-
-		}
-
-		#endregion
-
-
-
-
-
-
-
-
-
-
-
-
-
 		public class RootModel : IHoldSubmodels
 		{
 
@@ -226,9 +86,6 @@ namespace UIFramework
 
 		}
 
-
-
-
 		public class ModelMelonCategory : ModelCategoryItem
 		{
 			//public List<IModelable> SubModels { get; set; }
@@ -258,17 +115,12 @@ namespace UIFramework
 
 		}
 
-
-
-
-
 		/// <summary>
 		/// 
 		/// </summary>
 		public class ModelMelonEntry : ModelEntryItem
 		{
-			public UIPanel TargetParent { get => UIPanel.EntryPanel; }
-			public MelonPreferences_Entry PrefEntry;
+			public virtual MelonPreferences_Entry PrefEntry { get; set; }
 			public override string Identifier => PrefEntry.Identifier;
 			public override string DisplayName => PrefEntry.DisplayName.Trim() == "" ? PrefEntry.Identifier : PrefEntry.DisplayName;
 			public override string Description => PrefEntry.Description;
@@ -323,6 +175,8 @@ namespace UIFramework
 							return UIFramework.GetPrefab(InputType.NumericFloat);
 						case double:
 							return UIFramework.GetPrefab(InputType.NumericDouble);
+						case Enum:
+							return UIFramework.GetPrefab(InputType.Dropdown);
 						default:
 							Debug.Log("Unsupported type detected with no custom widget prefab provided. Defaulting to text input. Creating custom component recommended", false, 1);
 							return UIFramework.GetPrefab(InputType.TextField);
@@ -341,89 +195,6 @@ namespace UIFramework
 
 			}
 
-
-		}
-
-
-
-
-
-
-
-
-
-
-		#region customs
-		/// <summary>
-		/// 
-		/// </summary>
-		public class EmptyCategory : ModelCategoryItem
-		{
-			private string _displayName;
-			public override string DisplayName => _displayName;
-			private string _identifier;
-			public override string Identifier => _identifier;
-
-			public EmptyCategory( string identifier, string displayName)
-			{
-				_identifier = identifier;
-				_displayName = displayName;
-			}
-			public EmptyCategory(string identifier)
-			{
-				_identifier = identifier;
-				_displayName = identifier;
-			}
-		}
-
-		public class ButtonEntry : ModelEntryItem
-		{
-
-			private string _name;
-			public override string Identifier => _name;
-
-			private string _description;
-			public override string Description => _description;
-
-			private string _displayName;
-			public override string DisplayName => _displayName;
-			/// <summary>
-			/// This is only to satisfy the contract for IEntry. 
-			/// </summary>
-			public object BoxedValue { get; set; }
-
-			public void SaveAction() { }
-
-			public Action<UIFController.ButtonEntry> OnClick;
-
-
-			public ButtonEntry(Action<UIFController.ButtonEntry> onClick, string name, string description ="", string displayName="")
-			{
-				_name = name;
-				_description = description;
-				_displayName = displayName == "" ? name : displayName;
-				OnClick += onClick;
-			}
-
-			public override GameObject GetNewUIInstance() => UIFramework.GetPrefab(InputType.Button);
-
-
-		}
-		#endregion
-
-
-
-
-
-
-
-#pragma warning disable CS1591
-		public enum UIPanel
-		{
-			Window,
-			Sidebar,
-			Topbar,
-			EntryPanel,
 		}
 	}
 
