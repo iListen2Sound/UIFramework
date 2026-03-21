@@ -33,7 +33,7 @@ namespace UIFramework
 			}
 		}
 		/// <summary>
-		/// Models that become buttons on the sidebar and topbar
+		/// Models that represent buttons on the sidebar and topbar
 		/// </summary>
 		public abstract class SelectableModelBase : ModelBase, IHoldSubmodels
 		{

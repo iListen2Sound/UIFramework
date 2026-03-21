@@ -50,6 +50,9 @@ namespace UIFramework
 			UIFModel.ModelMelonCategory tester = (UIFModel.ModelMelonCategory)ModModel.GetSubmodel(Preferences.TestBooleans.Identifier);
 			UIFModel.ButtonEntry testButton = new UIFModel.ButtonEntry(CustomClick, "CustomButton", "just a test", "Custom Button");
 			tester.AddSubModel(testButton);
+
+
+			
 		}
 
 		public override void OnUpdate()

@@ -105,7 +105,7 @@ namespace UIFramework
 
 				for (int i = PrefRegistryPanel.gameObject.transform.childCount - 1; i >= 0; i--)
 				{
-					Entry entry = PrefRegistryPanel.gameObject.transform.GetChild(i).gameObject.GetComponent<MelonEntry>();
+					Entry entry = PrefRegistryPanel.gameObject.transform.GetChild(i).gameObject.GetComponent<Entry>();
 					entry.SaveAction();
 					entry.EntryModel.SaveAction();
 				}

@@ -313,7 +313,7 @@
         </member>
         <member name="T:UIFramework.UIFModel.SelectableModelBase">
             <summary>
-            Models that become buttons on the sidebar and topbar
+            Models that represent buttons on the sidebar and topbar
             </summary>
         </member>
         <member name="P:UIFramework.UIFModel.ModelEntryItem.OnUICreated">

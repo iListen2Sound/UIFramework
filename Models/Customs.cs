@@ -49,6 +49,7 @@ namespace UIFramework
 
 			private string _displayName;
 			public override string DisplayName => _displayName;
+
 			/// <summary>
 			/// This is only to satisfy the contract for IEntry. 
 			/// </summary>
