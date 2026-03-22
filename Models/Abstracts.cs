@@ -76,7 +76,7 @@ namespace UIFramework
 
 			public virtual void AddModelCategory(params ModelCategoryItem[] categoryModel)
 			{
-				AddSubModel(categoryModel.Cast<IModelable>());
+				AddSubmodel(categoryModel.Cast<IModelable>().ToArray());
 			}
 
 
@@ -89,7 +89,7 @@ namespace UIFramework
 			}
 			public virtual void AddEntry(params IEntry[] entryModel)
 			{
-				AddSubModel(entryModel.Cast<IModelable>());
+				AddSubmodel(entryModel.Cast<IModelable>().ToArray());
 			}
 		}
 
@@ -99,7 +99,7 @@ namespace UIFramework
 			/// <inheritdoc/>
 			public virtual Action<UIFController.Entry> OnUICreated { get; set; }
 
-			public virtual UIFramework.EntryState SaveState {get; set;}
+			public virtual EntryState SaveState {get; set;}
 		}
 
 		#endregion

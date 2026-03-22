@@ -31,7 +31,7 @@ namespace UIFramework
 		/// 2. Category tab top bar
 		/// 3. Entries Content area
 		/// </summary>
-		public class ListArea : MonoBehaviour
+		public abstract class ListArea : MonoBehaviour
 		{
 			protected UIFModel.IHoldSubmodels _model;
 			public UIFModel.IHoldSubmodels Model => _model;
@@ -106,6 +106,7 @@ namespace UIFramework
 
 				}
 			}
+			public virtual void DiscardAction() { }
 
 			/// <summary>
 			/// Is called when Save ButtonGo is clicked. Override to create custom behaviour 
@@ -148,8 +149,12 @@ namespace UIFramework
 			{
 				SelectedCategory.SaveAction();
 			}
-
-
+			public override void DiscardAction()
+			{
+				SelectedCategory.PrefCat.LoadFromFile();
+				BuildFromModelList();
+			}
+			
 		}
 	}
 }

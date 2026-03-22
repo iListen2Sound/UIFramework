@@ -125,8 +125,8 @@ namespace UIFramework
 			public virtual void DiscardButtonClick()
 			{
 				
-				PrefRegistryPanel.Model.DiscardAction();
-				PrefRegistryPanel.BuildFromModelList();
+				PrefRegistryPanel.DiscardAction();
+				
 			}
 
 		}

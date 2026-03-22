@@ -76,7 +76,7 @@ namespace UIFramework
 			public void Highlight()
 			{
 				Transform parent = gameObject.transform.parent;
-				for(int i = parent.chilCount -1; i >= 0; i--)
+				for(int i = parent.childCount -1; i >= 0; i--)
 				{
 					//set color of child
 				}

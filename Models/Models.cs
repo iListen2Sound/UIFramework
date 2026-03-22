@@ -37,9 +37,9 @@ namespace UIFramework
 				_name = name;
 			}
 
-			public void AddSubmodel(IModelable mod)
+			public void AddSubmodel(params IModelable[] mod)
 			{
-				SubModels.Add(mod);
+				SubModels.AddRange(mod);
 			}
 
 			public IModelable GetSubmodel(string name)
@@ -48,7 +48,7 @@ namespace UIFramework
 			}
 			public ModelModItem GetModModel(string identifier)
 			{
-				return (ModelModItem)GetSubmodel(name);
+				return (ModelModItem)GetSubmodel(identifier);
 			}
 			
 			public GameObject GetNewUIInstance() { return null; }

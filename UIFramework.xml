@@ -75,9 +75,9 @@
             </summary>
         </member>
         <member name="P:UIFramework.UIFController.PrefText.Value">
-            <summary>
+             <summary>
             
-            </summary>
+             </summary>
         </member>
         <member name="M:UIFramework.UIFController.PrefText.SaveAction">
             <inheritdoc/>
@@ -175,6 +175,11 @@
         <member name="M:UIFramework.UIFController.TabButtonController.SelectTargetPanel">
             <summary>
             Selects the panel that should be assigned a model next. The target then parents the models' game objects to itself from the list
+            </summary>
+        </member>
+        <member name="M:UIFramework.UIFController.TabButtonController.Highlight">
+            <summary>
+            Change the color of the selected panel to be more prominent. Reset all other buttons in parent to be default color
             </summary>
         </member>
         <member name="T:UIFramework.UIFController.Mod">
@@ -372,7 +377,7 @@
             <param name="identifier"></param>
             <returns></returns>
         </member>
-        <member name="M:UIFramework.UIFModel.IHoldSubmodels.AddSubmodel(UIFramework.UIFModel.IModelable)">
+        <member name="M:UIFramework.UIFModel.IHoldSubmodels.AddSubmodel(UIFramework.UIFModel.IModelable[])">
             <summary>
             Adds a new submodel to the SubModels list
             </summary>

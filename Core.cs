@@ -49,7 +49,7 @@ namespace UIFramework
 			UIFModel.ModelMod ModModel = UIFramework.Register(this, Preferences.CatUIFramework, Preferences.Experimental, Preferences.TestBooleans, Preferences.TestEmptyDisplayName);
 			UIFModel.ModelMelonCategory tester = (UIFModel.ModelMelonCategory)ModModel.GetSubmodel(Preferences.TestBooleans.Identifier);
 			UIFModel.ButtonEntry testButton = new UIFModel.ButtonEntry(CustomClick, "CustomButton", "just a test", "Custom Button");
-			tester.AddSubModel(testButton);
+			tester.AddSubmodel(testButton);
 
 
 			
