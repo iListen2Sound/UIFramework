@@ -57,7 +57,7 @@ namespace UIFramework
 			}*/
 			public virtual void DiscardAction()
 			{
-				
+
 			}
 
 		}
@@ -69,6 +69,16 @@ namespace UIFramework
 			{
 				return GameObject.Instantiate(Prefabs.ModTab);
 			}
+			public virtual ModelCategoryItem GetModelCategory(string identifier)
+			{
+				return (ModelCategoryItem) GetSubmodel(identifier);
+			}
+
+			public virtual void AddModelCategory(params ModelCategoryItem[] categoryModel)
+			{
+				AddSubModel(categoryModel.Cast<IModelable>());
+			}
+
 
 		}
 		public abstract class ModelCategoryItem : SelectableModelBase
@@ -76,6 +86,10 @@ namespace UIFramework
 			public override GameObject GetNewUIInstance()
 			{
 				return GameObject.Instantiate(Prefabs.CatTab);
+			}
+			public virtual void AddEntry(params IEntry[] entryModel)
+			{
+				AddSubModel(entryModel.Cast<IModelable>());
 			}
 		}
 

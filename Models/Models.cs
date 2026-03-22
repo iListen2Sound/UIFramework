@@ -83,16 +83,7 @@ namespace UIFramework
 				Instance = instance;
 			}
 
-			public ModelCategoryItem GetModelCategory(string identifier)
-			{
-				return (ModelCategoryItem) GetSubmodel(identifier);
-			}
-
-			public void AddModelCategory(params ModelCategoryItem[] categoryModel)
-			{
-				AddSubModel(categoryModel.Cast<IModelable>());
-			}
-
+			
 		}
 
 		public class ModelMelonCategory : ModelCategoryItem
@@ -121,10 +112,7 @@ namespace UIFramework
 			{
 				SubModels.Add((IModelable)model);
 			}*/
-			public void AddEntry(params IEntry[] entryModel)
-			{
-				AddSubModel(entryModel.Cast<IModelable>());
-			}
+			
 
 		}
 
