@@ -46,6 +46,11 @@ namespace UIFramework
 			{
 				return SubModels.FirstOrDefault(m => m.Identifier == name);
 			}
+			public ModelModItem GetModModel(string identifier)
+			{
+				return (ModelModItem)GetSubmodel(name);
+			}
+			
 			public GameObject GetNewUIInstance() { return null; }
 
 			public void SaveAction() { }
@@ -78,10 +83,14 @@ namespace UIFramework
 				Instance = instance;
 			}
 
-
-			public void AddSubmodel(IModelable model)
+			public ModelCategoryItem GetModelCategory(string identifier)
 			{
-				SubModels.Add(model);
+				return (ModelCategoryItem) GetSubmodel(identifier);
+			}
+
+			public void AddModelCategory(params ModelCategoryItem[] categoryModel)
+			{
+				AddSubModel(categoryModel.Cast<IModelable>());
 			}
 
 		}
@@ -108,9 +117,13 @@ namespace UIFramework
 				PrefCat.SaveToFile();
 			}
 
-			public void AddSubModel(IEntry model)
+			/*public void AddSubModel(IEntry model)
 			{
 				SubModels.Add((IModelable)model);
+			}*/
+			public void AddEntry(params IEntry[] entryModel)
+			{
+				AddSubModel(entryModel.Cast<IModelable>());
 			}
 
 		}

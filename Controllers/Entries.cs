@@ -85,7 +85,7 @@ namespace UIFramework
 		public abstract class MelonEntry : Entry
 		{
 			
-			
+			//public abstract string Value {get; set;}
 
 			/// <inheritdoc/>
 			public override void ModelSet() { }
@@ -120,7 +120,7 @@ namespace UIFramework
 			/// <inheritdoc/>
 			public override void ModelSet()
 			{
-				PlaceHolderText = _prefModel.BoxedValue.ToString();
+				textField.text = _prefModel.BoxedValue.ToString();
 				base.ModelSet();
 			}
 		}
@@ -133,7 +133,7 @@ namespace UIFramework
 		public class PrefText : TextInputEntry
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public virtual string Value => textField.text;
 			/// <inheritdoc/>

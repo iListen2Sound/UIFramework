@@ -43,6 +43,7 @@ namespace UIFramework
 			public void OnSelect()
 			{
 				SelectTargetPanel();
+				Highlight();
 			}
 			/// <summary>
 			/// Selects the panel that should be assigned a model next. The target then parents the models' game objects to itself from the list
@@ -69,8 +70,17 @@ namespace UIFramework
 
 				TargetContainer.SetModel(_model);
 			}
-
-
+			/// <summary>
+			/// Change the color of the selected panel to be more prominent. Reset all other buttons in parent to be default color
+			/// </summary>
+			public void Highlight()
+			{
+				Transform parent = gameObject.transform.parent;
+				for(int i = parent.chilCount -1; i >= 0; i--)
+				{
+					//set color of child
+				}
+			}
 			void Start()
 			{
 				this.gameObject.GetComponent<Button>().onClick.AddListener((UnityAction)OnSelect);

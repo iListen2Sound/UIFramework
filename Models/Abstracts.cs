@@ -42,18 +42,22 @@ namespace UIFramework
 			{
 				return SubModels.FirstOrDefault(m => m.Identifier == name);
 			}
-			public virtual void AddSubmodel(IModelable submodel)
+			/*public virtual void AddSubmodel(IModelable submodel)
 			{
 				SubModels.Add(submodel);
-			}
+			}*/
 			public virtual void AddSubmodel(params IModelable[] submodel)
 			{
 				SubModels.AddRange(submodel);
 			}
 
-			public virtual void AddSubmodel(List<IModelable> submodels)
+			/*public virtual void AddSubmodel(List<IModelable> submodels)
 			{
 				SubModels.AddRange(submodels);
+			}*/
+			public virtual void DiscardAction()
+			{
+				
 			}
 
 		}

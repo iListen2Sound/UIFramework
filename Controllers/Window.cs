@@ -102,9 +102,10 @@ namespace UIFramework
 			/// </remarks>
 			public virtual void SaveButtonClick()
 			{
-
+				
 				for (int i = PrefRegistryPanel.gameObject.transform.childCount - 1; i >= 0; i--)
 				{
+					//Error handling per child to prevent breaking the whole loop.
 					try
 					{
 						Entry entry = PrefRegistryPanel.gameObject.transform.GetChild(i).gameObject.GetComponent<Entry>();
@@ -118,6 +119,13 @@ namespace UIFramework
 				}
 				PrefRegistryPanel.SaveAction();
 				PrefRegistryPanel.Infanticide();
+				PrefRegistryPanel.BuildFromModelList();
+			}
+
+			public virtual void DiscardButtonClick()
+			{
+				
+				PrefRegistryPanel.Model.DiscardAction();
 				PrefRegistryPanel.BuildFromModelList();
 			}
 
