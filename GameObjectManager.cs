@@ -18,9 +18,9 @@ namespace UIFramework
 	internal static partial class Prefabs
 	{
 		/// <summary>
-		/// Root Game Object for all of UIFramework in DDOL
+		/// Root Game Object for all of UI in DDOL
 		/// </summary>
-		internal static GameObject UIFGameObjects = new GameObject("UIFramework");
+		internal static GameObject UIFGameObjects = new GameObject("UI");
 
 		/// <summary>
 		/// UI Assets from the asset bundle
@@ -60,7 +60,7 @@ namespace UIFramework
 			TempStorage.transform.SetParent(UIFGameObjects.transform,false);
 			TempStorage.SetActive(false);
 
-			AssetBundleLoaded = GameObject.Instantiate(LoadAssetFromStream<GameObject>(Core.Instance, "UIFramework.Assets.uiframework", "UIFramework"), UIFGameObjects.transform);
+			AssetBundleLoaded = GameObject.Instantiate(LoadAssetFromStream<GameObject>(Core.Instance, "UIFramework.Assets.uiframework", "UIframework"), UIFGameObjects.transform);
 			AssetBundleLoaded.name = "UIFrameworkAssets";
 			//AssetBundleLoaded.SetActive(false);
 			//Taco generated (text won't work witout this for some reason)
@@ -209,7 +209,7 @@ namespace UIFramework
 			foreach (var t in tmps)
 			{
 				if (t == null) continue;
-				if (t.gameObject.name == "ButtonText")
+				if (t.gameObject.name == "ButtonText" || t.gameObject.name == "Control")
 				{
 					t.enableWordWrapping = false; // Ensure wrapping is off for these
 					continue;

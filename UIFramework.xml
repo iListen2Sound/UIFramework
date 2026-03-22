@@ -253,12 +253,12 @@
             <param name="debugOnly"></param>
             <param name="logLevel"></param>
         </member>
-        <member name="T:UIFramework.UIFramework">
+        <member name="T:UIFramework.UI">
             <summary>
             primary public facing class, modders will interact with this to register their preferences and build the UI.
             </summary>
         </member>
-        <member name="M:UIFramework.UIFramework.Register(MelonLoader.MelonMod,MelonLoader.MelonPreferences_Category[])">
+        <member name="M:UIFramework.UI.Register(MelonLoader.MelonMod,MelonLoader.MelonPreferences_Category[])">
             <summary>
             
             </summary>
@@ -268,7 +268,7 @@
         </member>
         <member name="F:UIFramework.Prefabs.UIFGameObjects">
             <summary>
-            Root Game Object for all of UIFramework in DDOL
+            Root Game Object for all of UI in DDOL
             </summary>
         </member>
         <member name="F:UIFramework.Prefabs.AssetBundleLoaded">
@@ -423,7 +423,7 @@
         </member>
         <member name="T:UIFramework.Preferences">
             <summary>
-            UIFramework's own preferences go here 
+            UI's own preferences go here 
             </summary>
         </member>
     </members>

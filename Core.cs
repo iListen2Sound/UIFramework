@@ -21,7 +21,7 @@ namespace UIFramework
 		/// <summary></summary>
 		public const string Author = "Reverb && Spice";
 		/// <summary></summary>
-		public const string Version = "1.0.0";
+		public const string Version = "0.2.0";
 	}
 
 	
@@ -46,7 +46,7 @@ namespace UIFramework
 		public override void OnLateInitializeMelon()
 		{
 			Preferences.InitializePrefs();
-			UIFModel.ModelMod ModModel = UIFramework.Register(this, Preferences.CatUIFramework, Preferences.Experimental, Preferences.TestBooleans, Preferences.TestEmptyDisplayName);
+			UIFModel.ModelMod ModModel = UI.Register(this, Preferences.CatUIFramework, Preferences.Experimental, Preferences.TestBooleans, Preferences.TestEmptyDisplayName);
 			UIFModel.ModelMelonCategory tester = (UIFModel.ModelMelonCategory)ModModel.GetSubmodel(Preferences.TestBooleans.Identifier);
 			UIFModel.ButtonEntry testButton = new UIFModel.ButtonEntry(CustomClick, "CustomButton", "just a test", "Custom Button");
 			tester.AddSubmodel(testButton);
@@ -61,7 +61,7 @@ namespace UIFramework
 
 			if(Input.GetKeyDown(KeyCode.F9))
 			{
-				UIFramework.MainWindow.SetActive(!UIFramework.MainWindow.activeSelf);
+				UI.MainWindow.SetActive(!UI.MainWindow.activeSelf);
 			}
 		}
 
@@ -80,9 +80,9 @@ namespace UIFramework
 
 			if (!isFirstLoad)
 			{
-				if(UIFramework.MainWindow.activeSelf)
+				if(UI.MainWindow.activeSelf)
 				{
-					UIFramework.MainWindow.SetActive(!Preferences.AutoHideOnSceneLoad.Value);
+					UI.MainWindow.SetActive(!Preferences.AutoHideOnSceneLoad.Value);
 				}
 			}
 		}
@@ -94,11 +94,11 @@ namespace UIFramework
 		{
 			Prefabs.LoadAssetBundle();
 
-			UIFramework.InitializeUIObjects();
-			UIFramework.BuildUI();
+			UI.InitializeUIObjects();
+			UI.BuildUI();
 			isFirstLoad = false;
 
-			UIFramework.MainWindow.SetActive(false);
+			UI.MainWindow.SetActive(false);
 		}
 
 		public void MelPrefsSaved(string s)

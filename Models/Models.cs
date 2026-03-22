@@ -165,22 +165,22 @@ namespace UIFramework
 					switch (PrefEntry.BoxedValue)
 					{
 						case bool:
-							return UIFramework.GetPrefab(InputType.Toggle);
+							return UI.GetPrefab(InputType.Toggle);
 							break;
 						case string:
-							return UIFramework.GetPrefab(InputType.TextField);
+							return UI.GetPrefab(InputType.TextField);
 							break;
 						case int:
-							return UIFramework.GetPrefab(InputType.NumericInt);
+							return UI.GetPrefab(InputType.NumericInt);
 						case float:
-							return UIFramework.GetPrefab(InputType.NumericFloat);
+							return UI.GetPrefab(InputType.NumericFloat);
 						case double:
-							return UIFramework.GetPrefab(InputType.NumericDouble);
+							return UI.GetPrefab(InputType.NumericDouble);
 						case Enum:
-							return UIFramework.GetPrefab(InputType.Dropdown);
+							return UI.GetPrefab(InputType.Dropdown);
 						default:
 							Debug.Log("Unsupported type detected with no custom widget prefab provided. Defaulting to text input. Creating custom component recommended", false, 1);
-							return UIFramework.GetPrefab(InputType.TextField);
+							return UI.GetPrefab(InputType.TextField);
 
 
 					}
