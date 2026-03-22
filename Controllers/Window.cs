@@ -105,9 +105,16 @@ namespace UIFramework
 
 				for (int i = PrefRegistryPanel.gameObject.transform.childCount - 1; i >= 0; i--)
 				{
-					Entry entry = PrefRegistryPanel.gameObject.transform.GetChild(i).gameObject.GetComponent<Entry>();
-					entry.SaveAction();
-					entry.EntryModel.SaveAction();
+					try
+					{
+						Entry entry = PrefRegistryPanel.gameObject.transform.GetChild(i).gameObject.GetComponent<Entry>();
+						entry.SaveAction();
+						entry.EntryModel.SaveAction();
+					} catch (Exception ex)
+					{
+						Debug.Warning($"Error in entry saving loop {PrefRegistryPanel.gameObject.transform.childCount - i}:"); 
+						Debug.Error(ex.Message);
+					}
 				}
 				PrefRegistryPanel.SaveAction();
 				PrefRegistryPanel.Infanticide();

@@ -105,4 +105,12 @@ namespace UIFramework
 		MultiCheckbox,
 		RadioButton*/
 	}
+
+	public enum EntryState
+	{
+		Untouched,
+		Edited,
+		Saved,
+
+	}
 }

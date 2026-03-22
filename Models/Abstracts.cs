@@ -81,7 +81,7 @@ namespace UIFramework
 			/// <inheritdoc/>
 			public virtual Action<UIFController.Entry> OnUICreated { get; set; }
 
-
+			public virtual UIFramework.EntryState SaveState {get; set;}
 		}
 
 		#endregion
