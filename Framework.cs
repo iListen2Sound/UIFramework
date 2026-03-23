@@ -111,6 +111,7 @@ namespace UIFramework
 		Untouched,
 		Edited,
 		Saved,
+		Errored,
 
 	}
 }

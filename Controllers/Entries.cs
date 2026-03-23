@@ -48,6 +48,8 @@ namespace UIFramework
 				set { this.gameObject.gameObject.transform.Find("Data/Label").gameObject.GetComponent<TextMeshProUGUI>().text = value; }
 			}
 
+			public virtual EntryState EntryStatus {get; set;}
+
 			/// <summary>
 			/// Runs when the model property has been set. 
 			/// </summary>
@@ -81,6 +83,7 @@ namespace UIFramework
 		}
 		/// <summary>
 		/// Inherit this class to create your own custom entry controllers for your own input controls.
+		/// TODO: Refactor this to suggest non-melon related settings storage
 		/// </summary>
 		public abstract class MelonEntry : Entry
 		{
@@ -96,7 +99,7 @@ namespace UIFramework
 				return true;
 			}
 
-
+			public abstract void EditCheck();
 		}
 
 
@@ -122,6 +125,14 @@ namespace UIFramework
 			{
 				textField.text = _prefModel.BoxedValue.ToString();
 				base.ModelSet();
+			} 
+
+			public override void EditCheck()
+			{
+				if(textField.text != _prefModel.PrefEntry.BoxedValue.ToString())
+				{
+					EntryStatus = EntryState.Edited;
+				}
 			}
 		}
 
