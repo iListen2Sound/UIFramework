@@ -91,7 +91,7 @@ namespace UIFramework
 			//public abstract string Value {get; set;}
 
 			/// <inheritdoc/>
-			public override void ModelSet() { }
+			public override void ModelSet() { base.ModelSet();}
 
 			/// <inheritdoc/>
 			public virtual bool ValidationCheck()
@@ -320,7 +320,6 @@ namespace UIFramework
 			public Type prefEnum;
 			public override void ModelSet()
 			{
-				base.ModelSet();
 				dropdown = this.gameObject.transform.Find("Data/Dropdown").GetComponent<TMP_Dropdown>();
 				prefEnum = _prefModel.PrefEntry.BoxedValue.GetType();
 
