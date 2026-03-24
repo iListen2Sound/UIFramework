@@ -99,7 +99,7 @@ namespace UIFramework
 				return true;
 			}
 
-			public abstract void EditCheck();
+			public virtual void EditCheck() { }
 		}
 
 
@@ -262,7 +262,10 @@ namespace UIFramework
 				}
 
 			}
-
+			public override void EditCheck()
+			{
+				
+			}
 		}
 
 		[RegisterTypeInIl2Cpp]
@@ -345,7 +348,10 @@ namespace UIFramework
 			{
 				_prefModel.PrefEntry.BoxedValue = Enum.Parse(prefEnum, dropdown.value.ToString());
 			}
-
+			public override void EditCheck()
+			{
+				
+			}
 		}
 		#region no support
 

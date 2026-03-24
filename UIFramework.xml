@@ -38,6 +38,7 @@
         <member name="T:UIFramework.UIFController.MelonEntry">
             <summary>
             Inherit this class to create your own custom entry controllers for your own input controls.
+            TODO: Refactor this to suggest non-melon related settings storage
             </summary>
         </member>
         <member name="M:UIFramework.UIFController.MelonEntry.ModelSet">
@@ -280,12 +281,6 @@
             <summary>
             Temporary game object storage as they're being instantiated
             </summary>
-        </member>
-        <member name="M:UIFramework.Prefabs.ApplyAndRebuild(UnityEngine.GameObject)">
-            <summary>
-            Wrapping gets disabled when loading and this reenables it
-            </summary>
-            <param name="root"></param>
         </member>
         <member name="M:UIFramework.Helpers.ToNormal(System.String)">
              <summary>

@@ -62,23 +62,6 @@ namespace UIFramework
 
 			AssetBundleLoaded = GameObject.Instantiate(LoadAssetFromStream<GameObject>(Core.Instance, "UIFramework.Assets.uiframework", "UIframework"), UIFGameObjects.transform);
 			AssetBundleLoaded.name = "UIFrameworkAssets";
-			//AssetBundleLoaded.SetActive(false);
-			//Taco generated (text won't work witout this for some reason)
-			foreach (var tmpugui in AssetBundleLoaded.GetComponentsInChildren<TextMeshProUGUI>(true))
-			{
-				tmpugui.font = Resources.Load<TMP_FontAsset>("Fonts & Materials/Arial SDF");
-
-
-				var font = Resources.Load<Il2CppTMPro.TMP_FontAsset>("Fonts & Materials/Arial SDF");
-				if (font != null)
-				{
-					tmpugui.font = font;
-					tmpugui.fontSharedMaterial = font.material;
-					tmpugui.SetVerticesDirty();
-					tmpugui.SetMaterialDirty();
-				}
-			}
-			ApplyAndRebuild(AssetBundleLoaded);
 
 			
 			
@@ -191,58 +174,6 @@ namespace UIFramework
 			Il2CppStream.Flush();
 			return Il2CppStream;
 		}
-		#endregion
-
-		#region AIGenerated
-		/// <summary>
-		/// Wrapping gets disabled when loading and this reenables it
-		/// </summary>
-		/// <param name="root"></param>
-		internal static void ApplyAndRebuild(GameObject root)
-		{
-
-
-			if (root == null) return;
-
-			// 1) Configure TMP Components
-			var tmps = root.GetComponentsInChildren<TextMeshProUGUI>(true);
-			foreach (var t in tmps)
-			{
-				if (t == null) continue;
-				if (t.gameObject.name == "ButtonText" || t.gameObject.name == "Control")
-				{
-					t.enableWordWrapping = false; // Ensure wrapping is off for these
-					continue;
-				}
-				t.enableWordWrapping = true;
-				// Overflow mode ensures text wraps and fills the space, 
-				// rather than cutting off or masking.
-				t.overflowMode = TextOverflowModes.Overflow;
-
-				// Ensure this is not set to shrink the text
-				t.enableAutoSizing = false;
-			}
-
-			// 2) Force Layout Update
-			// Instead of forcing individual RectTransforms, we find the 
-			// top-most parent that has a layout group or is the root 
-			// and force a complete rebuild.
-			Canvas.ForceUpdateCanvases();
-
-			/*
-			 * this part of the code didn't work but doesn't seem to be needed?
-			 * // This finds all LayoutGroups and ContentSizeFitters in the root
-			// and forces them to re-evaluate their children's sizes.
-			//var layouts = root.GetComponentsInChildren<LayoutGroup>(true);
-			foreach (var l in layouts)
-			{
-				LayoutRebuilder.ForceRebuildLayoutImmediate(l.transform as RectTransform);
-			}*/
-			// Final pass to make sure everything is clean
-			Canvas.ForceUpdateCanvases();
-
-		}
-
 		#endregion
 	}
 
