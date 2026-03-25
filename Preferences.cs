@@ -68,7 +68,7 @@ namespace UIFramework
 				TestBoolList.Add(TestBooleans.CreateEntry("TestBool" + i, false, "Test Bool " + i));
 			}
 
-			/*Debug.debugMode = EnableDebugMode.Value;
+			/*Debug.debugMode = EnableDebugMode.EnteredValue;
 
 			EnableDebugMode.OnEntryValueChanged.Subscribe((oldValue, newValue) =>
 			{

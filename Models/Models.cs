@@ -121,6 +121,7 @@ namespace UIFramework
 		/// </summary>
 		public class ModelMelonEntry : ModelEntryItem
 		{
+			
 			public virtual MelonPreferences_Entry PrefEntry { get; set; }
 			public override string Identifier => PrefEntry.Identifier;
 			public override string DisplayName => PrefEntry.DisplayName.Trim() == "" ? PrefEntry.Identifier : PrefEntry.DisplayName;
@@ -134,8 +135,16 @@ namespace UIFramework
 			public ModelMelonEntry(MelonPreferences_Entry prefEntry)
 			{
 				PrefEntry = prefEntry;
-
+				SavedValue = prefEntry.BoxedValue;
+				PrefEntry.OnEntryValueChangedUntyped.Subscribe(OnValueChanged);
 			}
+
+			protected void OnValueChanged(object oldVal, object newVal)
+			{
+				SavedValue = newVal;
+			}
+			 
+			public virtual object SavedValue { get; set; }
 
 			private GameObject _uiPrefabSource;
 			/// <summary>
@@ -156,7 +165,7 @@ namespace UIFramework
 			/// Returns an instance of the game object associated with the MelonPreferences_Entry type.
 			/// If a custom one is provided, it will return an instance of that instead
 			/// </summary>
-			/// <returns></returns>
+			/// <returns>TODO: Move this to the UI builders as this is ui logic</returns>
 			public override GameObject GetNewUIInstance()
 			{
 				if (_uiPrefabSource == null)

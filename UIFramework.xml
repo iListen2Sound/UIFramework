@@ -75,12 +75,12 @@
             
             </summary>
         </member>
-        <member name="P:UIFramework.UIFController.PrefText.Value">
+        <member name="P:UIFramework.UIFController.PrefText.EnteredValue">
              <summary>
             
              </summary>
         </member>
-        <member name="M:UIFramework.UIFController.PrefText.SaveAction">
+        <member name="M:UIFramework.UIFController.PrefText.ApplyValueToPref">
             <inheritdoc/>
         </member>
         <member name="T:UIFramework.UIFController.PrefInt">
@@ -88,7 +88,7 @@
             
             </summary>
         </member>
-        <member name="M:UIFramework.UIFController.PrefInt.SaveAction">
+        <member name="M:UIFramework.UIFController.PrefInt.ApplyValueToPref">
             <inheritdoc/>
         </member>
         <member name="T:UIFramework.UIFController.PrefFloat">
@@ -101,7 +101,7 @@
             
             </summary>
         </member>
-        <member name="M:UIFramework.UIFController.PrefDouble.SaveAction">
+        <member name="M:UIFramework.UIFController.PrefDouble.ApplyValueToPref">
             <inheritdoc/>
         </member>
         <member name="T:UIFramework.UIFController.PrefBool">
@@ -112,10 +112,15 @@
         <member name="M:UIFramework.UIFController.PrefBool.ModelSet">
             <inheritdoc/>
         </member>
-        <member name="M:UIFramework.UIFController.PrefBool.SaveAction">
+        <member name="M:UIFramework.UIFController.PrefBool.EditCheck">
             <inheritdoc/>
         </member>
         <member name="T:UIFramework.UIFController.PrefDropDown">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:UIFramework.UIFController.EntryState">
             <summary>
             
             </summary>
@@ -414,7 +419,7 @@
             Returns an instance of the game object associated with the MelonPreferences_Entry type.
             If a custom one is provided, it will return an instance of that instead
             </summary>
-            <returns></returns>
+            <returns>TODO: Move this to the UI builders as this is ui logic</returns>
         </member>
         <member name="T:UIFramework.Preferences">
             <summary>

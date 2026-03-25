@@ -6,18 +6,19 @@ using MelonLoader;
 using MelonLoader.Logging;
 using MonoMod.ModInterop;
 using System;
+using System.Collections;
+using System.Globalization;
 //using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static UIFramework.Debug;
 //using static UI.UIFController;
 using static Unity.Collections.AllocatorManager;
-using static UIFramework.Debug;
-using System.Globalization;
-using System.Collections;
 namespace UIFramework
 {
 	/// <summary>
@@ -76,7 +77,6 @@ namespace UIFramework
 			void OnTransformParentChanged()
 			{
 				_rootWindow = FindRootWindow();
-				Debug.Log($"RootWindow found: {_rootWindow?.name?? "null"} for {gameObject.name}", true);
 			}
 			public virtual void ModelSet() { }
 		}
@@ -169,7 +169,16 @@ namespace UIFramework
 			{
 				PrefRegistryPanel.DiscardAction();
 			}
-		
+
+
+			void Update()
+			{
+				if (Input.GetKeyDown(KeyCode.Escape))
+				{
+					// Deselect the currently selected UI element
+					EventSystem.current.SetSelectedGameObject(null);
+				}
+			}
 
 		}
 	}
