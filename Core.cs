@@ -45,11 +45,7 @@ namespace UIFramework
 		}
 		public override void OnLateInitializeMelon()
 		{
-			Preferences.InitializePrefs();
-			UIFModel.ModelMod ModModel = UI.Register(this, Preferences.CatUIFramework, Preferences.Experimental, Preferences.TestBooleans, Preferences.TestEmptyDisplayName);
-			UIFModel.ModelMelonCategory tester = (UIFModel.ModelMelonCategory)ModModel.GetSubmodel(Preferences.TestBooleans.Identifier);
-			UIFModel.ButtonEntry testButton = new UIFModel.ButtonEntry(CustomClick, "CustomButton", "just a test", "Custom Button");
-			tester.AddSubmodel(testButton);
+			
 
 
 			
@@ -92,6 +88,14 @@ namespace UIFramework
 
 		internal void FirstGymLoad()
 		{
+			Preferences.InitializePrefs();
+			UIFModel.ModelMod ModModel = UI.Register(this, Preferences.CatUIFramework, Preferences.Experimental, Preferences.TestBooleans, Preferences.TestEmptyDisplayName);
+			UIFModel.ModelMelonCategory tester = (UIFModel.ModelMelonCategory)ModModel.GetSubmodel(Preferences.TestBooleans.Identifier);
+			UIFModel.ButtonEntry testButton = new UIFModel.ButtonEntry(CustomClick, "CustomButton", "just a test", "Custom Button");
+			
+			
+			tester.AddSubmodel(testButton);
+
 			Prefabs.LoadAssetBundle();
 
 			UI.InitializeUIObjects();

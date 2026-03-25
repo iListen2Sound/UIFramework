@@ -32,7 +32,7 @@ namespace UIFramework
 			
 		}*/
 
-		public abstract class Entry : MonoBehaviour, IChildable
+		public abstract class Entry : SubModelController, IChildable
 		{
 			/// <summary>
 			/// Sets the description text
@@ -53,25 +53,9 @@ namespace UIFramework
 			/// <summary>
 			/// Runs when the model property has been set. 
 			/// </summary>
-			public virtual void ModelSet() 
-			{
-				EntryModel.OnUICreated?.Invoke(this);
-			}
 
-			public UIFModel.IEntry EntryModel;
-			public virtual UIFModel.IModelable Model
-			{
-				get { return (UIFModel.IModelable)EntryModel; }
-				set
-				{
 
-					EntryModel = (UIFModel.IEntry)value;
-					DescriptionText = EntryModel.Description;
-					DisplayName = EntryModel.DisplayName;
-
-					ModelSet();
-				}
-			}
+			public UIFModel.IEntry EntryModel => (UIFModel.IEntry)_internalModel;
 			/// <summary>
 			/// This is called when the Save button is pressed. Override to create custom behaviour.
 			/// </summary>
@@ -79,6 +63,13 @@ namespace UIFramework
 			public virtual void SaveAction()
 			{
 				EntryModel.SaveAction();
+			}
+
+			public override void ModelSet()
+			{
+				DescriptionText = EntryModel.Description;
+				DisplayName = EntryModel.DisplayName;
+				EntryModel.OnUICreated?.Invoke(this);
 			}
 		}
 		/// <summary>
@@ -133,6 +124,23 @@ namespace UIFramework
 				{
 					EntryStatus = EntryState.Edited;
 				}
+			}
+
+
+
+			public void EditStart(string s)
+			{
+				textField.textComponent.fontStyle = FontStyles.Normal;
+			} 
+			public void EditEnd(string s)
+			{
+				textField.textComponent.fontStyle = FontStyles.Italic;
+			}
+
+			void Start()
+			{
+				textField.onSelect.AddListener((System.Action<string>)EditStart);
+				textField.onEndEdit.AddListener((System.Action<string>)EditEnd);
 			}
 		}
 
@@ -273,18 +281,7 @@ namespace UIFramework
 		{
 
 			public GameObject ButtonGo;
-			public virtual UIFModel.IModelable Model
-			{
-				get { return (UIFModel.IModelable)EntryModel; }
-				set
-				{
 
-					EntryModel = (UIFModel.IEntry)value;
-					DescriptionText = EntryModel.Description;
-					DisplayName = EntryModel.Identifier;
-					ModelSet();
-				}
-			}
 			public override void ModelSet()
 			{
 				ButtonGo = this.gameObject.transform.Find("Data/Button").gameObject;

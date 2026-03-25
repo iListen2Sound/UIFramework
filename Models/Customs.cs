@@ -55,7 +55,7 @@ namespace UIFramework
 			/// </summary>
 			public object BoxedValue { get; set; }
 
-			public void SaveAction() { }
+			public override void SaveAction() { }
 
 			public Action<UIFController.ButtonEntry> OnClick;
 

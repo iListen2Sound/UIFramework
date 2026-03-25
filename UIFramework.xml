@@ -24,7 +24,7 @@
             Sets the identifier text
             </summary>
         </member>
-        <member name="M:UIFramework.UIFController.Entry.ModelSet">
+        <member name="P:UIFramework.UIFController.Entry.EntryModel">
             <summary>
             Runs when the model property has been set. 
             </summary>

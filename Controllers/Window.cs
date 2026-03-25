@@ -17,6 +17,7 @@ using UnityEngine.UI;
 using static Unity.Collections.AllocatorManager;
 using static UIFramework.Debug;
 using System.Globalization;
+using System.Collections;
 namespace UIFramework
 {
 	/// <summary>
@@ -25,6 +26,7 @@ namespace UIFramework
 	/// <remarks>I may have gone a little crazy with inheritance</remarks>
 	public partial class UIFController
 	{
+
 		/// <summary>
 		/// Controllers for models that can be submodels of other models. 
 		/// Preference Entries
@@ -37,6 +39,46 @@ namespace UIFramework
 			/// Reference to the model the controller works from.  
 			/// </summary>
 			public UIFModel.IModelable Model { get; set; }
+		}
+		public abstract class SubModelController : MonoBehaviour
+		{
+			protected UIFModel.IModelable _internalModel;
+			public virtual UIFModel.IModelable Model
+			{
+				get
+				{
+					return _internalModel;
+				}
+				set
+				{
+					_internalModel = value;
+					ModelSet();
+				}
+			}
+
+			public WindowController _rootWindow;
+
+			public WindowController FindRootWindow()
+			{
+				WindowController foundRoot = null; ;
+				Transform ancestor = this.gameObject.transform.parent;
+				while (ancestor != null)
+				{
+					if (ancestor.name.Contains("MainWindow"))
+					{
+						return ancestor.GetComponent<WindowController>();
+					}
+					ancestor = ancestor.parent;
+				}
+
+				return foundRoot;
+			}
+			void OnTransformParentChanged()
+			{
+				_rootWindow = FindRootWindow();
+				Debug.Log($"RootWindow found: {_rootWindow?.name?? "null"} for {gameObject.name}", true);
+			}
+			public virtual void ModelSet() { }
 		}
 
 		/// <summary>
@@ -74,7 +116,7 @@ namespace UIFramework
 
 
 				MainActionButton.onClick.AddListener((UnityAction)SaveButtonClick);
-				
+
 				MinimizeButton.onClick.AddListener((UnityAction)(() => MainCanvas.SetActive(false)));
 
 				_model = model;
@@ -102,7 +144,7 @@ namespace UIFramework
 			/// </remarks>
 			public virtual void SaveButtonClick()
 			{
-				
+
 				for (int i = PrefRegistryPanel.gameObject.transform.childCount - 1; i >= 0; i--)
 				{
 					//Error handling per child to prevent breaking the whole loop.
@@ -111,9 +153,10 @@ namespace UIFramework
 						Entry entry = PrefRegistryPanel.gameObject.transform.GetChild(i).gameObject.GetComponent<Entry>();
 						entry.SaveAction();
 						entry.EntryModel.SaveAction();
-					} catch (Exception ex)
+					}
+					catch (Exception ex)
 					{
-						Debug.Warning($"Error in entry saving loop {PrefRegistryPanel.gameObject.transform.childCount - i}:"); 
+						Debug.Warning($"Error in entry saving loop {PrefRegistryPanel.gameObject.transform.childCount - i}:");
 						Debug.Error(ex.Message);
 					}
 				}
@@ -124,12 +167,11 @@ namespace UIFramework
 
 			public virtual void DiscardButtonClick()
 			{
-				
 				PrefRegistryPanel.DiscardAction();
-				
 			}
+		
 
 		}
 	}
-	
+
 }

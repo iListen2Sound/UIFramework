@@ -59,6 +59,7 @@ namespace UIFramework
 			{
 
 			}
+			public override void SaveAction() { }
 
 		}
 
@@ -91,6 +92,7 @@ namespace UIFramework
 			{
 				AddSubmodel(entryModel.Cast<IModelable>().ToArray());
 			}
+			//public override void DiscardAction() { }
 		}
 
 		public abstract class ModelEntryItem : ModelBase, IEntry

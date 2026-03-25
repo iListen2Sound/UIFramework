@@ -23,18 +23,23 @@ namespace UIFramework
 	public partial class UIFController
 	{
 		//protected override GameObject UIPrefab { get { return Prefabs.TextPrefab; } }
-		public abstract class TabButtonController : MonoBehaviour, IChildable
+		public abstract class TabButtonController : SubModelController, IChildable
 		{
-			protected UIFModel.IHoldSubmodels _model;
-			public virtual UIFModel.IModelable Model
+			protected UIFModel.IHoldSubmodels _model => (UIFModel.IHoldSubmodels)_internalModel;
+			/*public override UIFModel.IModelable Model
 			{
 				get { return _model; }
 				set
 				{
 					_model = (UIFModel.IHoldSubmodels)value;
-					Label = _model.DisplayName;
 
 				}
+			}*/
+
+			public override void ModelSet()
+			{
+				Label = _model.DisplayName;
+				
 			}
 
 			public string Label { set { this.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = value; } }
@@ -50,7 +55,7 @@ namespace UIFramework
 			/// </summary>
 			public virtual void SelectTargetPanel()
 			{
-				WindowController ParentWindow = gameObject.transform.parent.parent.parent.parent.parent.parent.gameObject.GetComponent<WindowController>();
+				WindowController ParentWindow = _rootWindow;
 				if (_model.SubModels.Count > 0)
 				{
 					switch (_model.SubModels[0])
@@ -70,6 +75,9 @@ namespace UIFramework
 
 				TargetContainer.SetModel(_model);
 			}
+
+
+
 			/// <summary>
 			/// Change the color of the selected panel to be more prominent. Reset all other buttons in parent to be default color
 			/// </summary>

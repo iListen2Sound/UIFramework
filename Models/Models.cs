@@ -166,10 +166,8 @@ namespace UIFramework
 					{
 						case bool:
 							return UI.GetPrefab(InputType.Toggle);
-							break;
 						case string:
 							return UI.GetPrefab(InputType.TextField);
-							break;
 						case int:
 							return UI.GetPrefab(InputType.NumericInt);
 						case float:
@@ -191,10 +189,10 @@ namespace UIFramework
 				}
 			}
 
-			public void SaveAction()
+			/*public void SaveAction()
 			{
 
-			}
+			}*/
 
 		}
 	}
