@@ -2,9 +2,9 @@
 Drop the dll in your mods folder. 
 #### **Default toggle is the `F9` key**
 
-Changing a value of an entry automatically updates the value of the preference and is applied. How mods that use that preference react depend on the modders' implementation.
+Changing a value of an entry automatically updates the value of the preference and is applied. How that preference's parent mod reacts depends on the modder's implementation.
 
-The save button writes it to the file for permanent storage. (closing your game also saves preferences to file automatically)
+The save button writes it to the file for permanent storage. Closing your game might also save preferences to file automatically depending on whether it's closed from the game window or through steam (steam doesn't save because it force closes it).
 
 # For Modders 
 Declare your MelonPreferences and then register to UI in `OnLateInitializeMelon();` with 
