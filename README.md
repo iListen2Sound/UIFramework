@@ -53,5 +53,5 @@ TestEntry22 = TestCategory2.CreateEntry("Entry 2-2", true, "Display Name 4", "Te
 ```
 https://melonwiki.xyz/#/modders/preferences?id=melon-preferences
 
-# Ongoing Development Discolosure
-This mod is in active development. The plan is to increase extensibility. **Basic MelonPreferences registration is stable and should always be backwards compatible.** So while advanced API usage will have a lot of changes for the time that this mod is in [Version 0.x.x](https://semver.org/#spec-item-4), mods that implement the basic usecase of this framework don't have to worry about breaking in the future (as long as I don't mess up too bad).
+# Ongoing Development Disclosure
+This mod is in active development. The plan is to increase extensibility. **Basic MelonPreferences registration is stable and should always be backwards compatible.** So while advanced API usage will have a lot of changes for the time that this mod is in [Version 0.x.x](https://semver.org/#spec-item-4), mods that implement the basic use case of this framework don't have to worry about breaking in the future (as long as I don't mess up too bad). 

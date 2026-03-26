@@ -21,7 +21,7 @@ namespace UIFramework
 		/// <summary></summary>
 		public const string Author = "Reverb && Spice";
 		/// <summary></summary>
-		public const string Version = "0.4.0";
+		public const string Version = "0.4.1";
 	}
 
 	
@@ -89,19 +89,20 @@ namespace UIFramework
 		internal void FirstGymLoad()
 		{
 			Preferences.InitializePrefs();
-			if(EnableDebugMode.Value)
+			UIFModel.ModelMod ModModel;
+			if (Preferences.EnableDebugMode.Value)
 			{
-				UIFModel.ModelMod ModModel = UI.Register(this, Preferences.CatUIFramework, Preferences.Experimental, Preferences.TestBooleans, Preferences.TestEmptyDisplayName);
+				ModModel = UI.Register(this, Preferences.CatUIFramework, Preferences.Experimental, Preferences.TestBooleans, Preferences.TestEmptyDisplayName);
+				UIFModel.ModelMelonCategory tester = (UIFModel.ModelMelonCategory)ModModel.GetSubmodel(Preferences.TestBooleans.Identifier);
+				UIFModel.ButtonEntry testButton = new UIFModel.ButtonEntry(CustomClick, "CustomButton", "just a test", "Custom Button");
+				tester.AddSubmodel(testButton);
 			}
 			else
 			{
-				UIFModel.ModelMod ModModel = UI.Register(this, Preferences.CatUIFramework);
+				ModModel = UI.Register(this, Preferences.CatUIFramework);
 			}
-			UIFModel.ModelMelonCategory tester = (UIFModel.ModelMelonCategory)ModModel.GetSubmodel(Preferences.TestBooleans.Identifier);
-			UIFModel.ButtonEntry testButton = new UIFModel.ButtonEntry(CustomClick, "CustomButton", "just a test", "Custom Button");
 			
 			
-			tester.AddSubmodel(testButton);
 
 			Prefabs.LoadAssetBundle();
 
