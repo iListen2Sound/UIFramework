@@ -8,9 +8,8 @@ UI.Register(this, TestCategory1, TestCategory2...);
 ```
 
 ## If you haven't used melonpreferences before
-Below is a link to the documentation as well as instructions for basic usage.
-**<details><summary> Standard Melon preferences declaration example </summary>**
-https://melonwiki.xyz/#/modders/preferences?id=melon-preferences
+### Below is a link to the documentation as well as instructions for basic usage.
+
 1. Set a file location. Make sure the directory exists for your mod because it will not error but your preferences don't save at all.
 ```cs
 private const string USER_DATA = "UserData/TestMod/";
@@ -44,4 +43,4 @@ TestEntry12 = TestCategory1.CreateEntry("Entry 1-2", 1, "Display Name2", "Test I
 TestEntry21 = TestCategory2.CreateEntry("Entry 2-1", "0.5126", "Display Name 3", "Test float");
 TestEntry22 = TestCategory2.CreateEntry("Entry 2-2", true, "Display Name 4", "Test bool");
 ```
-</details>
+https://melonwiki.xyz/#/modders/preferences?id=melon-preferences
