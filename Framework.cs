@@ -61,6 +61,9 @@ namespace UIFramework
 			WindowInstance = MainWindow.GetComponent<UIFController.WindowController>();
 
 		}
+		/// <summary>
+		/// 
+		/// </summary>
 		internal static void BuildUI()
 		{
 			WindowInstance.SetModel(ModelInstance);

@@ -4,10 +4,12 @@ Drop the dll in your mods folder.
 
 Changing a value of an entry automatically updates the value of the preference and is applied. How that preference's parent mod reacts depends on the modder's implementation.
 
-The save button writes it to the file for permanent storage. Closing your game might also save preferences to file automatically depending on whether it's closed from the game window or through steam (steam doesn't save because it force closes it).
+The save button writes it to the file for permanent storage. Closing your game might also save preferences to file automatically depending on whether it's closed from the game window or through Steam. Stopping through Steam doesn't save because it force closes it.
 
 # For Modders 
-Declare your MelonPreferences and then register to UI in `OnLateInitializeMelon();` with 
+Add `[assembly: MelonAdditionalDependencies("UIFramework")]` to your AssemblyInfo. This prevents your mod from calling on UIFramework before it's been initialized.
+
+[Declare](#If-you-havent-used-melonpreferences-before) your MelonPreferences in `OnInitializeMelon` and then register them to the UI.
 ```cs
 UI.Register(this, TestCategory1, TestCategory2...);
 ```

@@ -62,7 +62,7 @@ namespace UIFramework
 			/// <remarks>Generally MelonPreferences are saved from the category, not the indivial entries.</remarks>
 			public virtual void SaveAction()
 			{
-				EntryModel.SaveAction();
+				//EntryModel.SaveAction();
 			}
 
 			public override void ModelSet()

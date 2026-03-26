@@ -146,6 +146,11 @@ namespace UIFramework
 			 
 			public virtual object SavedValue { get; set; }
 
+			public override void SaveAction()
+			{
+				SavedValue = BoxedValue;
+			}
+
 			private GameObject _uiPrefabSource;
 			/// <summary>
 			/// Use this function to provide your own prefab for this entry. 
@@ -159,6 +164,8 @@ namespace UIFramework
 			{
 				_uiPrefabSource = prefab;
 			}
+
+			
 
 
 			/// <summary>
