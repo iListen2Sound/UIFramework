@@ -1,16 +1,22 @@
 # For Users
-Drop the dll in your mod folder. Default toggle is the `F9` key
+Drop the dll in your mods folder. 
+#### **Default toggle is the `F9` key**
+
+Changing a value of an entry automatically updates the value of the preference and is applied. How mods that use that preference react depend on the modders' implementation.
+
+The save button writes it to the file for permanent storage. (closing your game also saves preferences to file automatically)
 
 # For Modders 
 Declare your MelonPreferences and then register to UI in `OnLateInitializeMelon();` with 
 ```cs
 UI.Register(this, TestCategory1, TestCategory2...);
 ```
+Right now, support is limited to common types like `string`, `int`, `bool`, `double`, `float`, and `enums` without the flags attribute. Working on expanding this. 
 
 ## If you haven't used melonpreferences before
-### Below is a link to the documentation as well as instructions for basic usage.
+### Here's instructions for basic usage as well as a link to the official documentation for MelonPreferences from the MelonLoader wiki
 
-1. Set a file location. Make sure the directory exists for your mod because it will not error but your preferences don't save at all.
+1. Set a file location. Make sure the directory exists for your mod. Otherwise, it will not cause an error but your preferences don't save at all.
 ```cs
 private const string USER_DATA = "UserData/TestMod/";
 private const string CONFIG_FILE = "config.cfg";
@@ -35,7 +41,7 @@ private MelonPreferences_Entry<int> TestEntry12;
 private MelonPreferences_Entry<float> TestEntry21;
 private MelonPreferences_Entry<bool> TestEntry22;
 ```
-4. Create Entries by calling the .CreateEntry method on the category they go in
+4. Create Entries by calling the .CreateEntry method on the category they go in. Parameters are `Identifier`, `Default Value`, `Display Name`, and `Description`
 ```cs
 TestEntry11 = TestCategory1.CreateEntry("Entry 1-1", "Test Val", "Display Name1", "Test String");
 TestEntry12 = TestCategory1.CreateEntry("Entry 1-2", 1, "Display Name2", "Test Int");
@@ -44,3 +50,6 @@ TestEntry21 = TestCategory2.CreateEntry("Entry 2-1", "0.5126", "Display Name 3",
 TestEntry22 = TestCategory2.CreateEntry("Entry 2-2", true, "Display Name 4", "Test bool");
 ```
 https://melonwiki.xyz/#/modders/preferences?id=melon-preferences
+
+# Ongoing Development Discolosure
+This mod is in active development. The plan is to increase extensibility. **Basic MelonPreferences registration is stable and should always be backwards compatible.** So while advanced API usage will have a lot of changes for the time that this mod is in [Version 0.x.x](https://semver.org/#spec-item-4), mods that implement the basic usecase of this framework don't have to worry about breaking in the future (as long as I don't mess up too bad).
