@@ -89,7 +89,14 @@ namespace UIFramework
 		internal void FirstGymLoad()
 		{
 			Preferences.InitializePrefs();
-			UIFModel.ModelMod ModModel = UI.Register(this, Preferences.CatUIFramework, Preferences.Experimental, Preferences.TestBooleans, Preferences.TestEmptyDisplayName);
+			if(EnableDebugMode.Value)
+			{
+				UIFModel.ModelMod ModModel = UI.Register(this, Preferences.CatUIFramework, Preferences.Experimental, Preferences.TestBooleans, Preferences.TestEmptyDisplayName);
+			}
+			else
+			{
+				UIFModel.ModelMod ModModel = UI.Register(this, Preferences.CatUIFramework);
+			}
 			UIFModel.ModelMelonCategory tester = (UIFModel.ModelMelonCategory)ModModel.GetSubmodel(Preferences.TestBooleans.Identifier);
 			UIFModel.ButtonEntry testButton = new UIFModel.ButtonEntry(CustomClick, "CustomButton", "just a test", "Custom Button");
 			
