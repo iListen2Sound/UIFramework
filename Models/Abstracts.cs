@@ -26,7 +26,8 @@ namespace UIFramework
 			/// <inheritdoc/>
 			public abstract string DisplayName { get; }
 
-
+			
+			/// <inheritdoc/>
 			public virtual void SaveAction()
 			{
 
@@ -75,22 +76,28 @@ namespace UIFramework
 			{
 
 			}
+			/// <inheritdoc/>
 			public override void SaveAction() { }
 
 		}
 
 		public abstract class ModelModItem : SelectableModelBase
 		{
-
+			/// <inheritdoc/>
 			public override GameObject GetNewUIInstance()
 			{
 				return GameObject.Instantiate(Prefabs.ModTab);
 			}
+			/// <summary>
+			/// 
+			/// </summary>
 			public virtual ModelCategoryItem GetModelCategory(string identifier)
 			{
 				return (ModelCategoryItem) GetSubmodel(identifier);
 			}
-
+			/// <summary>
+			/// 
+			/// </summary>
 			public virtual void AddModelCategory(params ModelCategoryItem[] categoryModel)
 			{
 				AddSubmodel(categoryModel.Cast<IModelable>().ToArray());
@@ -100,6 +107,7 @@ namespace UIFramework
 		}
 		public abstract class ModelCategoryItem : SelectableModelBase
 		{
+			/// <inheritdoc/>
 			public override GameObject GetNewUIInstance()
 			{
 				return GameObject.Instantiate(Prefabs.CatTab);
@@ -113,10 +121,20 @@ namespace UIFramework
 
 		public abstract class ModelEntryItem : ModelBase, IEntry
 		{
+			
+			/// <summary>
+			/// Description of the modelentry
+			/// </summary>
 			public abstract string Description { get; }
-			/// <inheritdoc/>
+			
+			/// <summary>
+			/// Called when the corresponding UI element is created
+			/// </summary>
 			public virtual Action<UIFController.Entry> OnUICreated { get; set; }
-
+			
+			/// <summary>
+			/// 
+			/// </summary>
 			public virtual EntryState SaveState {get; set;}
 		}
 
