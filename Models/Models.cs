@@ -150,6 +150,25 @@ namespace UIFramework
 				get => PrefEntry.BoxedValue;
 				set => PrefEntry.BoxedValue = value;
 			}
+
+
+			public bool TryApply(object value)
+			{
+				bool result = false;
+				try
+				{
+					BoxedValue = value;
+					result = true;
+				}
+				catch (Exception ex) 
+				{
+					Debug.Log($"ModelMelonEntry TryApply: {ex.Message}", false, 2);
+					result= false;
+
+				}
+				return result;
+
+			}
 			/// <summary>
 			/// Creates a new instance of this object based around a MelonPreferences_Entry object
 			/// </summary>

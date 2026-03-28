@@ -96,6 +96,7 @@ namespace UIFramework
 			public PrefList PrefRegistryPanel;
 			public Button MainActionButton;
 			public Button MinimizeButton;
+			public TextMeshProUGUI TitleText;
 
 
 			void Awake()
@@ -107,19 +108,23 @@ namespace UIFramework
 
 			public virtual void SetModel(UIFModel.RootModel model)
 			{
+				_model = model;
+
 				MainCanvas = this.gameObject;
 				ModRegistryPanel = MainCanvas.transform.Find("Root/Body/ModRegistry/Viewport/ModRegCont").gameObject.GetComponent<Sidebar>();
 				CatRegistryPanel = MainCanvas.transform.Find("Root/Body/CatRegistry/Viewport/CatRegCont").gameObject.GetComponent<TopBar>();
 				PrefRegistryPanel = MainCanvas.transform.Find("Root/Body/PrefRegistry/Viewport/PrefRegCont").gameObject.GetComponent<PrefList>();
 				MainActionButton = MainCanvas.transform.Find("Root/Body/SaveActionButton").gameObject.GetComponent<Button>();
 				MinimizeButton = MainCanvas.transform.Find("Root/Ribbon/Minimize").gameObject.GetComponent<Button>();
-
+				TitleText = MainCanvas.transform.Find("Root/Ribbon/WindowTitle").gameObject.GetComponent<TextMeshProUGUI>();
 
 				MainActionButton.onClick.AddListener((UnityAction)SaveButtonClick);
 
 				MinimizeButton.onClick.AddListener((UnityAction)(() => MainCanvas.SetActive(false)));
 
-				_model = model;
+				TitleText.text = $"{Core.Instance.Info.Name} v{Core.Instance.Info.Version}";
+
+				
 				BuildModList();
 				Deb("Main Window Full Path: " + Helpers.HierarchyUtility.GetGameObjectPath(this.gameObject));
 			}
