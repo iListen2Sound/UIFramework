@@ -53,10 +53,17 @@ namespace UIFramework
 
 		public override void OnUpdate()
 		{
-			DiffLog($"");
+			//DiffLog($"");
 
-			if(Input.GetKeyDown(KeyCode.F9))
+			
+
+			if (Input.GetKeyDown(KeyCode.F9))
 			{
+				if (CurrentScene == "loader")
+				{
+					Debug.Warning("UIFramework does not work in the loader. Please finish calibrating.");
+					return;
+				}
 				UI.MainWindow.SetActive(!UI.MainWindow.activeSelf);
 			}
 		}
@@ -69,7 +76,7 @@ namespace UIFramework
 			CurrentScene = sceneName.ToNormal();
 			if (CurrentScene == "loader")
 			{
-
+				
 			}
 
 			if (CurrentScene == "gym" && isFirstLoad) FirstGymLoad();
@@ -88,6 +95,14 @@ namespace UIFramework
 
 		internal void FirstGymLoad()
 		{
+			BuildUI();
+
+
+			isFirstLoad = false;
+		}
+
+		internal void BuildUI()
+		{
 			Preferences.InitializePrefs();
 			UIFModel.ModelMod ModModel;
 			if (Preferences.EnableDebugMode.Value)
@@ -101,14 +116,13 @@ namespace UIFramework
 			{
 				ModModel = UI.Register(this, Preferences.CatUIFramework);
 			}
-			
-			
+
+
 
 			Prefabs.LoadAssetBundle();
 
 			UI.InitializeUIObjects();
 			UI.BuildUI();
-			isFirstLoad = false;
 
 			UI.MainWindow.SetActive(false);
 		}
