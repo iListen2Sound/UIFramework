@@ -196,10 +196,12 @@
         <member name="M:UIFramework.UIFController.PrefList.DiscardAction">
             <inheritdoc/>
         </member>
-        <member name="M:UIFramework.UIFController.TabButtonController.SelectTargetPanel">
+        <member name="M:UIFramework.UIFController.TabButtonController.OnSelect">
             <summary>
-            Selects the panel that should be assigned a model next. The target then parents the models' game objects to itself from the list
+            Runs when the button is clicked. Implement this in inheriting classes. 
             </summary>
+            <exception cref="T:System.NotImplementedException"></exception>
+            <remarks>IL2CPP does not like abstract methods 😭</remarks>
         </member>
         <member name="M:UIFramework.UIFController.TabButtonController.Highlight">
             <summary>

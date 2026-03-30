@@ -66,6 +66,8 @@ namespace UIFramework
 			public override string Identifier => Instance.Info.Name;
 			public override string DisplayName => Identifier;
 
+			public virtual string Version => Instance.Info.Version;
+
 			//internal List<ModelBase> catModelList = new();
 
 
