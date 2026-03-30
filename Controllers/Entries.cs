@@ -99,7 +99,7 @@ namespace UIFramework
 				base.SaveAction();
 			}
 
-			public virtual void ApplyValueToPref() { }
+			public virtual void ApplyValueToPref(){ }
 		}
 
 

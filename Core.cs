@@ -21,7 +21,7 @@ namespace UIFramework
 		/// <summary></summary>
 		public const string Author = "Reverb && Spice";
 		/// <summary></summary>
-		public const string Version = "0.4.1";
+		public const string Version = "0.5.0";
 	}
 
 	
@@ -129,7 +129,7 @@ namespace UIFramework
 
 		public void MelPrefsSaved(string s)
 		{
-			Debug.Deb("MelPrefsSaved called " + s);
+			//Debug.Deb("MelPrefsSaved called " + s);
 		}
 
 		public void CustomClick(UIFController.Entry button)

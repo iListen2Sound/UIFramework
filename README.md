@@ -1,6 +1,18 @@
 #### New in this version (expand each for details)
-<details>  <summary> New feature: Enum Display Name attribute support </summary></details>
-<details><summary> Bug fix: Prevented error when trying to toggle the UI in the loader scene </summary></details>
+<details>  <summary> New feature: Enum Display Name attribute support </summary>
+
+You can now use the `[Display(Name = "DisplayName")]` attribute on your enum values. [More details further down](#enum-display-names)
+
+</details>
+<details><summary> Bug fix: Error in the loader scene </summary>
+
+Trying to toggle the UI in the loader scene won't cause an error anymore. But you need to have loaded into the gym first before the window shows up.
+</details>
+<details><summary> Bug fix: The save button now saves all categories in a mod</summary>
+
+I think it makes more sense for the save button to save the entire mod's preferences instead of just that specific tab. 
+
+</details>
 
 -----
 # For Users
@@ -24,22 +36,7 @@ Right now, support is limited to common types like `string`, `int`, `bool`, `dou
 
 -----
 
-Enum dropdowns will now show the Display(Name) attribute. If unavailable, it will fall back to the default enum value name. 
-```cs
-using System.ComponentModel.DataAnnotations;
-public enum Example
-{
-    [Display(Name = "DisplayName")]
-    value1,
-    [Display(Name = "Other Value")]
-    value2
-}
-```
-</details>
 
-
-
------
 
 ## If you haven't used melonpreferences before
 ### Here's instructions for basic usage as well as a link to the official documentation for MelonPreferences from the MelonLoader wiki
@@ -79,6 +76,23 @@ TestEntry21 = TestCategory2.CreateEntry("Entry 2-1", "0.5126", "Display Name 3",
 TestEntry22 = TestCategory2.CreateEntry("Entry 2-2", true, "Display Name 4", "Test bool");
 ```
 https://melonwiki.xyz/#/modders/preferences?id=melon-preferences
+
+-----
+
+### Enum Display Names
+Enum dropdowns will now show the Display(Name) attribute. If unavailable, it will fall back to the default enum value name. 
+```cs
+using System.ComponentModel.DataAnnotations;
+public enum Example
+{
+    [Display(Name = "DisplayName")]
+    value1,
+    [Display(Name = "Other Value")]
+    value2
+}
+```
+-----
+
 
 
 # Ongoing Development Disclosure

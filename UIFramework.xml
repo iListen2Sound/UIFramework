@@ -556,6 +556,11 @@
             implemented by models that store data
             </summary>
         </member>
+        <member name="M:UIFramework.UIFModel.ModelMod.SaveAction">
+            <summary>
+            Calls individual category models' SaveAction method.
+            </summary>
+        </member>
         <member name="F:UIFramework.UIFModel.ModelMelonCategory.PrefCat">
             <summary>
             The MelonPreferences_Category object this adapts into the framework

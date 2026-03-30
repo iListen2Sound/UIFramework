@@ -50,7 +50,7 @@ namespace UIFramework
 			{
 				return (ModelModItem)GetSubmodel(identifier);
 			}
-			
+
 			public GameObject GetNewUIInstance() { return null; }
 
 			public void SaveAction() { }
@@ -78,20 +78,38 @@ namespace UIFramework
 				foreach (MelonPreferences_Category cat in catList)
 				{
 					SubModels.Add(new ModelMelonCategory(cat));
+
 				}
 			}
 			public ModelMod(MelonMod instance)
 			{
 				Instance = instance;
 			}
+			/// <summary>
+			/// Calls individual category models' SaveAction method.
+			/// </summary>
+			public override void SaveAction()
+			{
+				foreach (IModelable model in SubModels)
+				{
+					try
+					{
+						model.SaveAction();
+					}
+					catch (Exception ex)
+					{
+						Debug.Log($"Error savinvg category {model.Identifier} for mod {Instance.Info.Name}: {ex.Message}", false, 2);
+					}
+				}
+			}
 
-			
+
 		}
 
 		public class ModelMelonCategory : ModelCategoryItem
 		{
 			//public List<IModelable> SubModels { get; set; }
-			
+
 			/// <summary>
 			/// The MelonPreferences_Category object this adapts into the framework
 			/// </summary>
@@ -100,7 +118,7 @@ namespace UIFramework
 			public override string Identifier => PrefCat.Identifier;
 			/// <inheritdoc/>
 			public override string DisplayName => PrefCat.DisplayName.Trim() == "" ? PrefCat.Identifier : PrefCat.DisplayName;
-			
+
 			/// <summary>
 			/// Creates a new instance of this class based on a MelonPreferences_Category
 			/// </summary>
@@ -123,7 +141,7 @@ namespace UIFramework
 			{
 				SubModels.Add((IModelable)model);
 			}*/
-			
+
 
 		}
 
@@ -132,7 +150,7 @@ namespace UIFramework
 		/// </summary>
 		public class ModelMelonEntry : ModelEntryItem
 		{
-			
+
 			/// <summary>
 			/// MelonPreferences_Entry this model is meant to adapt
 			/// </summary>
@@ -143,7 +161,7 @@ namespace UIFramework
 			public override string DisplayName => PrefEntry.DisplayName.Trim() == "" ? PrefEntry.Identifier : PrefEntry.DisplayName;
 			/// <inheritdoc/>
 			public override string Description => PrefEntry.Description;
-			
+
 			/// <summary>
 			/// Direct access to the PrefEntry boxedvalue property
 			/// </summary>
@@ -162,10 +180,10 @@ namespace UIFramework
 					BoxedValue = value;
 					result = true;
 				}
-				catch (Exception ex) 
+				catch (Exception ex)
 				{
 					Debug.Log($"ModelMelonEntry TryApply: {ex.Message}", false, 2);
-					result= false;
+					result = false;
 
 				}
 				return result;
@@ -209,7 +227,7 @@ namespace UIFramework
 				_uiPrefabSource = prefab;
 			}
 
-			
+
 
 
 			/// <summary>
