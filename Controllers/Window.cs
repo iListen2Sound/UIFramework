@@ -129,6 +129,9 @@ namespace UIFramework
 				MainActionButton.onClick.AddListener((UnityAction)SaveButtonClick);
 
 				MinimizeButton.onClick.AddListener((UnityAction)(() => MainCanvas.SetActive(false)));
+
+				DiscardActionButton.onClick.AddListener((UnityAction)DiscardButtonClick);
+				DiscardActionButton.gameObject.SetActive(true);
 				
 
 				WindowTitle.text = $"{Core.Instance.Info.Name} v{Core.Instance.Info.Version}";
