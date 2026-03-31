@@ -193,8 +193,6 @@ namespace UIFramework
 			{
 
 				PrefRegistryPanel.DiscardAction();
-				CatRegistryPanel.Model?.SaveAction();
-				PrefRegistryPanel.SaveAction();
 				PrefRegistryPanel.Infanticide();
 				PrefRegistryPanel.BuildFromModelList();
 			}
