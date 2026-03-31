@@ -52,8 +52,8 @@ namespace UIFramework
 			TestFloat = Experimental.CreateEntry("TestFloat", 3.14f, "Test Float", "This is a test float.");
 			TestDouble = Experimental.CreateEntry("TestDouble", 3.14159, "Test Double", "This is a test double.");
 			TestEnum = Experimental.CreateEntry("TestEnum", InputType.TextField, "Test Enum", "This is a test enum.");
-			NonZeroBased = Experimental.CreateEntry("Non-Zero", a,"Non-zero-based enum test", "This tests enums that don't start from zero");
-			NonContiguous = Experimental.CreateCategory("Non-Cont", z, "Non-Contiguous enum test", "This tests enums that have gaps in between the explicitlyi named values");
+			NonZeroEnum = Experimental.CreateEntry("Non-Zero", NonZeroBased.a,"Non-zero-based enum test", "This tests enums that don't start from zero");
+			NonContiguousEnum = Experimental.CreateEntry("Non-Cont", NonContiguous.z, "Non-Contiguous enum test", "This tests enums that have gaps in between the explicitlyi named values");
 			TestList = Experimental.CreateEntry("TestList", new List<int> { 1, 2, 3 }, "Test List", "This is a test list of integers.");
 
 			

@@ -32,6 +32,9 @@ namespace UIFramework
 			{
 
 			}
+			public virtual void DiscardAction()
+			{
+			}
 		}
 		/// <summary>
 		/// Models that represent buttons on the sidebar and topbar
@@ -135,6 +138,7 @@ namespace UIFramework
 			/// </summary>
 			public virtual EntryState SaveState {get; set;}
 
+			public virtual void DiscardAction() { }
 		}
 
 		#endregion

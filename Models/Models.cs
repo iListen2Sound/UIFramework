@@ -54,6 +54,7 @@ namespace UIFramework
 			public GameObject GetNewUIInstance() { return null; }
 
 			public void SaveAction() { }
+			public void DiscardAction() { }
 
 		}
 
@@ -153,7 +154,7 @@ namespace UIFramework
 
 			public override void DiscardAction()
 			{
-				PrefCat.ReadFromFile();
+				PrefCat.LoadFromFile();
 			}
 
 			/*public void AddSubModel(IEntry model)

@@ -38,6 +38,7 @@ namespace UIFramework
 			/// Should be called when save button is pressed. Runs after all ancestor's save actions have been run
 			/// </summary>
 			public void SaveAction();
+			public void DiscardAction();
 			/// <summary>
 			/// Describes the parent for where the parent container should be
 			/// </summary>
