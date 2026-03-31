@@ -1,8 +1,11 @@
-#### New in this version (expand each for details)
+#### New in 0.5.0 (expand each for details)
 <details>  <summary> New feature: Enum Display Name attribute support </summary>
 
 You can now use the `[Display(Name = "DisplayName")]` attribute on your enum values. [More details further down](#enum-display-names)
 
+</details>
+<details><summary> New Feature: (0.5.1) Non-contiguous enum support</summary>
+You can now use enum types that are non-sequential and non-zero-based for your dropdowns
 </details>
 <details><summary> Bug fix: Error in the loader scene </summary>
 
@@ -13,6 +16,8 @@ Trying to toggle the UI in the loader scene won't cause an error anymore. But yo
 I think it makes more sense for the save button to save the entire mod's preferences instead of just that specific tab. 
 
 </details>
+
+
 
 -----
 # For Users
