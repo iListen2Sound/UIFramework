@@ -137,6 +137,11 @@ namespace UIFramework
 				PrefCat.SaveToFile();
 			}
 
+			public override void DiscardAction()
+			{
+				PrefCat.ReadFromFile();
+			}
+
 			/*public void AddSubModel(IEntry model)
 			{
 				SubModels.Add((IModelable)model);
@@ -211,6 +216,11 @@ namespace UIFramework
 			public override void SaveAction()
 			{
 				SavedValue = BoxedValue;
+			}
+			/// </inheritdoc>
+			public override void DiscardAction()
+			{
+
 			}
 
 			private GameObject _uiPrefabSource;

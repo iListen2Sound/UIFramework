@@ -122,9 +122,7 @@ namespace UIFramework
 		public abstract class ModelEntryItem : ModelBase, IEntry
 		{
 			
-			/// <summary>
-			/// Description of the modelentry
-			/// </summary>
+			/// </inheritdoc>
 			public abstract string Description { get; }
 			
 			/// <summary>
@@ -136,6 +134,7 @@ namespace UIFramework
 			/// 
 			/// </summary>
 			public virtual EntryState SaveState {get; set;}
+
 		}
 
 		#endregion
