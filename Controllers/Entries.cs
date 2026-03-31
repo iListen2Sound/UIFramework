@@ -307,6 +307,7 @@ namespace UIFramework
 		public class PrefDropDown : MelonEntry
 		{
 			protected UIFModel.ModelMelonEntry _prefModel => (UIFModel.ModelMelonEntry)EntryModel;
+			public List<int> _indexToValueMap = new();
 			public TMP_Dropdown dropdown;
 
 			public Type prefEnum;
@@ -316,8 +317,17 @@ namespace UIFramework
 				dropdown = this.gameObject.transform.Find("Data/Dropdown").GetComponent<TMP_Dropdown>();
 				prefEnum = _prefModel.PrefEntry.BoxedValue.GetType();
 
-				Il2CppSystem.Collections.Generic.List<string> enumNames = Helpers.GetDisplayName(prefEnum);
+				//Get a list of display name attributes or the enum name if not available
+				Il2CppSystem.Collections.Generic.List<string> enumNames;// = Helpers.GetDisplayName(prefEnum);
+				foreach(var value in Enum.GetValues(prefEnum))
+				{
+					FieldInfo info = prefEnum.GetField(value.ToString());
+					DisplayAttribute attr = info?.GetCustomAttribute<DisplayAttribute>();
+					enumNames.Add(attr?.GetName() ?? value.ToString());
+					_indexToValueMap.Add(Convert.ToInt32(value));
+				}
 
+				
 				dropdown.ClearOptions();
 				dropdown.AddOptions(enumNames);
 
@@ -340,7 +350,7 @@ namespace UIFramework
 			/// <inheritdoc/>
 			public override void ApplyValueToPref()
 			{
-				_prefModel.PrefEntry.BoxedValue = Enum.Parse(prefEnum, dropdown.value.ToString());
+				_prefModel.PrefEntry.BoxedValue = Enum.ToObject(prefEnum, _indexToValueMap[dropdown.value]);
 			}
 		}
 
