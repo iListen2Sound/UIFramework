@@ -271,8 +271,6 @@ namespace UIFramework
 						default:
 							Debug.Log("Unsupported type detected with no custom widget prefab provided. Defaulting to text input. Creating custom component recommended", false, 1);
 							return UI.GetPrefab(InputType.TextField);
-
-
 					}
 				}
 				else

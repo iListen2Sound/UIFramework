@@ -15,7 +15,6 @@ namespace UIFramework
 
 	public partial class UIFModel
 	{
-		#region Abstracts
 		public abstract class ModelBase : IModelable
 		{
 
@@ -136,7 +135,5 @@ namespace UIFramework
 
 			public virtual void DiscardAction() { }
 		}
-
-		#endregion
 	}
 }

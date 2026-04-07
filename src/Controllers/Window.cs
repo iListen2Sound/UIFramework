@@ -171,7 +171,7 @@ namespace UIFramework
 			public virtual void SaveButtonClick()
 			{
 
-				for (int i = PrefRegistryPanel.gameObject.transform.childCount - 1; i >= 0; i--)
+/*				for (int i = PrefRegistryPanel.gameObject.transform.childCount - 1; i >= 0; i--)
 				{
 					//Error handling per child to prevent breaking the whole loop.
 					try
@@ -185,7 +185,7 @@ namespace UIFramework
 						Debug.Warning($"Error in entry saving loop {PrefRegistryPanel.gameObject.transform.childCount - i}:");
 						Debug.Error(ex.Message);
 					}
-				}
+				}*/
 
 				CatRegistryPanel.Model?.SaveAction();
 				PrefRegistryPanel.SaveAction();

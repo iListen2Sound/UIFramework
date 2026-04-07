@@ -115,8 +115,6 @@ namespace UIFramework
 					{
 						ViewController.Model = model;
 					}
-
-
 				}
 			}
 			/// <summary>
