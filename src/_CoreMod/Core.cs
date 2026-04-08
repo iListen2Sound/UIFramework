@@ -118,17 +118,17 @@ namespace UIFramework
 				Vector2 delta = Mouse.current.delta.ReadValue();
 				if (delta.sqrMagnitude > 0)
 				{
-					DiffLog("Interaction Detected", true);
+					//DiffLog("Interaction Detected", true);
 					return true;
 				}
 			}
 
 			if (Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame)
 			{
-				DiffLog("Interaction Detected", true);
+				//DiffLog("Interaction Detected", true);
 				return true;
 			}
-			DiffLog("No Interaction Detected", true);
+			//DiffLog("No Interaction Detected", true);
 			return false;
 		}
 

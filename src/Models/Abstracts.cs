@@ -81,6 +81,7 @@ namespace UIFramework
 
 		public abstract class ModelModItem : SelectableModelBase
 		{
+			public abstract MelonMod Instance { get; set; }
 			/// <inheritdoc/>
 			public override GameObject GetNewUIInstance()
 			{

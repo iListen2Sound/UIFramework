@@ -61,7 +61,7 @@ namespace UIFramework
 		public class ModelMod : ModelModItem
 		{
 			public List<ModelCategoryItem> Categories => SubModels.Cast<ModelCategoryItem>().ToList();
-			public MelonMod Instance { get; set; }
+			public override MelonMod Instance { get; set; }
 
 			public override string Identifier => Instance.Info.Name;
 			public override string DisplayName => Identifier;
