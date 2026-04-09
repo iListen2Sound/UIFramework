@@ -130,15 +130,9 @@ namespace UIFramework
 				CatRegistryPanel.SetModel(mod);
 
 				UIFModel.ModelCategoryItem lastSelected = null;
-				try
-				{
-					if (LastCategorySelected.ContainsKey(mod as UIFModel.ModelModItem))
-						lastSelected = LastCategorySelected[mod as UIFModel.ModelModItem];
-				}
-				catch (Exception ex)
-				{
-					Debug.Log(ex.Message);
-				}
+				if (LastCategorySelected.ContainsKey(mod as UIFModel.ModelModItem))
+					lastSelected = LastCategorySelected[mod as UIFModel.ModelModItem];
+
 
 				PrefRegistryPanel.SetModel(lastSelected ?? (UIFModel.ModelCategoryItem)mod.SubModels[0]);
 
