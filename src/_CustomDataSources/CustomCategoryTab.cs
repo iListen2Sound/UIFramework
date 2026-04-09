@@ -16,7 +16,7 @@ namespace UIFramework
 	public class CustomCategoryTab
 	{
         internal UIFModel.ModelCategoryItem CategoryModel {get; set;}
-        public readonly List<CustomUIEntry> Entries = new List<MelonPreferences_Entry>();
+        public readonly List<CustomUIEntry> Entries = new List<CustomUIEntry>();
 
         public string Identifier { get; internal set; }
         public string DisplayName { get; set; }
@@ -31,7 +31,7 @@ namespace UIFramework
             IsInlined = is_inlined;
         }
 
-        public CustomUIEntry<T> CreateEntry<T>(string identifier, T default_value, string display_name = null, string description = null, bool is_hidden = false, bool dont_save_default = false, Preferences.ValueValidator validator = null, string oldIdentifier = null)
+        public CustomUIEntry<T> CreateEntry<T>(string identifier, T default_value, string display_name = null, string description = null, bool is_hidden = false, bool dont_save_default = false, MelonLoader.Preferences.ValueValidator validator = null)
         {
                  if (string.IsNullOrEmpty(identifier))
                 throw new Exception("identifier is null or empty when calling CreateEntry");
@@ -43,16 +43,9 @@ namespace UIFramework
             if (entry != null)
                 throw new Exception($"Calling CreateEntry for { display_name } when it Already Exists");
 
-            if (validator != null && !validator.IsValid(default_value))
-                throw new ArgumentException($"Default value '{default_value}' is invalid according to the provided ValueValidator!");
+            /*if (validator != null && !validator.IsValid(default_value))
+                throw new ArgumentException($"Default value '{default_value}' is invalid according to the provided ValueValidator!");*/
 
-            if (oldIdentifier != null)
-            {
-                if (HasEntry(oldIdentifier))
-                    throw new Exception($"Unable to rename '{oldIdentifier}' when it got already loaded");
-
-                RenameEntry(oldIdentifier, identifier);
-            }
 
             entry = new CustomUIEntry<T>
             {
@@ -67,14 +60,21 @@ namespace UIFramework
                 Validator = validator,
             };
 
-            Preferences.IO.File currentFile = File;
-            if (currentFile == null)
-                currentFile = MelonPreferences.DefaultFile;
-            currentFile.SetupEntryFromRawValue(entry);
-
             Entries.Add(entry);
 
             return entry;
         }
-    }
+
+		public CustomUIEntry GetEntry(string identifier)
+		{
+			if (string.IsNullOrEmpty(identifier))
+				throw new Exception("identifier cannot be null or empty when calling GetEntry");
+			if (Entries.Count <= 0)
+				return null;
+			return Entries.Find(x => x.Identifier.Equals(identifier));
+		}
+
+		public CustomUIEntry<T> GetEntry<T>(string identifier) => (CustomUIEntry<T>)GetEntry(identifier);
+		public bool HasEntry(string identifier) => GetEntry(identifier) != null;
+	}
 }

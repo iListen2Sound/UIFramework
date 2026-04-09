@@ -13,7 +13,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 namespace UIFramework
 {
-	public class CustomUIEntry
+	public abstract class CustomUIEntry
 	{
         public string Identifier { get; internal set; }
         public string DisplayName { get; set; }
@@ -21,24 +21,27 @@ namespace UIFramework
         public string Comment { get; set; }
         public bool IsHidden { get; set; }
         public bool DontSaveDefault { get; set; }
-        //public MelonPreferences_Category Category { get; internal set; }
+        public CustomCategoryTab Category { get; internal set; }
 
         public abstract object BoxedValue { get; set; }
         public abstract object BoxedEditedValue { get; set; }
 
-        //Melon:  public Preferences.ValueValidator Validator { get; internal set; }
-        //Melon:  public string GetExceptionMessage(string submsg) => $"Attempted to {submsg} {DisplayName} when it is a {GetReflectedType().FullName}!";
-        public abstract Type GetReflectedType();
+        public MelonLoader.Preferences.ValueValidator Validator { get; internal set; }
 
+		//Melon:  public Preferences.ValueValidator Validator { get; internal set; }
+		//Melon:  public string GetExceptionMessage(string submsg) => $"Attempted to {submsg} {DisplayName} when it is a {GetReflectedType().FullName}!";
+		public abstract Type GetReflectedType();
 
-        public abstract string GetEditedValueAsString();
+        public abstract void ResetToDefault();
+
+		public abstract string GetEditedValueAsString();
         public abstract string GetDefaultValueAsString();
         public abstract string GetValueAsString();
 
         public Action<object, object> OnEntryValueChangedUntyped;
         protected void FireUntypedValueChanged(object old, object neew)
         {
-            OnEntryValueChangedUntyped.Invoke(old, new);
+            OnEntryValueChangedUntyped.Invoke(old, neew);
         }
     }
 
@@ -50,8 +53,8 @@ namespace UIFramework
             get => myValue;
             set
             {
-                if (Validator != null)
-                    value = (T)Validator.EnsureValid(value);
+                /*if (Validator != null)
+                    value = (T)Validator.EnsureValid(value);*/
 
                 if ((myValue == null && value == null) || (myValue != null && myValue.Equals(value)))
                     return;
