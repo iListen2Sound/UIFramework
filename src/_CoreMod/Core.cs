@@ -23,7 +23,7 @@ namespace UIFramework
 		/// <summary></summary>
 		public const string Author = "Reverb && Spice";
 		/// <summary></summary>
-		public const string Version = "0.6.0";
+		public const string Version = "0.6.1";
 	}
 
 
@@ -53,7 +53,7 @@ namespace UIFramework
 
 		}
 		public override void OnLateInitializeMelon()
-		{
+		{ 
 
 		}
 
@@ -198,6 +198,10 @@ namespace UIFramework
 		public void CustomClick(UIFController.Entry button)
 		{
 			Debug.Log($"Clicked: {button.DisplayName} ");
+		}
+		private void SinglesaveClick()
+		{
+			Debug.Log("Clicked Single Save Button");
 		}
 	}
 }

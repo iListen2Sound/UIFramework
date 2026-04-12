@@ -217,7 +217,7 @@ namespace UIFramework
 				}*/
 
 				CatRegistryPanel.Model?.SaveAction();
-				PrefRegistryPanel.SaveAction();
+				//PrefRegistryPanel.SaveAction();
 				PrefRegistryPanel.Infanticide();
 				PrefRegistryPanel.BuildFromModelList();
 			}
