@@ -68,7 +68,7 @@ namespace UIFramework
 
 				foreach (MelonPreferences_Category cat in catList)
 				{
-					SubModels.Add(new ModelMelonCategory(cat));
+					SubModels.Add(new ModelMelonCategory(cat, this));
 
 				}
 			}
@@ -94,12 +94,13 @@ namespace UIFramework
 			/// <summary>
 			/// Creates a new instance of this class based on a MelonPreferences_Category
 			/// </summary>
-			public ModelMelonCategory(MelonPreferences_Category cat)
+			public ModelMelonCategory(MelonPreferences_Category cat, ModelModItem parentMod)
+				: base(parentMod)
 			{
 				PrefCat = cat;
 				foreach (MelonPreferences_Entry entry in PrefCat.Entries)
 				{
-					SubModels.Add(new ModelMelonEntry(entry));
+					SubModels.Add(new ModelMelonEntry(entry, this));
 				}
 
 			}
@@ -164,7 +165,8 @@ namespace UIFramework
 			/// <summary>
 			/// Creates a new instance of this object based around a MelonPreferences_Entry object
 			/// </summary>
-			public ModelMelonEntry(MelonPreferences_Entry prefEntry)
+			public ModelMelonEntry(MelonPreferences_Entry prefEntry, ModelCategoryItem parentCategory)
+				: base(parentCategory)
 			{
 				PrefEntry = prefEntry;
 				SavedValue = prefEntry.BoxedValue;

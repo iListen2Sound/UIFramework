@@ -144,9 +144,28 @@ namespace UIFramework
 			/// </summary>
 			public event Action OnModSaved;
 
+			public event Action<ModelModItem> OnUiUpdateRequest;
+
+			private bool _isUpdateRequestQueued = false;
+			public void RequestUpdateUI() => _isUpdateRequestQueued = true;
+			void Update()
+			{
+				if (!_isUpdateRequestQueued)
+					return;
+				
+				OnUiUpdateRequest?.Invoke(this);
+				_isUpdateRequestQueued= false;
+				
+			}
+
 		}
 		public abstract class ModelCategoryItem : SelectableModelBase
 		{
+			public ModelModItem ParentMod { get; set; }
+			protected ModelCategoryItem(ModelModItem parentMod)
+			{
+				ParentMod = parentMod;
+			}
 			/// <inheritdoc/>
 			public override GameObject GetNewUIInstance()
 			{
@@ -161,7 +180,11 @@ namespace UIFramework
 
 		public abstract class ModelEntryItem : ModelBase, IEntry
 		{
-			
+			public ModelCategoryItem ParentCategory { get; set; }
+			public ModelEntryItem(ModelCategoryItem parentCategory)
+			{
+				ParentCategory = parentCategory;
+			}
 			/// <inheritdoc/>
 			public abstract string Description { get; }
 			
@@ -176,6 +199,10 @@ namespace UIFramework
 			public virtual EntryState SaveState {get; set;}
 
 			public override void DiscardAction() { }
+
+			#region UI Commands
+			
+			#endregion
 		}
 	}
 }
