@@ -23,7 +23,7 @@ namespace UIFramework
 		/// <summary></summary>
 		public const string Author = "Reverb && Spice";
 		/// <summary></summary>
-		public const string Version = "0.6.1";
+		public const string Version = "0.6.2";
 	}
 
 
@@ -185,9 +185,9 @@ namespace UIFramework
 			Prefabs.LoadAssetBundle();
 
 			UI.InitializeUIObjects();
+			UI.MainWindow.SetActive(false);
 			UI.BuildUI();
 
-			UI.MainWindow.SetActive(false);
 		}
 
 		public void MelPrefsSaved(string s)
