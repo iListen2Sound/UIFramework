@@ -211,6 +211,8 @@ namespace UIFramework
 		/// </summary>
 		public abstract class ModelDataEntryBase: ModelEntryItem
 		{
+			protected ModelDataEntryBase(ModelCategoryItem parentCategory) : base(parentCategory) { }
+
 			public abstract object BoxedValue {get; protected set;}
 			public virtual bool TryApply(object value)
 			{
@@ -246,7 +248,7 @@ namespace UIFramework
 					else
 					{
 						// Handles String-to-Int, Bool-to-Int, String-to-Bool, etc.
-						entry.BoxedValue = Convert.ChangeType(newValue, targetType);
+						BoxedValue = Convert.ChangeType(newValue, targetType);
 					}
 				}
 				catch (Exception ex)

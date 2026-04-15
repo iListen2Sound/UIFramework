@@ -7,7 +7,7 @@ Got a little too excited with abstraction and caused nullrefs
 -----
 # For Users
 Drop the dll in your mods folder. 
-#### **Default toggle is the `F9` key**
+### **Default toggle is the `F9` key**
 
 Changing a value of an entry automatically updates the value of the preference and is applied. How that preference's parent mod reacts depends on the modder's implementation.
 
