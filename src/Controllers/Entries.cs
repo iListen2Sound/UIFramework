@@ -98,7 +98,7 @@ namespace UIFramework
 			/// <summary>
 			/// TODO: This is jank. Deal with this by creating a base class for preference entries that aren't based on melonloader.
 			/// </summary>
-			protected UIFModel.ModelMelonEntry _prefModel => (UIFModel.ModelMelonEntry)EntryModel;
+			protected UIFModel.ModelDataEntryBase _prefModel => (UIFModel.ModelDataEntryBase)EntryModel;
 			/// <summary>
 			/// Returns the textfield
 			/// </summary>

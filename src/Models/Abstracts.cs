@@ -200,9 +200,61 @@ namespace UIFramework
 
 			public override void DiscardAction() { }
 
+
 			#region UI Commands
 			
 			#endregion
+		}
+
+		/// <summary>
+		/// A model for interfacing with a piece of data.
+		/// </summary>
+		public abstract class ModelDataEntryBase: ModelEntryItem
+		{
+			public abstract object BoxedValue {get; protected set;}
+			public virtual bool TryApply(object value)
+			{
+				bool result = false;
+				try
+				{
+					BoxedValue = value;
+					result = true;
+				}
+				catch (Exception ex)
+				{
+					Debug.Log($"ModelDataEntry TryApply: {ex.Message}\n{ex.StackTrace}", false, 2);
+					result = false;
+
+				}
+				return result;
+			}
+			//untested AI generated codbe
+			public void SetDataValue(object newValue)
+			{
+				Type targetType = BoxedValue.GetType();
+
+				try
+				{
+					// Enums need specialized handling if they aren't already the correct type
+					if (targetType.IsEnum)
+					{
+						// If it's already the enum type, cast it; otherwise, parse/convert
+						BoxedValue = newValue is string str 
+							? Enum.Parse(targetType, str, true) 
+							: Enum.ToObject(targetType, newValue);
+					}
+					else
+					{
+						// Handles String-to-Int, Bool-to-Int, String-to-Bool, etc.
+						entry.BoxedValue = Convert.ChangeType(newValue, targetType);
+					}
+				}
+				catch (Exception ex)
+				{
+					MelonLogger.Error($"Conversion failed: {newValue} to {targetType.Name}. {ex.Message}");
+				}
+			}
+
 		}
 	}
 }

@@ -121,13 +121,13 @@ namespace UIFramework
 		/// <summary>
 		/// 
 		/// </summary>
-		public class ModelMelonEntry : ModelEntryItem
+		public class ModelMelonEntry : ModelDataEntryBase
 		{
 
 			/// <summary>
 			/// MelonPreferences_Entry this model is meant to adapt
 			/// </summary>
-			public virtual MelonPreferences_Entry PrefEntry { get; set; }
+			public MelonPreferences_Entry PrefEntry { get; set; }
 			/// <inheritdoc/>
 			public override string Identifier => PrefEntry.Identifier;
 			/// <inheritdoc/>
@@ -138,29 +138,10 @@ namespace UIFramework
 			/// <summary>
 			/// Direct access to the PrefEntry boxedvalue property
 			/// </summary>
-			public object BoxedValue
+			public override object BoxedValue
 			{
 				get => PrefEntry.BoxedValue;
 				set => PrefEntry.BoxedValue = value;
-			}
-
-
-			public bool TryApply(object value)
-			{
-				bool result = false;
-				try
-				{
-					BoxedValue = value;
-					result = true;
-				}
-				catch (Exception ex)
-				{
-					Debug.Log($"ModelMelonEntry TryApply: {ex.Message}", false, 2);
-					result = false;
-
-				}
-				return result;
-
 			}
 			/// <summary>
 			/// Creates a new instance of this object based around a MelonPreferences_Entry object
