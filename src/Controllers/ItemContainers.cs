@@ -83,7 +83,8 @@ namespace UIFramework
 					GameObject uiElement = model.GetNewUIInstance();//GameObject.Instantiate(GetUIPrefabForModel(model), this.gameObject.transform);
 					uiElement.SetActive(true);
 					uiElement.transform.SetParent(this.gameObject.transform, false);
-
+					uiElement.transform.localScale = Vector3.one;
+					uiElement.transform.localPosition = Vector3.zero;
 
 
 					IChildable ViewController;
@@ -118,6 +119,8 @@ namespace UIFramework
 						ViewController.Model = model;
 					}
 				}
+				LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
+
 			}
 			/// <summary>
 			/// 
