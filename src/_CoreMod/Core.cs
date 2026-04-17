@@ -7,6 +7,7 @@ using static UIFramework.Debug;
 using System.Diagnostics;
 using UnityEngine.InputSystem;
 using UnityEngine.Jobs;
+using System.Collections;
 
 [assembly: MelonInfo(typeof(UIFramework.Core), UIFramework.BuildInfo.Name, UIFramework.BuildInfo.Version, UIFramework.BuildInfo.Author)]
 [assembly: MelonGame("Buckethead Entertainment", "RUMBLE")]
@@ -37,7 +38,7 @@ namespace UIFramework
 
 		internal string CurrentScene = "";
 		internal bool isFirstLoad = true;
-
+		internal GameObject ModUIWindow;
 
 		internal Stopwatch displayTime = new Stopwatch();
 
@@ -71,7 +72,7 @@ namespace UIFramework
 
 			if (isFirstLoad)
 				return;
-			Debug.DiffLog($"UI is Visible {UI.IsVisible}",true);
+			//Debug.DiffLog($"UI is Visible {UI.IsVisible}",true);
 			AutoHideCheck();
 
 		}
@@ -106,6 +107,8 @@ namespace UIFramework
 		/// </remarks>
 		private bool VRActivationAction()
         {
+			if (isFirstLoad)
+				return false;
 			if (!Preferences.VrInputToggle.Value)
 				return false;
             float High = 0.9f;
@@ -115,14 +118,14 @@ namespace UIFramework
 			float tLeftDepress = leftGrip.ReadValue<float>();
 			float pLeftPress = rightPrimary.ReadValue<float>();
 
-			Debug.DiffLog($"TR: {tRightDepress}\n" +
+/*			Debug.DiffLog($"TR: {tRightDepress}\n" +
 				$"PR: {pRightPress}\n" +
 				$"TL: {tLeftDepress}\n" +
-				$"PL: {pLeftPress}",true);
+				$"PL: {pLeftPress}", true);*/
 
-			
 
-            if (tRightDepress >= High && pRightPress >= High && tLeftDepress >= High && pLeftPress >= High && !VRButtonsPressed)
+
+			if (tRightDepress >= High && pRightPress >= High && tLeftDepress >= High && pLeftPress >= High && !VRButtonsPressed)
             {
                 VRButtonsPressed = true;
                 return true;
@@ -162,7 +165,13 @@ namespace UIFramework
 
 			//Once user hasn't interacted with mouse or keyboard abev the inactive time limit, hide the UI window
 			if (displayTime.ElapsedMilliseconds >= inactiveTimeLimit)
+			{
 				UI.MainWindow.SetActive(false);
+				if(Preferences.HijackModUI.Value)
+				{
+					ModUIWindow?.SetActive(false);
+				}
+			}
 		}
 
 		private bool UserInteracted()
@@ -202,6 +211,7 @@ namespace UIFramework
 				if (UI.MainWindow.activeSelf)
 				{
 					UI.MainWindow.SetActive(!Preferences.AutoHideOnSceneLoad.Value);
+					ModUIWindow?.SetActive(!(Preferences.HijackModUI.Value && Preferences.AutoHideOnSceneLoad.Value));
 				}
 			}
 		}
@@ -213,7 +223,7 @@ namespace UIFramework
 		internal void FirstGymLoad()
 		{
 			BuildUI();
-
+			MelonCoroutines.Start(FindModUI());
 
 			isFirstLoad = false;
 		}
@@ -239,10 +249,19 @@ namespace UIFramework
 
 			Prefabs.LoadAssetBundle();
 
-			UI.InitializeUIObjects();
+			UI.InitializeUIObjects();			
 			UI.MainWindow.SetActive(false);
 			UI.BuildUI();
 
+		}
+
+		public IEnumerator FindModUI()
+		{
+			yield return null;
+			GameObject uiObject = GameObject.Find("Game Instance/UI");
+			GameObject modUiWindow = uiObject.transform.Find("Mod_Setting_UI").gameObject;
+			ModUIWindow = modUiWindow;
+		
 		}
 
 		public void MelPrefsSaved(string s)

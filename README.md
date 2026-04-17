@@ -1,4 +1,15 @@
 ### New in 0.7.1
+<details><summary>New setting: VR Toggle</summary>
+Toggle UI Framework window using your controllers by pressing both grips on both hands
+and pressing both primary buttons on both hands (X and A)
+
+</details>
+<details><summary>New setting: Force Hide ModUI</summary>
+Never leave ModUI accidentally open again. 
+Enabling this setting will make UI Framework hide the ModUI window when UI Framework hides. 
+This setting does not support the inactivity timer if ModUI is open by itself
+
+</details>
 <details><summary></summary>
 
 
