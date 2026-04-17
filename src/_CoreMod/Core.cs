@@ -134,6 +134,7 @@ namespace UIFramework
 
 		public override void OnSceneWasLoaded(int buildIndex, string sceneName)
 		{
+			Debug.Log($"Current buildIndex = {buildIndex} was loaded. sceneName = {sceneName}");
 			CurrentScene = sceneName.ToNormal();
 			if (CurrentScene == "loader")
 			{
