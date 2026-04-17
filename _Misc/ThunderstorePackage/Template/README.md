@@ -1,3 +1,9 @@
+### New in 0.6.3
+<details><summary></summary>
+
+
+</details>
+
 ### New in 0.6.2
 <details><summary>New Feature: Plugin support</summary>
 I just completely forgot about those.

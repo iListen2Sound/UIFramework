@@ -6,6 +6,7 @@ using UnityEngine;
 using static UIFramework.Debug;
 using System.Diagnostics;
 using UnityEngine.InputSystem;
+using UnityEngine.Jobs;
 
 [assembly: MelonInfo(typeof(UIFramework.Core), UIFramework.BuildInfo.Name, UIFramework.BuildInfo.Version, UIFramework.BuildInfo.Author)]
 [assembly: MelonGame("Buckethead Entertainment", "RUMBLE")]
@@ -23,7 +24,7 @@ namespace UIFramework
 		/// <summary></summary>
 		public const string Author = "Reverb && Spice";
 		/// <summary></summary>
-		public const string Version = "0.6.2";
+		public const string Version = "0.6.3";
 	}
 
 
@@ -42,14 +43,21 @@ namespace UIFramework
 
 		internal int inactiveTimeLimit => (Preferences.InactivityTimeout?.Value * 1000) ?? 30000;
 
+		
+
+
 
 #pragma warning disable CS1591
 		public override void OnInitializeMelon()
 		{
-
-			LoggerInstance.Msg("Initialized.");
+			rightGrip.AddBinding("<XRController>{RightHand}/grip");
+			rightPrimary.AddBinding("<XRController>{RightHand}/primaryButton");
+			leftGrip.AddBinding("<XRController>{LeftHand}/grip");
+			leftPrimary.AddBinding("<XRController>{LeftHand}/primaryButton");
+			map.Enable();
 			Instance = this;
 			MelonPreferences.OnPreferencesSaved.Subscribe(MelPrefsSaved);
+			LoggerInstance.Msg("Initialized.");
 
 		}
 		public override void OnLateInitializeMelon()
@@ -69,7 +77,7 @@ namespace UIFramework
 		}
 		private void UiToggleInputCheck()
 		{
-			if (!Input.GetKeyDown(KeyCode.F9))
+			if (!(Input.GetKeyDown(KeyCode.F9) || VRActivationAction()))
 				return;
 
 			if (CurrentScene == "loader")
@@ -81,6 +89,51 @@ namespace UIFramework
 
 		}
 
+		#region Baumritter-generated
+		//VR input variables
+		private static InputActionMap map = new InputActionMap("Tha Map");
+		private static InputAction rightGrip = map.AddAction("Right Trigger");
+		private static InputAction rightPrimary = map.AddAction("Right Primary");
+		private static InputAction leftGrip = map.AddAction("Left Trigger");
+		private static InputAction leftPrimary = map.AddAction("Left Primary");
+		private bool VRButtonsPressed = false;
+		private bool VRButtonsAllowed = false;
+		/// <summary>
+		/// Checks if activation by VR input has been pressed
+		/// </summary>
+		/// <returns></returns>
+		/// <remarks>
+		/// Code yoinked from Baumritter's ModUI
+		/// </remarks>
+		private bool VRActivationAction()
+        {
+            float High = 0.9f;
+            float Low = 0.1f;
+			float tRightDepress = rightGrip.ReadValue<float>();
+			float pRightPress = rightPrimary.ReadValue<float>();
+			float tLeftDepress = leftGrip.ReadValue<float>();
+			float pLeftPress = rightPrimary.ReadValue<float>();
+
+			Debug.Log($"TR: {tRightDepress}\n" +
+				$"PR: {pRightPress}\n" +
+				$"TL: {tLeftDepress}\n" +
+				$"PL: {pLeftPress}");
+
+			
+
+            if (tRightDepress >= High && pRightPress >= High && tLeftDepress >= High && pLeftPress >= High && !VRButtonsPressed)
+            {
+                VRButtonsPressed = true;
+                return true;
+            }
+            if (tRightDepress <= Low && pRightPress <= Low && tLeftDepress <= Low && pLeftPress <= Low && VRButtonsPressed)
+            {
+                VRButtonsPressed = false;
+            }
+            return false;
+
+        }
+		#endregion
 		private void AutoHideCheck()
 		{
 			//Don't proceed if Autohide preference is set to false or null
