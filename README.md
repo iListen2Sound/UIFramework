@@ -1,4 +1,4 @@
-### New in 0.6.3
+### New in 0.7.1
 <details><summary></summary>
 
 

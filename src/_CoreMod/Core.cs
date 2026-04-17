@@ -24,7 +24,7 @@ namespace UIFramework
 		/// <summary></summary>
 		public const string Author = "Reverb && Spice";
 		/// <summary></summary>
-		public const string Version = "0.6.3";
+		public const string Version = "0.7.1";
 	}
 
 
@@ -97,7 +97,6 @@ namespace UIFramework
 		private static InputAction leftGrip = map.AddAction("Left Trigger");
 		private static InputAction leftPrimary = map.AddAction("Left Primary");
 		private bool VRButtonsPressed = false;
-		private bool VRButtonsAllowed = false;
 		/// <summary>
 		/// Checks if activation by VR input has been pressed
 		/// </summary>
@@ -107,6 +106,8 @@ namespace UIFramework
 		/// </remarks>
 		private bool VRActivationAction()
         {
+			if (!Preferences.VrInputToggle.Value)
+				return false;
             float High = 0.9f;
             float Low = 0.1f;
 			float tRightDepress = rightGrip.ReadValue<float>();
@@ -114,10 +115,10 @@ namespace UIFramework
 			float tLeftDepress = leftGrip.ReadValue<float>();
 			float pLeftPress = rightPrimary.ReadValue<float>();
 
-			Debug.Log($"TR: {tRightDepress}\n" +
+			Debug.DiffLog($"TR: {tRightDepress}\n" +
 				$"PR: {pRightPress}\n" +
 				$"TL: {tLeftDepress}\n" +
-				$"PL: {pLeftPress}");
+				$"PL: {pLeftPress}",true);
 
 			
 
