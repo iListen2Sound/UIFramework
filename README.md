@@ -1,7 +1,12 @@
 ### New in 0.6.2
-<details><summary>BugFix: error on initial UI Build</summary>
+<details><summary>New Feature: Plugin support</summary>
+I just completely forgot about those.
 
-Got a little too excited with abstraction and caused nullrefs
+<sup>I did have to change the .Register() function's signature. Right now, I have an overload for the old function for backwards compatibility. More details at the bottom of the page </sup>
+</details>
+
+<details><summary>New Feature: Exposed UI.IsVisible Property</summary>
+Your mod can now check if UIFramework is currently open. 
 </details>
 
 -----
@@ -106,9 +111,23 @@ public enum Example
 
 # Ongoing Development Disclosure
 This mod is in active development. The plan is to increase extensibility. 
-**<ins>Basic MelonPreferences registration is stable and should always be backwards compatible.</ins>** 
-So while advanced API usage will have a lot of changes for the time that this mod is in [Version 0.x.x](https://semver.org/#spec-item-4), 
+**<ins>~~Basic MelonPreferences registration is stable and should always be backwards compatible.~~</ins>** 
+So while advanced API usage will have a lot of changes for the time that this mod is in [Version 0.x.x](https://semver.org/#spec-item-4),
 mods that implement the basic use case of this framework don't have to worry about breaking in the future (as long as I don't mess up too bad). 
+
+### Oops (0.6.2)
+Well, so much for always be backwards compatible. In order to support plugins, I'm having to change .Register to use MelonBase as the instance instead of MelonMod
+Currently, I have an obsolete bridging function for backwards compatibility. 
+But that will be removed in a future version if I'm confident that enough mods have migrated that it won't be too big of a problem. 
+
+In order to make your mod future proof, explicitly cast your MelonMod instance to MelonBase in your next update. 
+You don't need to publish that update now for this small change but it makes it so that when the old function does become actually deprecated, you won't need to push an update specific to it.
+
+```cs
+UI.Register((MelonBase)this, TestCategory1, TestCategory2);
+```
+
+Okay, so for real this time: **<ins>Basic MelonPreferences registration is stable and should always be backwards compatible.</ins>** 
 
 ### XML Documentation File
 You can place the .xml documentation file for UIFramework in the same folder as the dll to get intellisense documentation for the API. 

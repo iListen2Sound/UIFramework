@@ -21,7 +21,7 @@ namespace UIFramework
 
 		internal static UIFModel.RootModel ModelInstance = new();
 		internal static GameObject MainWindow;
-
+		public static bool IsVisible { get { return MainWindow.activeSelf; }  }
 		internal static UIFController.WindowController WindowInstance;
 		/// <summary>
 		/// Registers a mod and its categories to the UI instance. 
@@ -32,24 +32,64 @@ namespace UIFramework
 		/// Unless the dependency was explicitly declared, Don't use before OnLateInitializeMelon.
 		/// Currently, registration after the first gym load means your mod won't show up on the mod list
 		/// 
+		/// Deprecated: this version of the Register function will be removed in a future version in favor of taking in the MelonBase type instead
+		/// Please explicitly cast your mod instance as MelonBase to prevent future incompatibility
+		/// So UI.Register((MelonBase)this, Category1, Category2,...);
 		/// </remarks>
 		/// <returns>A reference to the created Mod Model for further customization</returns>
+		[Obsolete(".Register() will be a different function in the future to support plugins.\n " +
+			"When that happens, no code changes are needed but you will need to rebuild your project so the compiler can find the correct method\n" +
+			"To future-proof your mod, Explicitly cast your mod instance to MelonBase when registering")]
 		public static UIFModel.ModelMod Register(MelonMod modInstance, params MelonPreferences_Category[] categories)
+		{
+			return Register((MelonBase)modInstance, categories);
+		}
+		
+		/// <summary>
+		/// Registers a mod or a plugin to UIFramework along with its categories.
+		/// </summary>
+		/// <param name="modInstance"></param>
+		/// <param name="categories"></param>
+		/// <remarks>
+		/// Unless the dependency was explicitly declared, Don't use before OnLateInitializeMelon.
+		/// Currently, registration after the first gym load means your mod won't show up on the mod list
+		/// </remarks>
+		/// <returns></returns>
+		public static UIFModel.ModelMod Register(MelonBase modInstance, params MelonPreferences_Category[] categories)
 		{
 			UIFModel.ModelMod NewModModel = new(modInstance, categories.ToList());
 			ModelInstance.AddSubmodel(NewModModel);
 			return NewModModel;
 		}
+
 		/// <summary>
 		/// Registers a mod with no categories to the framework. Categories need to be manually added
 		/// </summary>
+		/// <remarks>
+		/// Deprecated: this version of the Register function will be removed in a future version in favor of taking in the MelonBase type instead
+		/// Please explicitly cast your mod instance as MelonBase to prevent future incompatibility
+		/// So UI.Register((MelonBase)this);
+		/// </remarks>
 		/// <param name="modInstance">Instance of your MelonMod class</param>
+		[Obsolete(".Register() will be a different function in the future to support plugins.\n " +
+			"When that happens, no code changes are needed but you will need to rebuild your project so the compiler can find the correct method\n" +
+			"To future-proof your mod, Explicitly cast your mod instance to MelonBase when registering")]
 		public static UIFModel.ModelMod Register(MelonMod modInstance)
+		{
+			return Register(modInstance);
+		}
+
+		/// <summary>
+		/// Registers a mod or plugin with no categories to the framework. Categories need to be manually added
+		/// </summary>
+		/// <param name="modInstance">Instance of your MelonMod class</param>
+		public static UIFModel.ModelMod Register(MelonBase modInstance)
 		{
 			UIFModel.ModelMod NewModModel = new(modInstance);
 			ModelInstance.AddSubmodel(NewModModel);
 			return NewModModel;
 		}
+
 
 		/// <summary>
 		/// 
