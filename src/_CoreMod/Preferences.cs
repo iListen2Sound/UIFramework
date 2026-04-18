@@ -1,4 +1,6 @@
 using MelonLoader;
+using System.Drawing;
+using UnityEngine;
 using UnityEngine.Bindings;
 
 namespace UIFramework
@@ -20,6 +22,7 @@ namespace UIFramework
 		internal static MelonPreferences_Entry<int> InactivityTimeout;
 		
 		internal static MelonPreferences_Category Experimental;
+		internal static MelonPreferences_Entry<UnityEngine.Color> ExperimentalColor;
 		internal static MelonPreferences_Entry<bool> TestBool;
 		internal static MelonPreferences_Entry<string> TestString;
 		internal static MelonPreferences_Entry<int> TestInt;
@@ -56,6 +59,8 @@ namespace UIFramework
 
 			Experimental = MelonPreferences.CreateCategory("UIFrameworkExperimental", "Experimental Settings");
 			Experimental.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
+
+			ExperimentalColor = Experimental.CreateEntry("ColorTest", new UnityEngine.Color(50, 238, 165,255),"Test color", "ColorTest");
 			TestBool = Experimental.CreateEntry("TestBool", false, "Test Bool", "This is a test bool.");
 			TestString = Experimental.CreateEntry("TestString", "Hello, World!", "Test String", "This is a test string.");
 			TestInt = Experimental.CreateEntry("TestInt", 42, "Test Int", "This is a test int.");

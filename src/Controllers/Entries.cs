@@ -65,11 +65,21 @@ namespace UIFramework
 				DisplayName = EntryModel.DisplayName;
 				EntryModel.OnUICreated?.Invoke(this);
 			}
-
+			/// <summary>
+			/// Serializes an object into the toml string representation of that object
+			/// </summary>
+			/// <param name="input"></param>
+			/// <returns></returns>
 			public string ToTomlString(object input)
 			{
 				return TomletMain.ValueFrom(input).SerializedValue;
 			}
+			/// <summary>
+			/// Parses a toml string into an object of type with its value.
+			/// </summary>
+			/// <param name="input"></param>
+			/// <param name="targetType"></param>
+			/// <returns></returns>
 			public object FromTomlString(string input, Type targetType)
 			{
 				string wrappedEntry = $"temp = {input.Trim()}";
@@ -114,7 +124,7 @@ namespace UIFramework
 		/// <summary>
 		/// Base controller for text fields 
 		/// </summary>
-		public abstract class TextInputEntry : MelonEntry
+		public class TextInputEntry : MelonEntry
 		{
 			/// <summary>
 			/// TODO: This is jank. Deal with this by creating a base class for preference entries that aren't based on melonloader.
@@ -143,6 +153,21 @@ namespace UIFramework
 					Debug.Log($"{ex.Message}\n{ex.StackTrace}");
 				}
 				base.ModelSet();
+			}
+			public override void ApplyValueToPref()
+			{
+				try
+				{
+					if (textField.text.Trim() != "")
+					{
+						_prefModel.SetDataValue(FromTomlString(textField.text, _prefModel.BoxedValue.GetType()));
+						Debug.Log($"Toml data parsed {FromTomlString(textField.text, _prefModel.BoxedValue.GetType())}");
+					}
+				}
+				catch (Exception ex)
+				{
+					Log(ex.Message, false, 2);
+				}
 			}
 
 			public override void EditCheck()
@@ -176,106 +201,27 @@ namespace UIFramework
 		/// 
 		/// </summary>
 		[RegisterTypeInIl2Cpp]
-
-		public class PrefText : TextInputEntry
+		public class PrefDirectString : TextInputEntry
 		{
-			/// <summary>
-			///
-			/// </summary>
-			public virtual string EnteredValue => textField.text;
 			/// <inheritdoc/>
-
-			public override void ApplyValueToPref()
+			public override void ModelSet()
 			{
+				//textField.text = _prefModel.BoxedValue.ToString();
+				//TomletMain.TomlStringFrom(_prefModel.BoxedValue).Trim();
 				try
 				{
-					if (textField.text.Trim() != "")
-					{
-						_prefModel.SetDataValue(FromTomlString(textField.text, _prefModel.BoxedValue.GetType()));
-						Debug.Log($"Toml data parsed {FromTomlString(textField.text, _prefModel.BoxedValue.GetType())}");
-					}
+					textField.text = _prefModel.BoxedValue.ToString();
 				}
 				catch (Exception ex)
 				{
-					Log(ex.Message, false, 2);
+					Debug.Log($"{ex.Message}\n{ex.StackTrace}");
 				}
 			}
-		}
-
-
-		/// <summary>
-		/// 
-		/// </summary>
-		[RegisterTypeInIl2Cpp]
-		public class PrefInt : TextInputEntry
-		{
-			public int EnteredValue => int.Parse(textField.text);
-			/// <inheritdoc/>
 			public override void ApplyValueToPref()
 			{
-				try
-				{
-					if (textField.text.Trim() != "")
-					{
-						_prefModel.SetDataValue(int.Parse(textField.text.Trim()));
-					}
-				}
-				catch (Exception ex)
-				{
-					Log($"{ex.Message} {textField.text}", false, 2);
-				}
-
+				_prefModel.SetDataValue( textField.text );
 			}
-		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		[RegisterTypeInIl2Cpp]
-		public class PrefFloat : TextInputEntry
-		{
-			public float EnteredValue => float.Parse(textField.text);
-
-			public override void ApplyValueToPref()
-			{
-				try
-				{
-					if (textField.text.Trim() != "")
-					{
-						_prefModel.SetDataValue(float.Parse(textField.text.Trim()));
-					}
-				}
-				catch (Exception ex)
-				{
-					Log($"{ex.Message} {textField.text}", false, 2);
-				}
-
-			}
-		}
-		/// <summary>
-		/// 
-		/// </summary>
-		[RegisterTypeInIl2Cpp]
-		public class PrefDouble : TextInputEntry
-		{
-			public double EnteredValue => double.Parse(textField.text);
-			/// <inheritdoc/>
-
-			public override void ApplyValueToPref()
-			{
-				try
-				{
-					if (textField.text.Trim() != "")
-					{
-						_prefModel.SetDataValue(double.Parse(textField.text.Trim()));
-					}
-				}
-				catch (Exception ex)
-				{
-					Log($"{ex.Message} {textField.text}", false, 2);
-				}
-
-			}
 		}
 
 		/// <summary>

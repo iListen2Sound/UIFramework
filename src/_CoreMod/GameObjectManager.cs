@@ -130,12 +130,12 @@ namespace UIFramework
 			//Add the appropriate components to each prefab for later use
 			MainCanvasSource.AddComponent<UIFController.WindowController>();
 
-			TextPrefab.AddComponent<UIFController.PrefText>();
+			TextPrefab.AddComponent<UIFController.PrefDirectString>();
 			BoolPrefab.AddComponent<UIFController.PrefBool>();
 			
-			IntPrefab.AddComponent<UIFController.PrefText>();
-			FloatPrefab.AddComponent<UIFController.PrefText>();
-			DoublePrefab.AddComponent<UIFController.PrefText>();
+			IntPrefab.AddComponent<UIFController.TextInputEntry>();
+			FloatPrefab.AddComponent<UIFController.TextInputEntry>();
+			DoublePrefab.AddComponent<UIFController.TextInputEntry>();
 			
 			DropDownPrefab.AddComponent<UIFController.PrefDropDown>();
 
