@@ -133,9 +133,9 @@ namespace UIFramework
 			TextPrefab.AddComponent<UIFController.PrefText>();
 			BoolPrefab.AddComponent<UIFController.PrefBool>();
 			
-			IntPrefab.AddComponent<UIFController.PrefInt>();
-			FloatPrefab.AddComponent<UIFController.PrefFloat>();
-			DoublePrefab.AddComponent<UIFController.PrefDouble>();
+			IntPrefab.AddComponent<UIFController.PrefText>();
+			FloatPrefab.AddComponent<UIFController.PrefText>();
+			DoublePrefab.AddComponent<UIFController.PrefText>();
 			
 			DropDownPrefab.AddComponent<UIFController.PrefDropDown>();
 

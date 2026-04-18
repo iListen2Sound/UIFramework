@@ -27,6 +27,7 @@ namespace UIFramework
 		internal static MelonPreferences_Entry<double> TestDouble;
 		internal static MelonPreferences_Entry<InputType> TestEnum;
 		internal static MelonPreferences_Entry<List<int> > TestList;
+		internal static MelonPreferences_Entry<List<string>> TestListString;
 		internal static MelonPreferences_Entry<NonZeroBased> NonZeroEnum;
 		internal static MelonPreferences_Entry<NonContiguous> NonContiguousEnum;
 
@@ -64,7 +65,7 @@ namespace UIFramework
 			NonZeroEnum = Experimental.CreateEntry("Non-Zero", NonZeroBased.a,"Non-zero-based enum test", "This tests enums that don't start from zero");
 			NonContiguousEnum = Experimental.CreateEntry("Non-Cont", NonContiguous.z, "Non-Contiguous enum test", "This tests enums that have gaps in between the explicitlyi named values");
 			TestList = Experimental.CreateEntry("TestList", new List<int> { 1, 2, 3 }, "Test List", "This is a test list of integers.");
-
+			TestListString = Experimental.CreateEntry("TestStringList", new List<string> { "hello", "world", "hi" }, "this is a test list of strings"); 
 			
 			TestEmptyDisplayName = MelonPreferences.CreateCategory("EmptyDisplayName");
 			TestEmptyDisplayName.SetFilePath(Path.Combine(USER_DATA,CONFIG_FILE));
