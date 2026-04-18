@@ -124,6 +124,7 @@ namespace UIFramework
 		/// <summary>
 		/// Base controller for text fields 
 		/// </summary>
+		[RegisterTypeInIl2Cpp]
 		public class TextInputEntry : MelonEntry
 		{
 			/// <summary>
@@ -143,30 +144,44 @@ namespace UIFramework
 			{
 				//textField.text = _prefModel.BoxedValue.ToString();
 				//TomletMain.TomlStringFrom(_prefModel.BoxedValue).Trim();
-				try
+				if (_prefModel.BoxedValue.GetType() == typeof(string))
 				{
-					textField.text = ToTomlString(_prefModel.BoxedValue);
-					Debug.Log(ToTomlString(_prefModel.BoxedValue), true);
+					textField.text = (string)_prefModel.BoxedValue;
 				}
-				catch (Exception ex)
+				else
 				{
-					Debug.Log($"{ex.Message}\n{ex.StackTrace}");
+					try
+					{
+						textField.text = ToTomlString(_prefModel.BoxedValue);
+						Debug.Log(ToTomlString(_prefModel.BoxedValue), true);
+					}
+					catch (Exception ex)
+					{
+						Debug.Log($"{ex.Message}\n{ex.StackTrace}");
+					}
 				}
 				base.ModelSet();
 			}
 			public override void ApplyValueToPref()
 			{
-				try
+				if (_prefModel.BoxedValue.GetType() == typeof(string))
 				{
-					if (textField.text.Trim() != "")
-					{
-						_prefModel.SetDataValue(FromTomlString(textField.text, _prefModel.BoxedValue.GetType()));
-						Debug.Log($"Toml data parsed {FromTomlString(textField.text, _prefModel.BoxedValue.GetType())}");
-					}
+					_prefModel.SetDataValue(textField.text);
 				}
-				catch (Exception ex)
+				else
 				{
-					Log(ex.Message, false, 2);
+					try
+					{
+						if (textField.text.Trim() != "")
+						{
+							_prefModel.SetDataValue(FromTomlString(textField.text, _prefModel.BoxedValue.GetType()));
+							Debug.Log($"Toml data parsed {FromTomlString(textField.text, _prefModel.BoxedValue.GetType())}");
+						}
+					}
+					catch (Exception ex)
+					{
+						Log(ex.Message, false, 2);
+					}
 				}
 			}
 
@@ -195,33 +210,6 @@ namespace UIFramework
 				textField.onSelect.AddListener((System.Action<string>)EditStart);
 				textField.onDeselect.AddListener((System.Action<string>)EditEnd);
 			}
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		[RegisterTypeInIl2Cpp]
-		public class PrefDirectString : TextInputEntry
-		{
-			/// <inheritdoc/>
-			public override void ModelSet()
-			{
-				//textField.text = _prefModel.BoxedValue.ToString();
-				//TomletMain.TomlStringFrom(_prefModel.BoxedValue).Trim();
-				try
-				{
-					textField.text = _prefModel.BoxedValue.ToString();
-				}
-				catch (Exception ex)
-				{
-					Debug.Log($"{ex.Message}\n{ex.StackTrace}");
-				}
-			}
-			public override void ApplyValueToPref()
-			{
-				_prefModel.SetDataValue( textField.text );
-			}
-
 		}
 
 		/// <summary>
