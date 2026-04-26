@@ -87,7 +87,7 @@ namespace UIFramework
 		/// </summary>
 		internal static void InitializeUIObjects()
 		{
-			MainWindow = GameObject.Instantiate(Prefabs.MainCanvasSource, Prefabs.UIFGameObjects.transform);
+			MainWindow = GameObject.Instantiate(Prefabs.MainWindowSource, Prefabs.Canvas.transform);
 			MainWindow.name = "MainWindow";
 			MainWindow.SetActive(true);
 			WindowInstance = MainWindow.GetComponent<UIFController.WindowController>();

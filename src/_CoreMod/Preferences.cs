@@ -1,5 +1,5 @@
 using MelonLoader;
-
+using UnityEngine;
 namespace UIFramework
 {
 	/// <summary>
@@ -17,9 +17,10 @@ namespace UIFramework
 		internal static MelonPreferences_Entry<bool> VrInputToggle;
 		internal static MelonPreferences_Entry<bool> HijackModUI;
 		internal static MelonPreferences_Entry<int> InactivityTimeout;
+		internal static MelonPreferences_Entry<Vector2> UiPosition;
 		
 		internal static MelonPreferences_Category Experimental;
-		internal static MelonPreferences_Entry<UnityEngine.Color> ExperimentalColor;
+		internal static MelonPreferences_Entry<Color> ExperimentalColor;
 		internal static MelonPreferences_Entry<float> ExperimentalSlider;
 		internal static MelonPreferences_Entry<int> ExperimentalIntSlider;
 		internal static MelonPreferences_Entry<bool> TestBool;
@@ -55,6 +56,7 @@ namespace UIFramework
 			HijackModUI = CatUIFramework.CreateEntry("HijackModUI", false, "Force Hide Mod UI", "If enabled, UI Framework will find the ModUI object and hide it whenever UI Framework is also hidden.\n" +
 				"<size=75%>*Might cause unintended effects. Next ModUI toggle will need to be done twice</size>");
 			EnableDebugMode = CatUIFramework.CreateEntry("EnableDebugMode", false, "Enable Debug Logs", "Enables or disables debug logs for UIFramework.");
+			UiPosition = CatUIFramework.CreateEntry("UiPosition", new Vector2(110f, -214f), "UI Position", "The position of the UI on the screen represented",true, true);
 
 			Experimental = MelonPreferences.CreateCategory("UIFrameworkExperimental", "Experimental Settings");
 			Experimental.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));

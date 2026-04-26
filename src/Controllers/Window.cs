@@ -151,16 +151,16 @@ namespace UIFramework
 				_model = model;
 
 				MainCanvas = this.gameObject;
-				ModRegistryPanel = MainCanvas.transform.Find("Root/Body/ModRegistry/Viewport/ModRegCont").gameObject.GetComponent<Sidebar>();
-				CatRegistryPanel = MainCanvas.transform.Find("Root/Body/CatRegistry/Viewport/CatRegCont").gameObject.GetComponent<TopBar>();
-				PrefRegistryPanel = MainCanvas.transform.Find("Root/Body/PrefRegistry/Viewport/PrefRegCont").gameObject.GetComponent<PrefList>();
+				ModRegistryPanel = MainCanvas.transform.Find("Body/ModRegistry/Viewport/ModRegCont").gameObject.GetComponent<Sidebar>();
+				CatRegistryPanel = MainCanvas.transform.Find("Body/CatRegistry/Viewport/CatRegCont").gameObject.GetComponent<TopBar>();
+				PrefRegistryPanel = MainCanvas.transform.Find("Body/PrefRegistry/Viewport/PrefRegCont").gameObject.GetComponent<PrefList>();
 				
-				MainActionButton = MainCanvas.transform.Find("Root/Body/SaveActionButton").gameObject.GetComponent<Button>();
+				MainActionButton = MainCanvas.transform.Find("Body/SaveActionButton").gameObject.GetComponent<Button>();
 				DiscardActionButton = MainCanvas.transform.GetComponentsInChildren<Transform>(true).FirstOrDefault(t => t.name == "DiscardActionButton")?.gameObject.GetComponent<Button>();
-				MinimizeButton = MainCanvas.transform.Find("Root/Ribbon/Minimize").gameObject.GetComponent<Button>();
+				MinimizeButton = MainCanvas.transform.Find("Ribbon/Minimize").gameObject.GetComponent<Button>();
 				
-				WindowTitle = MainCanvas.transform.Find("Root/Ribbon/WindowTitle").gameObject.GetComponent<TextMeshProUGUI>();
-				TitleButtonText = MainCanvas.transform.Find("Root/Body/TitleButton/Text").gameObject.GetComponent<TextMeshProUGUI>();
+				WindowTitle = MainCanvas.transform.Find("Ribbon/WindowTitle").gameObject.GetComponent<TextMeshProUGUI>();
+				TitleButtonText = MainCanvas.transform.Find("Body/TitleButton/Text").gameObject.GetComponent<TextMeshProUGUI>();
 
 				MainActionButton.onClick.AddListener((UnityAction)SaveButtonClick);
 
