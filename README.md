@@ -1,4 +1,17 @@
-<sup> btw: The changelog doubles as a feature list </sup> 
+<sup> btw: The changelog doubles as a feature list </sup>
+# Attention: Modders
+If you have the same category identifier as another mod, your preferences will have a naming collision 
+and might be displayed alongside their categories' entries. 
+Please prefix your identifiers with your mod such as `"MyMod_MyCategory1"`to avoid this.
+This is a base MelonLoader problem. Not something that can be fixed in the UI. 
+
+Naming collisions also means you might accidentally change another mod's preferences if you have the same category and entry identifiers.
+
+### New in 0.8.1 
+<details><summary> Bug Fix: Buttons with empty display names will not show "Placeholder xxxx" anymore </summary>
+This also applies to entries in general. Only for empty strings though. If you pass null, it will show placeholder again. 
+</details>
+
 ### New in 0.8.0
 
 ***Modders read this first one***
@@ -230,12 +243,14 @@ private MelonPreferences_Entry<bool> TestEntry22;
 
 #### 3.  Call the CreateCategory method and set file paths
 ```cs
-TestCategory1 = MelonPreferences.CreateCategory("TestCat1", "Category DisplayName 1");
+TestCategory1 = MelonPreferences.CreateCategory("MyMod_TestCat1", "Category DisplayName 1");
 TestCategory1.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
 
-TestCategory2 = MelonPreferences.CreateCategory("TestCat2", "Category DisplayName 2");
+TestCategory2 = MelonPreferences.CreateCategory("MyMod_TestCat2", "Category DisplayName 2");
 TestCategory2.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
 ```
+
+*<sup>Prefix your category identifiers with the name of your mod to avoid conflicts with other categories later on</sup>
 
 #### 4. Create Entries by calling the .CreateEntry method on the category they go in. Parameters are `Identifier`, `Default Value`, `Display Name`, and `Description`
 ```cs

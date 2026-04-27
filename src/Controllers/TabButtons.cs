@@ -70,7 +70,6 @@ namespace UIFramework
 
 		}
 		/// <summary>
-		/// 
 		/// </summary>
 		[RegisterTypeInIl2Cpp]
 		public class Category : TabButtonController, IChildable

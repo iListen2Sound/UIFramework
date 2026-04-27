@@ -63,7 +63,8 @@ namespace UIFramework
 
 
 			ExperimentalColor = Experimental.CreateEntry("ColorTest", new UnityEngine.Color(50, 238, 165,255),"Test color", "ColorTest");
-			UI.CreateButtonEntry(Experimental, "Test Button", "Test Button Entry", "This is a test button entry that should not be treated as an actual preference and should not be saved to the config file.", TestButtonAsEntry);
+			UI.CreateButtonEntry(Experimental, "Test Buttton", "", "This is a test button entry that should not be treated as an actual preference and should not be saved to the config file.", TestButtonAsEntry);
+			
 			ExperimentalSlider = Experimental.CreateEntry("SliderTest", 0.5f, "Test Slider", "This is a test slider with a range from 0 to 1",false, false, new ValidatorExtensions.SliderDescriptor { Min = 0, Max = 1, DecimalPlaces = 3 }); 
 
 			ExperimentalIntSlider = Experimental.CreateEntry("IntSliderTest", 50, "Test Int Slider", "This is a test int slider with a range from 0 to 100", false, false, new ValidatorExtensions.SliderDescriptor { Min = 0, Max = 100 });
