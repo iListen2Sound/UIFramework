@@ -1,3 +1,9 @@
+# New in 0.8.1 
+
+<details><summary> Bug Fix: Buttons with empty display names will not show "Placeholder xxxx" anymore </summary>
+This also applies to entries in general. Only for empty strings though. If you pass null, it will show placeholder again. 
+</details>
+
 # New in 0.8.0
 
 ***Modders read this first one***

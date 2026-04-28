@@ -8,9 +8,21 @@ This is a base MelonLoader problem. Not something that can be fixed in the UI.
 Naming collisions also means you might accidentally change another mod's preferences if you have the same category and entry identifiers.
 
 ### New in 0.8.1 
+<details> <summary>New Feature: Draggable UI Window!</summary>
+
+The UI window is now draggable by the title bar. 
+</details>
 <details><summary> Bug Fix: Buttons with empty display names will not show "Placeholder xxxx" anymore </summary>
 This also applies to entries in general. Only for empty strings though. If you pass null, it will show placeholder again. 
 </details>
+<details><summary> Feature change: VR toggle behavior now follows ModUI</summary>
+
+If ModUI is enabled, and it has the VR Menu Toggle setting enabled, UI Framework will follow  ModUI's visibility.
+If ModUI is visible (when the VR toggle is pressed), UI Framework will also be visible and vice versa.
+If you don't have ModUI or the setting is off, UI Framework will toggle normally with the VR toggle.
+
+</details>
+
 
 ### New in 0.8.0
 

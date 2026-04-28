@@ -231,7 +231,6 @@ namespace UIFramework
 			targetPanel.anchoredPosition += eventData.delta / scale;
 
 			Preferences.UiPosition.Value = targetPanel.anchoredPosition;
-			Debug.Log($"{targetPanel.anchoredPosition}");
 
 		}
 

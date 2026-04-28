@@ -1,5 +1,6 @@
 using MelonLoader;
 using UnityEngine;
+using System.ComponentModel.DataAnnotations;
 namespace UIFramework
 {
 	/// <summary>
@@ -16,6 +17,8 @@ namespace UIFramework
 		internal static MelonPreferences_Entry<bool> AutoHideOnInactivity;
 		internal static MelonPreferences_Entry<bool> VrInputToggle;
 		internal static MelonPreferences_Entry<bool> HijackModUI;
+
+		internal static MelonPreferences_Entry<ToggleOptions> ToggleSettings;
 		internal static MelonPreferences_Entry<int> InactivityTimeout;
 		internal static MelonPreferences_Entry<Vector2> UiPosition;
 		
@@ -52,11 +55,19 @@ namespace UIFramework
 			AutoHideOnSceneLoad = CatUIFramework.CreateEntry("AutoHideOnSceneLoad", true, "Auto Hide On Scene Load", "Hides the UI Automatically in between scenes.");
 			AutoHideOnInactivity = CatUIFramework.CreateEntry("AutohideOnInactivity", true, "Auto Hide on Inactivity", "Hide the UI if mouse and keyboard are inactive");
 			InactivityTimeout = CatUIFramework.CreateEntry("InactivityTimeout", 30, "Inactivity Time Out (Seconds)", "Number of seconds of inactivity for UI to hide automatically");
-			VrInputToggle = CatUIFramework.CreateEntry("VrInputToggle", false, "Toggle with VR buttons", "Toggle UI window by pressing both grip and primary (A/X) on both hands");
+			VrInputToggle = CatUIFramework.CreateEntry("VrInputToggle", false, "Toggle with VR buttons", "Toggle UI window by pressing both trigger and primary (A/X) on both hands",true);
+			
+			ToggleSettings = CatUIFramework.CreateEntry("ToggleSettings", ToggleOptions.Keyboard, "Toggle Options", "Select the input method for toggling the UI.\n" +
+				"Keyboard: F9 \n" +
+				"VR: Press both trigger and primary (A/X) buttons on both hands\n" +
+				"<sup>*If you have ModUI, VR Input matches ModUI. UI Framework will be visible when ModUI is visible\n</sup>");
+			
 			HijackModUI = CatUIFramework.CreateEntry("HijackModUI", false, "Force Hide Mod UI", "If enabled, UI Framework will find the ModUI object and hide it whenever UI Framework is also hidden.\n" +
 				"<size=75%>*Might cause unintended effects. Next ModUI toggle will need to be done twice</size>");
+
+			
 			EnableDebugMode = CatUIFramework.CreateEntry("EnableDebugMode", false, "Enable Debug Logs", "Enables or disables debug logs for UIFramework.");
-			UiPosition = CatUIFramework.CreateEntry("UiPosition", new Vector2(110f, -214f), "UI Position", "The position of the UI on the screen represented",true, true);
+			UiPosition = CatUIFramework.CreateEntry("UiPosition", new Vector2(970, -128f), "UI Position", "The position of the UI on the screen represented",true, true);
 
 			Experimental = MelonPreferences.CreateCategory("UIFrameworkExperimental", "Experimental Settings");
 			Experimental.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
@@ -116,5 +127,15 @@ namespace UIFramework
 		x = 10,
 		w = 13,
 
+	}
+
+	internal enum ToggleOptions
+	{
+		[Display(Name = "Keyboard Only")]
+		Keyboard,
+		[Display(Name = "VR Only")]
+		VR,
+		[Display(Name = "VR And Keyboard")]
+		KeyAndVR,
 	}
 }
