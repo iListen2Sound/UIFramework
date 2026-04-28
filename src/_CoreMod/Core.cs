@@ -93,6 +93,7 @@ namespace UIFramework
 				MelonCoroutines.Start(SyncModUIState());
 			}
 
+			
 		}
 		/// <summary>
 		/// The actual coroutine that toggles the UI.
@@ -129,6 +130,8 @@ namespace UIFramework
 			{
 				UI.MainWindow.SetActive(!UI.MainWindow.activeSelf);
 			}
+
+			UI.MainWindow.GetComponent<UIFController.WindowController>().DragHandle.ClampToBounds();
 		}
 		/// <summary>
 		/// Runs after mod UI keyboard toggle to make sure lastModUIState variable is correct

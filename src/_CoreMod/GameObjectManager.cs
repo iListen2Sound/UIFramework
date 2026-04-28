@@ -230,10 +230,38 @@ namespace UIFramework
 
 			targetPanel.anchoredPosition += eventData.delta / scale;
 
+			ClampToBounds();
+
 			Preferences.UiPosition.Value = targetPanel.anchoredPosition;
 
 		}
+		public void ClampToBounds()
+		{
+			if (targetPanel == null) return;
 
+			Canvas canvas = targetPanel.GetComponentInParent<Canvas>();
+			float scale = (canvas != null) ? canvas.scaleFactor : 1.0f;
+
+			Rect pixelRect = canvas.pixelRect;
+			Vector2 screenSize = new Vector2(pixelRect.width, pixelRect.height) / scale;
+			Vector2 size = targetPanel.rect.size;
+
+			const float keepRight = 30f;
+			const float keepBottom = 30f;
+			const float keepLeft = 50f;
+
+			float minX = -(size.x - keepLeft);
+			float maxX = screenSize.x - keepRight;
+			float minY = -(screenSize.y - keepBottom);
+			float maxY = 0f;
+
+			targetPanel.anchoredPosition = new Vector2(
+				Mathf.Clamp(targetPanel.anchoredPosition.x, minX, maxX),
+				Mathf.Clamp(targetPanel.anchoredPosition.y, minY, maxY)
+			);
+
+			Preferences.UiPosition.Value = targetPanel.anchoredPosition;
+		}
 		void Start()
 		{
 			targetPanel = FindRootWindow();
@@ -250,6 +278,7 @@ namespace UIFramework
 			trigger.triggers.Add(entry);
 
 			targetPanel.anchoredPosition = Preferences.UiPosition.Value;
+			ClampToBounds();
 		}
 	}
 	#endregion

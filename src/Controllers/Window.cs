@@ -112,6 +112,7 @@ namespace UIFramework
 			public TextMeshProUGUI WindowTitle;
 
 			public TextMeshProUGUI TitleButtonText;
+			public DragHandle DragHandle;
 
 			public UIFModel.ModelModItem SelectedMod => _selectedMod;
 			private UIFModel.ModelModItem _selectedMod = null;
@@ -165,6 +166,7 @@ namespace UIFramework
 				MainActionButton.onClick.AddListener((UnityAction)SaveButtonClick);
 
 				MinimizeButton.onClick.AddListener((UnityAction)(() => MainCanvas.SetActive(false)));
+				DragHandle = MainCanvas.transform.Find("Ribbon/DragHandle").gameObject.GetComponent<DragHandle>();
 
 				DiscardActionButton.onClick.AddListener((UnityAction)DiscardButtonClick);
 				DiscardActionButton.gameObject.SetActive(true);
