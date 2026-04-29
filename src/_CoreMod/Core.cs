@@ -97,7 +97,7 @@ namespace UIFramework
 			
 		}
 		/// <summary>
-		/// The actual coroutine that toggles the UI.
+		/// The actual coroutine that toggles the UI. Has to be in a coroutine to allow for a delay if ModUI is present.
 		/// If ModUI is present, it matches UI Framework with ModUI. 
 		/// A delay is needed to make sure ModUI's new state has been apllied first before it's copied
 		/// </summary>

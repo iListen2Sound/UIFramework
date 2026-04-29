@@ -12,8 +12,8 @@ Naming collisions also means you might accidentally change another mod's prefere
 
 The UI window is now draggable by the title bar. 
 </details>
-<details><summary> Bug Fix: Buttons with empty display names will not show "Placeholder xxxx" anymore </summary>
-This also applies to entries in general. Only for empty strings though. If you pass null, it will show placeholder again. 
+<details><summary> Bug Fix: Empty string display name support </summary>
+Buttons with empty display names will not show "Placeholder xxxx" anymore. This also applies to entries in general. Only for empty strings though. If you pass null, it will show placeholder again. 
 </details>
 <details><summary> Feature change: VR toggle behavior now follows ModUI</summary>
 
@@ -23,7 +23,9 @@ If you don't have ModUI or the setting is off, UI Framework will toggle normally
 
 The toggle with VR buttons preference is also no longer a thing. A new preference is added for toggling with VR, keyboard, or both.
 </details>
-
+<details><summary> Backend "enhancements"</summary>
+Don't worry about it lol.
+</details>
 
 ### New in 0.8.0 (Highlights)
 
