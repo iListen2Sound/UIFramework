@@ -3,7 +3,7 @@ using MelonLoader;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static UIFramework.UIFController;
+using UIFramework.Adapters;
 
 namespace UIFramework
 {
@@ -126,31 +126,31 @@ namespace UIFramework
 			//ModEntry.TestComponent test = ModDisplayList.AddComponent<ModEntry.TestComponent>();
 
 			//Add the appropriate components to each prefab for later use
-			MainWindowSource.AddComponent<UIFController.WindowCoordinator>();
-			
-
-			TextPrefab.AddComponent<UIFController.TextInputEntry>();
-			BoolPrefab.AddComponent<UIFController.PrefBool>();
-
-			IntPrefab.AddComponent<UIFController.TextInputEntry>();
-			FloatPrefab.AddComponent<UIFController.TextInputEntry>();
-			//DoublePrefab.AddComponent<UIFController.TextInputEntry>();
-
-			DropDownPrefab.AddComponent<UIFController.PrefDropDown>();
-			SliderPrefab.AddComponent<UIFController.PrefSlider>();
-
-			//ButtonPrefab.AddComponent<UIFController.ButtonEntry>();
+			MainWindowSource.AddComponent<WindowCoordinator>();
 
 
+			TextPrefab.AddComponent<TextInputEntry>();
+			BoolPrefab.AddComponent<PrefBool>();
 
-			ModTab.AddComponent<UIFController.ModButtonView>();
+			IntPrefab.AddComponent<TextInputEntry>();
+			FloatPrefab.AddComponent<TextInputEntry>();
+			//DoublePrefab.AddComponent<   TextInputEntry>();
 
-			CatTab.AddComponent<UIFController.CategoryTabView>();
+			DropDownPrefab.AddComponent<PrefDropDown>();
+			SliderPrefab.AddComponent<PrefSlider>();
+
+			//ButtonPrefab.AddComponent<   ButtonEntryAdapter>();
+
+
+
+			ModTab.AddComponent<ModButtonView>();
+
+			CatTab.AddComponent<CategoryTabView>();
 
 			//Add the component to the container sections
-			ModDisplayList.AddComponent<UIFController.ModListAdapter>();
-			CatDisplayList.AddComponent<UIFController.CategoryListAdapter>();
-			PrefDisplayList.AddComponent<UIFController.PrefListAdapter>();
+			ModDisplayList.AddComponent<ModListAdapter>();
+			CatDisplayList.AddComponent<CategoryListAdapter>();
+			PrefDisplayList.AddComponent<PrefListAdapter>();
 
 
 			DragHandle dragScript = MainWindowDragHandle.AddComponent<DragHandle>();

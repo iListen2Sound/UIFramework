@@ -4,6 +4,7 @@ using System.Collections;
 using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UIFramework.Adapters;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.LowLevel;
 
@@ -131,7 +132,7 @@ namespace UIFramework
 				UI.MainWindow.SetActive(!UI.MainWindow.activeSelf);
 			}
 
-			UI.MainWindow.GetComponent<UIFController.WindowCoordinator>().DragHandle.ClampToBounds();
+			UI.MainWindow.GetComponent<WindowCoordinator>().DragHandle.ClampToBounds();
 		}
 		/// <summary>
 		/// Runs after mod UI keyboard toggle to make sure lastModUIState variable is correct
@@ -326,7 +327,7 @@ namespace UIFramework
 
 		}
 
-		public void CustomClick(UIFController.Entry button)
+		public void CustomClick(ButtonEntryAdapter button)
 		{
 			Debug.Log($"Clicked: {button.DisplayName} ");
 		}

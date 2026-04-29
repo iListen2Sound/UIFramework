@@ -2,188 +2,183 @@
 using UnityEngine;
 using UnityEngine.UI;
 using static UIFramework.Debug;
-namespace UIFramework
+namespace UIFramework.Adapters
 {
+
 	/// <summary>
-	/// Custom components that will serve as views in this MVP/MVC-ish pattern
+	/// Areas where UI elements are shown to the user. 
+	/// 1. ModButtonView list ModListAdapter 
+	/// 2. CategoryTabView tab top bar
+	/// 3. Entries Content area
 	/// </summary>
-	/// <remarks>I may have gone a little crazy with inheritance</remarks>
-	public partial class UIFController
+	public abstract class ListAreaAdapterBase : SubModelAdapter
 	{
-		/// <summary>
-		/// Areas where UI elements are shown to the user. 
-		/// 1. ModButtonView list ModListAdapter 
-		/// 2. CategoryTabView tab top bar
-		/// 3. Entries Content area
-		/// </summary>
-		public abstract class ListAreaAdapterBase : SubModelAdapter
+		protected UIFModel.IHoldSubmodels _model => (UIFModel.IHoldSubmodels)_internalModel;
+
+		public virtual void ContainerReset()
 		{
-			protected UIFModel.IHoldSubmodels _model => (UIFModel.IHoldSubmodels)_internalModel;
+			Model = null;
+			Infanticide();
+		}
 
-			public virtual void ContainerReset()
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public void Infanticide()
+		{
+			for (int i = this.transform.childCount - 1; i >= 0; i--)
 			{
-				Model = null;
-				Infanticide();
+				GameObject.Destroy(this.transform.GetChild(i).gameObject);
 			}
+		}
+		/// <summary>
+		/// Sets the underlying data model for the current instance.
+		/// </summary>
+		/// <remarks>
+		/// Calling this method updates the internal state to reflect the provided model. Subsequent
+		/// operations may depend on the newly set model.
+		/// </remarks>
+		/// <param name="model">The model to associate with this instance. Cannot be null.</param>
+		public virtual void SetModel(UIFModel.IHoldSubmodels model)
+		{
+			if (model == null)
+				return;
+			ContainerReset();
+			Model = model;
+			_rootWindow = FindRootWindow();
+			BuildFromModelList();
+		}
 
-
-			/// <summary>
-			/// 
-			/// </summary>
-			public void Infanticide()
+		///	<summary>
+		/// Clears the contents and recreates them from the submodels list in Model
+		/// </summary>
+		public void BuildFromModelList()
+		{
+			if (Model == null) return;
+			Infanticide();
+			foreach (UIFModel.IModelable model in _model.SubModels)
 			{
-				for (int i = this.transform.childCount - 1; i >= 0; i--)
+				if (model.IsHidden)
 				{
-					GameObject.Destroy(this.transform.GetChild(i).gameObject);
+					Debug.Log($"Model {model.DisplayName} is hidden, skipping UI creation.", true);
+					continue;
 				}
-			}
-			/// <summary>
-			/// Sets the underlying data model for the current instance.
-			/// </summary>
-			/// <remarks>
-			/// Calling this method updates the internal state to reflect the provided model. Subsequent
-			/// operations may depend on the newly set model.
-			/// </remarks>
-			/// <param name="model">The model to associate with this instance. Cannot be null.</param>
-			public virtual void SetModel(UIFModel.IHoldSubmodels model)
-			{
-				if (model == null)
-					return;
-				ContainerReset();
-				Model = model;
-				_rootWindow = FindRootWindow();
-				BuildFromModelList();
-			}
 
-			///	<summary>
-			/// Clears the contents and recreates them from the submodels list in Model
-			/// </summary>
-			public void BuildFromModelList()
-			{
-				if (Model == null) return;
-				Infanticide();
-				foreach (UIFModel.IModelable model in _model.SubModels)
+				GameObject uiElement = model.GetNewUIInstance();//GameObject.Instantiate(GetUIPrefabForModel(model), this.gameObject.transform);
+				uiElement.SetActive(true);
+				uiElement.transform.SetParent(this.gameObject.transform, false);
+				uiElement.transform.localScale = Vector3.one;
+				uiElement.transform.localPosition = Vector3.zero;
+
+
+				IChildable ViewController;
+
+				//Retrieve the appropriate game object controller component depending on the model type. 
+				//Switch statement could be unnecessary if interface was replaced with an abstract class
+
+				switch (model)
 				{
-					if (model.IsHidden)
-					{
-						Debug.Log($"Model {model.DisplayName} is hidden, skipping UI creation.", true);
+					case UIFModel.IEntry entryModel:
+
+						ViewController = uiElement.GetComponent<Entry>();
+						_rootWindow.CatRegistryPanel.SelectTab(Model as UIFModel.IHoldSubmodels);
+						break;
+					case UIFModel.SelectableModelBase tabModel:
+						ViewController = uiElement.GetComponent<TabButtonController>();
+						try
+						{
+							_rootWindow.ModRegistryPanel.SelectTab(Model as UIFModel.IHoldSubmodels);
+						}
+						catch (Exception ex)
+						{
+							Debug.Log($"{ex.Message}");// _rootWindow is null? {_rootWindow is null}. Model type: {Model.GetType}. Model is null? {Model is null}", true);
+						}
+						break;
+					default:
+						Warning($"No view found for model type {model.GetType()}");
 						continue;
-					}
-						
-					GameObject uiElement = model.GetNewUIInstance();//GameObject.Instantiate(GetUIPrefabForModel(model), this.gameObject.transform);
-					uiElement.SetActive(true);
-					uiElement.transform.SetParent(this.gameObject.transform, false);
-					uiElement.transform.localScale = Vector3.one;
-					uiElement.transform.localPosition = Vector3.zero;
-
-
-					IChildable ViewController;
-
-					//Retrieve the appropriate game object controller component depending on the model type. 
-					//Switch statement could be unnecessary if interface was replaced with an abstract class
-
-					switch (model)
-					{
-						case UIFModel.IEntry entryModel:
-
-							ViewController = uiElement.GetComponent<UIFController.Entry>();
-							_rootWindow.CatRegistryPanel.SelectTab(Model as UIFModel.IHoldSubmodels);
-							break;
-						case UIFModel.SelectableModelBase tabModel:
-							ViewController = uiElement.GetComponent<UIFController.TabButtonController>();
-							try
-							{
-								_rootWindow.ModRegistryPanel.SelectTab(Model as UIFModel.IHoldSubmodels);
-							}
-							catch (Exception ex)
-							{
-								Debug.Log($"{ex.Message}");// _rootWindow is null? {_rootWindow is null}. Model type: {Model.GetType}. Model is null? {Model is null}", true);
-							}
-							break;
-						default:
-							Warning($"No view found for model type {model.GetType()}");
-							continue;
-					}
-
-					if (ViewController != null)
-					{
-						ViewController.Model = model;
-					}
 				}
-				LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
 
-			}
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="buttonModel"></param>
-			public void SelectTab(UIFModel.IHoldSubmodels buttonModel)
-			{
-				for (int i = 0; i < transform.childCount; i++)
+				if (ViewController != null)
 				{
-					TabButtonController tabButton = transform.GetChild(i).GetComponent<TabButtonController>();
-					if (tabButton is null)
-						return;
-					if (tabButton.Model == buttonModel)
-					{
-						tabButton.GetComponent<Image>().color = _rootWindow.openTabColor;
-					}
-					else
-					{
-						tabButton.GetComponent<Image>().color = _rootWindow.defaultTabColor;
-					}
+					ViewController.Model = model;
 				}
 			}
-			public virtual void DiscardAction() { }
-
-			/// <summary>
-			/// Is called when Save ButtonGo is clicked. Override to create custom behaviour 
-			/// </summary>
-			public virtual void SaveAction() { }
+			LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
 
 		}
-
-
 		/// <summary>
-		///
+		/// 
 		/// </summary>
-		[RegisterTypeInIl2Cpp]
-		public class ModListAdapter : ListAreaAdapterBase
+		/// <param name="buttonModel"></param>
+		public void SelectTab(UIFModel.IHoldSubmodels buttonModel)
 		{
-		}
-
-		/// <summary>
-		///
-		/// </summary>
-		[RegisterTypeInIl2Cpp]
-		public class CategoryListAdapter : ListAreaAdapterBase
-		{
-		}
-		/// <summary>
-		/// Main body of the UI. Lists individual preferences
-		/// </summary>
-		[RegisterTypeInIl2Cpp]
-
-		public class PrefListAdapter : ListAreaAdapterBase
-		{
-			public UIFModel.ModelCategoryItem SelectedCategory => Model as UIFModel.ModelCategoryItem;
-			/// <summary>
-			/// When the save button is clicked, the selected category save action will be called. The model is now in charge of what that means
-			/// </summary>
-			public override void SaveAction()
+			for (int i = 0; i < transform.childCount; i++)
 			{
-				SelectedCategory?.SaveAction();
-
-
-
+				TabButtonController tabButton = transform.GetChild(i).GetComponent<TabButtonController>();
+				if (tabButton is null)
+					return;
+				if (tabButton.Model == buttonModel)
+				{
+					tabButton.GetComponent<Image>().color = _rootWindow.openTabColor;
+				}
+				else
+				{
+					tabButton.GetComponent<Image>().color = _rootWindow.defaultTabColor;
+				}
 			}
-			/// <inheritdoc/>
-			public override void DiscardAction()
-			{
-				SelectedCategory.DiscardAction();
-				BuildFromModelList();
-			}
-
 		}
+		public virtual void DiscardAction() { }
+
+		/// <summary>
+		/// Is called when Save ButtonGo is clicked. Override to create custom behaviour 
+		/// </summary>
+		public virtual void SaveAction() { }
+
 	}
+
+
+	/// <summary>
+	///
+	/// </summary>
+	[RegisterTypeInIl2Cpp]
+	public class ModListAdapter : ListAreaAdapterBase
+	{
+	}
+
+	/// <summary>
+	///
+	/// </summary>
+	[RegisterTypeInIl2Cpp]
+	public class CategoryListAdapter : ListAreaAdapterBase
+	{
+	}
+	/// <summary>
+	/// Main body of the UI. Lists individual preferences
+	/// </summary>
+	[RegisterTypeInIl2Cpp]
+
+	public class PrefListAdapter : ListAreaAdapterBase
+	{
+		public UIFModel.ModelCategoryItem SelectedCategory => Model as UIFModel.ModelCategoryItem;
+		/// <summary>
+		/// When the save button is clicked, the selected category save action will be called. The model is now in charge of what that means
+		/// </summary>
+		public override void SaveAction()
+		{
+			SelectedCategory?.SaveAction();
+
+
+
+		}
+		/// <inheritdoc/>
+		public override void DiscardAction()
+		{
+			SelectedCategory.DiscardAction();
+			BuildFromModelList();
+		}
+
+	}
+
 }

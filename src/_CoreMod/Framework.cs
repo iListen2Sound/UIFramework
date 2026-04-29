@@ -2,6 +2,7 @@ using MelonLoader;
 using UnityEngine;
 using System.ComponentModel.DataAnnotations;
 using UIFramework.ValidatorExtensions;
+using UIFramework.Adapters;
 namespace UIFramework
 {
 	/// <summary>
@@ -13,7 +14,7 @@ namespace UIFramework
 		internal static UIFModel.RootModel ModelInstance = new();
 		internal static GameObject MainWindow;
 		public static bool IsVisible { get { return MainWindow.activeSelf; }  }
-		internal static UIFController.WindowCoordinator WindowInstance;
+		internal static WindowCoordinator WindowInstance;
 		/// <summary>
 		/// Registers a mod and its categories to the UI instance. 
 		/// </summary>
@@ -90,7 +91,7 @@ namespace UIFramework
 			MainWindow = GameObject.Instantiate(Prefabs.MainWindowSource, Prefabs.Canvas.transform);
 			MainWindow.name = "MainWindow";
 			MainWindow.SetActive(true);
-			WindowInstance = MainWindow.GetComponent<UIFController.WindowCoordinator>();
+			WindowInstance = MainWindow.GetComponent<WindowCoordinator>();
 
 		}
 
