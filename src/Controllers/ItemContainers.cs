@@ -12,11 +12,11 @@ namespace UIFramework
 	{
 		/// <summary>
 		/// Areas where UI elements are shown to the user. 
-		/// 1. Mod list Sidebar 
-		/// 2. Category tab top bar
+		/// 1. ModButtonView list ModListAdapter 
+		/// 2. CategoryTabView tab top bar
 		/// 3. Entries Content area
 		/// </summary>
-		public abstract class ListArea : SubModelController
+		public abstract class ListAreaAdapterBase : SubModelAdapter
 		{
 			protected UIFModel.IHoldSubmodels _model => (UIFModel.IHoldSubmodels)_internalModel;
 
@@ -148,7 +148,7 @@ namespace UIFramework
 		///
 		/// </summary>
 		[RegisterTypeInIl2Cpp]
-		public class Sidebar : ListArea
+		public class ModListAdapter : ListAreaAdapterBase
 		{
 		}
 
@@ -156,7 +156,7 @@ namespace UIFramework
 		///
 		/// </summary>
 		[RegisterTypeInIl2Cpp]
-		public class TopBar : ListArea
+		public class CategoryListAdapter : ListAreaAdapterBase
 		{
 		}
 		/// <summary>
@@ -164,7 +164,7 @@ namespace UIFramework
 		/// </summary>
 		[RegisterTypeInIl2Cpp]
 
-		public class PrefList : ListArea
+		public class PrefListAdapter : ListAreaAdapterBase
 		{
 			public UIFModel.ModelCategoryItem SelectedCategory => Model as UIFModel.ModelCategoryItem;
 			/// <summary>

@@ -131,7 +131,7 @@ namespace UIFramework
 				UI.MainWindow.SetActive(!UI.MainWindow.activeSelf);
 			}
 
-			UI.MainWindow.GetComponent<UIFController.WindowController>().DragHandle.ClampToBounds();
+			UI.MainWindow.GetComponent<UIFController.WindowCoordinator>().DragHandle.ClampToBounds();
 		}
 		/// <summary>
 		/// Runs after mod UI keyboard toggle to make sure lastModUIState variable is correct

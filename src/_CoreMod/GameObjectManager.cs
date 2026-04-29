@@ -126,7 +126,7 @@ namespace UIFramework
 			//ModEntry.TestComponent test = ModDisplayList.AddComponent<ModEntry.TestComponent>();
 
 			//Add the appropriate components to each prefab for later use
-			MainWindowSource.AddComponent<UIFController.WindowController>();
+			MainWindowSource.AddComponent<UIFController.WindowCoordinator>();
 			
 
 			TextPrefab.AddComponent<UIFController.TextInputEntry>();
@@ -143,14 +143,14 @@ namespace UIFramework
 
 
 
-			ModTab.AddComponent<UIFController.Mod>();
+			ModTab.AddComponent<UIFController.ModButtonView>();
 
-			CatTab.AddComponent<UIFController.Category>();
+			CatTab.AddComponent<UIFController.CategoryTabView>();
 
 			//Add the component to the container sections
-			ModDisplayList.AddComponent<UIFController.Sidebar>();
-			CatDisplayList.AddComponent<UIFController.TopBar>();
-			PrefDisplayList.AddComponent<UIFController.PrefList>();
+			ModDisplayList.AddComponent<UIFController.ModListAdapter>();
+			CatDisplayList.AddComponent<UIFController.CategoryListAdapter>();
+			PrefDisplayList.AddComponent<UIFController.PrefListAdapter>();
 
 
 			DragHandle dragScript = MainWindowDragHandle.AddComponent<DragHandle>();

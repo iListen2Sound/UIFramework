@@ -14,7 +14,7 @@ namespace UIFramework
 	public partial class UIFController
 	{
 
-		public abstract class Entry : SubModelController, IChildable
+		public abstract class Entry : SubModelAdapter, IChildable
 		{
 			/// <summary>
 			/// Sets the description text

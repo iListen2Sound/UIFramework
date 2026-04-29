@@ -31,8 +31,8 @@ namespace UIFramework
 		/// <summary>
 		/// Controllers for models that can be submodels of other models. 
 		/// Preference Entries
-		/// Mod Buttons
-		/// Category Buttons
+		/// ModButtonView Buttons
+		/// CategoryTabView Buttons
 		/// </summary>
 		public interface IChildable
 		{
@@ -41,7 +41,7 @@ namespace UIFramework
 			/// </summary>
 			public UIFModel.IModelable Model { get; set; }
 		}
-		public abstract class SubModelController : MonoBehaviour
+		public abstract class SubModelAdapter : MonoBehaviour
 		{
 			protected UIFModel.IModelable _internalModel;
 			public virtual UIFModel.IModelable Model
@@ -57,17 +57,17 @@ namespace UIFramework
 				}
 			}
 
-			public WindowController _rootWindow;
+			public WindowCoordinator _rootWindow;
 
-			public WindowController FindRootWindow()
+			public WindowCoordinator FindRootWindow()
 			{
-				WindowController foundRoot = null; ;
+				WindowCoordinator foundRoot = null; ;
 				Transform ancestor = this.gameObject.transform.parent;
 				while (ancestor != null)
 				{
 					if (ancestor.name.Contains("MainWindow"))
 					{
-						return ancestor.GetComponent<WindowController>();
+						return ancestor.GetComponent<WindowCoordinator>();
 					}
 					ancestor = ancestor.parent;
 				}
@@ -89,11 +89,11 @@ namespace UIFramework
 		/// 
 		/// </summary>
 		[RegisterTypeInIl2Cpp]
-		public class WindowController : MonoBehaviour
+		public class WindowCoordinator : MonoBehaviour
 		{
 			void Awake()
 			{
-				Log("WindowController Awake", true, 1);
+				Log("WindowCoordinator Awake", true, 1);
 			}
 
 			public Color defaultTabColor = new Color(0.22f, 0.22f, 0.22f, 1f);
@@ -103,9 +103,9 @@ namespace UIFramework
 			public UIFModel.IModelable Model { get { return _model; } }
 
 			public GameObject MainCanvas;
-			public Sidebar ModRegistryPanel;
-			public TopBar CatRegistryPanel;
-			public PrefList PrefRegistryPanel;
+			public ModListAdapter ModRegistryPanel;
+			public CategoryListAdapter CatRegistryPanel;
+			public PrefListAdapter PrefRegistryPanel;
 			public Button MainActionButton;
 			public Button DiscardActionButton;
 			public Button MinimizeButton;
@@ -152,9 +152,9 @@ namespace UIFramework
 				_model = model;
 
 				MainCanvas = this.gameObject;
-				ModRegistryPanel = MainCanvas.transform.Find("Body/ModRegistry/Viewport/ModRegCont").gameObject.GetComponent<Sidebar>();
-				CatRegistryPanel = MainCanvas.transform.Find("Body/CatRegistry/Viewport/CatRegCont").gameObject.GetComponent<TopBar>();
-				PrefRegistryPanel = MainCanvas.transform.Find("Body/PrefRegistry/Viewport/PrefRegCont").gameObject.GetComponent<PrefList>();
+				ModRegistryPanel = MainCanvas.transform.Find("Body/ModRegistry/Viewport/ModRegCont").gameObject.GetComponent<ModListAdapter>();
+				CatRegistryPanel = MainCanvas.transform.Find("Body/CatRegistry/Viewport/CatRegCont").gameObject.GetComponent<CategoryListAdapter>();
+				PrefRegistryPanel = MainCanvas.transform.Find("Body/PrefRegistry/Viewport/PrefRegCont").gameObject.GetComponent<PrefListAdapter>();
 				
 				MainActionButton = MainCanvas.transform.Find("Body/SaveActionButton").gameObject.GetComponent<Button>();
 				DiscardActionButton = MainCanvas.transform.GetComponentsInChildren<Transform>(true).FirstOrDefault(t => t.name == "DiscardActionButton")?.gameObject.GetComponent<Button>();
@@ -186,8 +186,8 @@ namespace UIFramework
 			{
 				ModRegistryPanel.ContainerReset();
 
-				CatRegistryPanel.GetComponent<TopBar>().ContainerReset();
-				PrefRegistryPanel.GetComponent<PrefList>().ContainerReset();
+				CatRegistryPanel.GetComponent<CategoryListAdapter>().ContainerReset();
+				PrefRegistryPanel.GetComponent<PrefListAdapter>().ContainerReset();
 
 				ModRegistryPanel.SetModel(_model);
 			}

@@ -9,10 +9,10 @@ namespace UIFramework
 	public partial class UIFController
 	{
 		//protected override GameObject UIPrefab { get { return Prefabs.TextPrefab; } }
-		public abstract class TabButtonController : SubModelController, IChildable
+		public abstract class TabButtonController : SubModelAdapter, IChildable
 		{
 
-			protected WindowController ParentWindow;
+			protected WindowCoordinator ParentWindow;
 			protected UIFModel.IHoldSubmodels _model => (UIFModel.IHoldSubmodels)_internalModel;
 
 			public override void ModelSet()
@@ -53,7 +53,7 @@ namespace UIFramework
 		/// 
 		/// </summary>
 		[RegisterTypeInIl2Cpp]
-		public class Mod : TabButtonController, IChildable
+		public class ModButtonView : TabButtonController, IChildable
 		{
 
 			protected UIFModel.ModelMod ModModel => (UIFModel.ModelMod)_internalModel;
@@ -72,7 +72,7 @@ namespace UIFramework
 		/// <summary>
 		/// </summary>
 		[RegisterTypeInIl2Cpp]
-		public class Category : TabButtonController, IChildable
+		public class CategoryTabView : TabButtonController, IChildable
 		{
 			public override void OnSelect()
 			{
