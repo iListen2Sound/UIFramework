@@ -99,7 +99,7 @@ namespace UIFramework
 			
 		{
 			ButtonAsEntry button = new ButtonAsEntry { Handler = handler, ButtonText = buttonText, DisplayName = displayName, Description = description };
-			category.CreateEntry<ButtonAsEntry>($"PlaceHolder{handler.GetHashCode().ToString().Substring(0,7)}", button, displayName, description, false, true, button);
+			category.CreateEntry<ButtonAsEntry>($"PlaceHolder{buttonText + displayName + description}", button, displayName, description, false, true, button);
 		}
 		/// <summary>
 		/// 

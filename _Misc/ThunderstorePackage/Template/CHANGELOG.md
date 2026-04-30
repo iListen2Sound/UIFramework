@@ -1,3 +1,9 @@
+# New in 0.8.2
+<details><summary> <sup> just some backend stuff</sup>
+</summary>
+Don't worry about it
+</details>
+
 # New in 0.8.1 
 <details> <summary>New Feature: Draggable UI Window!</summary>
 

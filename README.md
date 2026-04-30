@@ -7,7 +7,7 @@ This is a base MelonLoader problem. Not something that can be fixed in the UI.
 
 Naming collisions also means you might accidentally change another mod's preferences if you have the same category and entry identifiers.
 
-### New in 0.8.1 
+### New in 0.8.1/2
 <details> <summary>New Feature: Draggable UI Window!</summary>
 
 The UI window is now draggable by the title bar. 
