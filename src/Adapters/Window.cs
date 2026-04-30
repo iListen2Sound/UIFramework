@@ -109,31 +109,31 @@ namespace UIFramework.Adapters
 		public TextMeshProUGUI TitleButtonText;
 		public DragHandle DragHandle;
 
-		public ModelModItem SelectedMod => _selectedMod;
-		private ModelModItem _selectedMod = null;
+		public ModModelBase SelectedMod => _selectedMod;
+		private ModModelBase _selectedMod = null;
 
-		public ModelCategoryItem SelectedCategory => _selectedCategory;
-		private ModelCategoryItem _selectedCategory = null;
+		public CategoryModelBase SelectedCategory => _selectedCategory;
+		private CategoryModelBase _selectedCategory = null;
 
-		public Dictionary<ModelModItem, ModelCategoryItem> LastCategorySelected = new();
+		public Dictionary<ModModelBase, CategoryModelBase> LastCategorySelected = new();
 
 
-		public void SetSelectedMod(ModelModItem mod)
+		public void SetSelectedMod(ModModelBase mod)
 		{
 			_selectedMod = mod;
 			TitleButtonText.text = $"{mod.DisplayName}\n{mod.Instance.Info.Version}";
 
 			CatRegistryPanel.SetModel(mod);
 
-			ModelCategoryItem lastSelected = null;
-			if (LastCategorySelected.ContainsKey(mod as ModelModItem))
-				lastSelected = LastCategorySelected[mod as ModelModItem];
+			CategoryModelBase lastSelected = null;
+			if (LastCategorySelected.ContainsKey(mod as ModModelBase))
+				lastSelected = LastCategorySelected[mod as ModModelBase];
 
 
-			PrefRegistryPanel.SetModel(lastSelected ?? (ModelCategoryItem)mod.SubModels[0]);
+			PrefRegistryPanel.SetModel(lastSelected ?? (CategoryModelBase)mod.SubModels[0]);
 
 		}
-		public void SetSelectedCategory(ModelCategoryItem cat)
+		public void SetSelectedCategory(CategoryModelBase cat)
 		{
 			_selectedCategory = cat;
 			PrefRegistryPanel.SetModel(cat);

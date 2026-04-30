@@ -55,7 +55,7 @@ namespace UIFramework.Adapters
 	public class ModButtonView : TabButtonController, IChildable
 	{
 
-		protected ModelMod ModModel => (ModelMod)_internalModel;
+		protected MelonModel ModModel => (MelonModel)_internalModel;
 
 		public override void OnSelect()
 		{
@@ -75,7 +75,7 @@ namespace UIFramework.Adapters
 	{
 		public override void OnSelect()
 		{
-			ParentWindow.SetSelectedCategory((ModelCategoryItem)_internalModel);
+			ParentWindow.SetSelectedCategory((CategoryModelBase)_internalModel);
 		}
 	}
 

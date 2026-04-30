@@ -97,7 +97,7 @@ namespace UIFramework.Models
 			}
 			catch (Exception ex)
 			{
-				Debug.Log($"ModelMelonEntry TryApply: {ex.Message}", false, 2);
+				Debug.Log($"MelonEntryModel TryApply: {ex.Message}", false, 2);
 				result = false;
 
 			}

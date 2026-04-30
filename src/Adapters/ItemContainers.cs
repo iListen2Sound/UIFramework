@@ -162,7 +162,7 @@ namespace UIFramework.Adapters
 
 	public class PrefListAdapter : ListAreaAdapterBase
 	{
-		public ModelCategoryItem SelectedCategory => Model as ModelCategoryItem;
+		public CategoryModelBase SelectedCategory => Model as CategoryModelBase;
 		/// <summary>
 		/// When the save button is clicked, the selected category save action will be called. The model is now in charge of what that means
 		/// </summary>

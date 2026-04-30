@@ -31,11 +31,11 @@ namespace UIFramework
 			}
 		}
 		[Obsolete("This class is just a shim for backwards compatibility and should not be used directly. Use the new models instead in UIFramework.Models")]
-		public abstract class ModelModItem : global::UIFramework.Models.ModelModItem
+		public abstract class ModelModItem : global::UIFramework.Models.ModModelBase
 		{
 			// No logic here
 		}
-		public class ModelMod : global::UIFramework.Models.ModelMod
+		public class ModelMod : global::UIFramework.Models.MelonModel
 		{
 			public ModelMod(MelonBase instance, List<MelonPreferences_Category> categories) : base(instance, categories)
 			{
@@ -44,7 +44,7 @@ namespace UIFramework
 			{ }
 		}
 		[Obsolete("This class is just a shim for backwards compatibility and should not be used directly. Use the new models instead in UIFramework.Models")]
-		public abstract class ModelCategoryItem : global::UIFramework.Models.ModelCategoryItem
+		public abstract class ModelCategoryItem : global::UIFramework.Models.CategoryModelBase
 		{
 			[Obsolete("This class is just a shim for backwards compatibility and should not be used directly. Use the new models instead in UIFramework.Models")]
 			protected ModelCategoryItem(ModelModItem parentMod) : base(parentMod)
@@ -53,7 +53,7 @@ namespace UIFramework
 			
 		}
 		[Obsolete("This class is just a shim for backwards compatibility and should not be used directly. Use the new models instead in UIFramework.Models")]
-		public class ModelMelonCategory : global::UIFramework.Models.ModelMelonCategory
+		public class ModelMelonCategory : global::UIFramework.Models.MelonCategoryModel
 		{
 			[Obsolete("This class is just a shim for backwards compatibility and should not be used directly. Use the new models instead in UIFramework.Models")]
 			public ModelMelonCategory(MelonPreferences_Category cat, ModelModItem parentMod) : base(cat, parentMod)
@@ -65,7 +65,7 @@ namespace UIFramework
 		public class EmptyCategory : global::UIFramework.Models.EmptyCategory
 		{
 			[Obsolete("This class is just a shim for backwards compatibility and should not be used directly. Use the new models instead in UIFramework.Models")]
-			/*public EmptyCategory(string identifier, string displayName, ModelModItem parentMod = null)
+			/*public EmptyCategory(string identifier, string displayName, ModModelBase parentMod = null)
 			: base(identifier, displayName, parentMod)
 			{
 			}*/
@@ -75,7 +75,7 @@ namespace UIFramework
 
 		}
 		[Obsolete("This class is just a shim for backwards compatibility and should not be used directly. Use the new models instead in UIFramework.Models")]
-		public abstract class ModelEntryItem : global::UIFramework.Models.ModelEntryItem
+		public abstract class ModelEntryItem : global::UIFramework.Models.EntryModelBase
 		{
 			[Obsolete("This class is just a shim for backwards compatibility and should not be used directly. Use the new models instead in UIFramework.Models")]	
 			protected ModelEntryItem(ModelCategoryItem parentCategory) : base(parentCategory)

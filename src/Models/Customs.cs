@@ -5,7 +5,7 @@ using UIFramework.Adapters;
 namespace UIFramework.Models
 {
 
-	public class EmptyCategory : ModelCategoryItem
+	public class EmptyCategory : CategoryModelBase
 	{
 		private string _displayName;
 		/// <inheritdoc/>
@@ -14,13 +14,13 @@ namespace UIFramework.Models
 		/// <inheritdoc/>
 		public override string Identifier => _identifier;
 		public override bool IsHidden { get; set; } = false;
-		public EmptyCategory(string identifier, string displayName, ModelModItem parentMod = null)
+		public EmptyCategory(string identifier, string displayName, ModModelBase parentMod = null)
 			: base(parentMod)
 		{
 			_identifier = identifier;
 			_displayName = displayName;
 		}
-		public EmptyCategory(string identifier, ModelModItem parentMod = null)
+		public EmptyCategory(string identifier, ModModelBase parentMod = null)
 			: base(parentMod)
 		{
 			_identifier = identifier;
@@ -28,7 +28,7 @@ namespace UIFramework.Models
 		}
 	}
 
-	public class ButtonEntry : ModelEntryItem
+	public class ButtonEntry : EntryModelBase
 	{
 
 		private string _name;
@@ -55,7 +55,7 @@ namespace UIFramework.Models
 		public Action<ButtonEntryAdapter> OnClick;
 
 
-		public ButtonEntry(Action<ButtonEntryAdapter> onClick, string name, string description = "", string displayName = "", ModelCategoryItem parentCategory = null)
+		public ButtonEntry(Action<ButtonEntryAdapter> onClick, string name, string description = "", string displayName = "", CategoryModelBase parentCategory = null)
 			: base(parentCategory)
 		{
 			_name = name;

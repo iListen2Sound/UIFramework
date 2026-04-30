@@ -71,10 +71,10 @@ namespace UIFramework.Models
 
 	}
 
-	public abstract class ModelModItem : SelectableModelBase
+	public abstract class ModModelBase : SelectableModelBase
 	{
 
-		public List<ModelCategoryItem> Categories => SubModels.Cast<ModelCategoryItem>().ToList();
+		public List<CategoryModelBase> Categories => SubModels.Cast<CategoryModelBase>().ToList();
 		public abstract MelonBase Instance { get; set; }
 		public override string Identifier => Instance.Info.Name;
 		public string _displayName;
@@ -89,14 +89,14 @@ namespace UIFramework.Models
 		/// <summary>
 		/// 
 		/// </summary>
-		public virtual ModelCategoryItem GetModelCategory(string identifier)
+		public virtual CategoryModelBase GetModelCategory(string identifier)
 		{
-			return (ModelCategoryItem)GetSubmodel(identifier);
+			return (CategoryModelBase)GetSubmodel(identifier);
 		}
 		/// <summary>
 		/// 
 		/// </summary>
-		public virtual void AddModelCategory(params ModelCategoryItem[] categoryModel)
+		public virtual void AddModelCategory(params CategoryModelBase[] categoryModel)
 		{
 			AddSubmodel(categoryModel.Cast<IModelable>().ToArray());
 		}
@@ -138,7 +138,7 @@ namespace UIFramework.Models
 		/// </summary>
 		public event Action OnModSaved;
 
-		public event Action<ModelModItem> OnUiUpdateRequest;
+		public event Action<ModModelBase> OnUiUpdateRequest;
 
 		private bool _isUpdateRequestQueued = false;
 		public void RequestUpdateUI() => _isUpdateRequestQueued = true;
@@ -153,12 +153,12 @@ namespace UIFramework.Models
 		}
 
 	}
-	public abstract class ModelCategoryItem : SelectableModelBase
+	public abstract class CategoryModelBase : SelectableModelBase
 	{
-		//public List<ModelEntryItem> Entries => SubModels.Cast<ModelEntryItem>().ToList();
-		public ModelModItem ParentMod { get; set; }
+		//public List<EntryModelBase> Entries => SubModels.Cast<EntryModelBase>().ToList();
+		public ModModelBase ParentMod { get; set; }
 		public abstract bool IsHidden { get; set; }
-		protected ModelCategoryItem(ModelModItem parentMod)
+		protected CategoryModelBase(ModModelBase parentMod)
 		{
 			ParentMod = parentMod;
 		}
@@ -174,10 +174,10 @@ namespace UIFramework.Models
 		//public override void DiscardAction() { }
 	}
 
-	public abstract class ModelEntryItem : ModelBase, IEntry
+	public abstract class EntryModelBase : ModelBase, IEntry
 	{
-		public ModelCategoryItem ParentCategory { get; set; }
-		public ModelEntryItem(ModelCategoryItem parentCategory)
+		public CategoryModelBase ParentCategory { get; set; }
+		public EntryModelBase(CategoryModelBase parentCategory)
 		{
 			ParentCategory = parentCategory;
 		}
@@ -206,9 +206,9 @@ namespace UIFramework.Models
 	/// <summary>
 	/// A model for interfacing with a piece of data.
 	/// </summary>
-	public abstract class ModelDataEntryBase : ModelEntryItem
+	public abstract class DataEntryModelBase : EntryModelBase
 	{
-		protected ModelDataEntryBase(ModelCategoryItem parentCategory) : base(parentCategory) { }
+		protected DataEntryModelBase(CategoryModelBase parentCategory) : base(parentCategory) { }
 		public abstract DefaultValidator Validator { get; }
 
 		public abstract object ModelBoxedValue { get; protected set; }

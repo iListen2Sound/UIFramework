@@ -17,7 +17,7 @@ namespace UIFramework
 {
 	public class CustomCategoryTab
 	{
-		internal ModelCategoryItem CategoryModel { get; set; }
+		internal CategoryModelBase CategoryModel { get; set; }
 		public readonly List<CustomUIEntry> Entries = new List<CustomUIEntry>();
 
 		public string Identifier { get; internal set; }

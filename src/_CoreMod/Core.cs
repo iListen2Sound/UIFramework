@@ -302,7 +302,7 @@ namespace UIFramework
 			else
 			{
 				ModModel = UI.Register(this, Preferences.CatUIFramework, Preferences.Experimental, Preferences.TestBooleans, Preferences.TestEmptyDisplayName);
-				ModelMelonCategory tester = (ModelMelonCategory)ModModel.GetSubmodel(Preferences.TestBooleans.Identifier);
+				MelonCategoryModel tester = (MelonCategoryModel)ModModel.GetSubmodel(Preferences.TestBooleans.Identifier);
 				ButtonEntry testButton = new ButtonEntry(CustomClick, "CustomButton", "just a test", "Custom Button");
 				tester.AddSubmodel(testButton);
 			}

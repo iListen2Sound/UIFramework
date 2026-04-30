@@ -9,7 +9,7 @@ namespace UIFramework.Models
 	//TODO: Too much repitition Reinstate base model classq
 	/// <summary>
 	/// Models define how the UI is built. The heirarchy is simple and follows melonpreferences basic structure
-	/// ModelMod ->  ModelMelonCategory -> ModelMelonEntry
+	/// MelonModel ->  MelonCategoryModel -> MelonEntryModel
 	/// Modders can use the default model just by calling UIF.Register(modInstance, categories) in their OnLateInitializeMelon. 
 	/// The default model will use simple input methods: bools will be toggles, strings will be text input fields and so would numerics.
 	/// More options will eventually be available: sliders, dropdowns, multi checkboxes, radio buttons, etc.
@@ -42,9 +42,9 @@ namespace UIFramework.Models
 		{
 			return SubModels.FirstOrDefault(m => m.Identifier == name);
 		}
-		public ModelModItem GetModModel(string identifier)
+		public ModModelBase GetModModel(string identifier)
 		{
-			return (ModelModItem)GetSubmodel(identifier);
+			return (ModModelBase)GetSubmodel(identifier);
 		}
 
 		public GameObject GetNewUIInstance() { return null; }
@@ -54,12 +54,12 @@ namespace UIFramework.Models
 
 	}
 
-	public class ModelMod : ModelModItem
+	public class MelonModel : ModModelBase
 	{
 
 		public override MelonBase Instance { get; set; }
 
-		public ModelMod(MelonBase instance, List<MelonPreferences_Category> catList)
+		public MelonModel(MelonBase instance, List<MelonPreferences_Category> catList)
 		{
 			Instance = instance;
 			try
@@ -72,18 +72,18 @@ namespace UIFramework.Models
 
 			foreach (MelonPreferences_Category cat in catList)
 			{
-				SubModels.Add(new ModelMelonCategory(cat, this));
+				SubModels.Add(new MelonCategoryModel(cat, this));
 
 			}
 		}
-		public ModelMod(MelonBase instance)
+		public MelonModel(MelonBase instance)
 		{
 			Instance = instance;
 		}
 
 	}
 
-	public class ModelMelonCategory : ModelCategoryItem
+	public class MelonCategoryModel : CategoryModelBase
 	{
 
 		/// <summary>
@@ -103,13 +103,13 @@ namespace UIFramework.Models
 		/// <summary>
 		/// Creates a new instance of this class based on a MelonPreferences_Category
 		/// </summary>
-		public ModelMelonCategory(MelonPreferences_Category cat, ModelModItem parentMod)
+		public MelonCategoryModel(MelonPreferences_Category cat, ModModelBase parentMod)
 			: base(parentMod)
 		{
 			PrefCat = cat;
 			foreach (MelonPreferences_Entry entry in PrefCat.Entries)
 			{
-				SubModels.Add(new ModelMelonEntry(entry, this));
+				SubModels.Add(new MelonEntryModel(entry, this));
 			}
 
 		}
@@ -122,7 +122,7 @@ namespace UIFramework.Models
 		public override void DiscardAction()
 		{
 			PrefCat.LoadFromFile(false);
-			foreach (ModelEntryItem entry in SubModels)
+			foreach (EntryModelBase entry in SubModels)
 			{
 				entry.DiscardAction();
 			}
@@ -132,7 +132,7 @@ namespace UIFramework.Models
 	/// <summary>
 	/// 
 	/// </summary>
-	public class ModelMelonEntry : ModelDataEntryBase, IModelable
+	public class MelonEntryModel : DataEntryModelBase, IModelable
 	{
 
 		/// <summary>
@@ -165,7 +165,7 @@ namespace UIFramework.Models
 		/// <summary>
 		/// Creates a new instance of this object based around a MelonPreferences_Entry object
 		/// </summary>
-		public ModelMelonEntry(MelonPreferences_Entry prefEntry, ModelCategoryItem parentCategory)
+		public MelonEntryModel(MelonPreferences_Entry prefEntry, CategoryModelBase parentCategory)
 			: base(parentCategory)
 		{
 			PrefEntry = prefEntry;

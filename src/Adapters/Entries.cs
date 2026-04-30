@@ -98,7 +98,7 @@ namespace UIFramework.Adapters
 		/// <inheritdoc/>
 		//public override void ModelSet() { base.ModelSet(); }
 
-		virtual protected ModelDataEntryBase _prefModel => (ModelDataEntryBase)EntryModel;
+		virtual protected DataEntryModelBase _prefModel => (DataEntryModelBase)EntryModel;
 
 		/// <inheritdoc/>
 		public virtual bool ValidationCheck()
@@ -127,7 +127,7 @@ namespace UIFramework.Adapters
 		/// <summary>
 		/// TODO: This is jank. Deal with this by creating a base class for preference entries that aren't based on melonloader.
 		/// </summary>
-		//protected ModelDataEntryBase _prefModel => (ModelDataEntryBase)EntryModel;
+		//protected DataEntryModelBase _prefModel => (DataEntryModelBase)EntryModel;
 
 		/// <summary>
 		/// Returns the textfield
@@ -283,7 +283,7 @@ namespace UIFramework.Adapters
 	public class PrefBool : DataEntry
 	{
 		protected Toggle toggle => this.gameObject.transform.Find("Data/ToggleControl").gameObject.GetComponent<Toggle>();
-		//protected override ModelDataEntryBase _prefModel => (ModelDataEntryBase)EntryModel;
+		//protected override DataEntryModelBase _prefModel => (DataEntryModelBase)EntryModel;
 		public bool EnteredValue => this.gameObject.transform.Find("Data/ToggleControl").gameObject.GetComponent<Toggle>().isOn;
 		/// <inheritdoc/>
 		public override void SetData()
@@ -325,7 +325,7 @@ namespace UIFramework.Adapters
 	[RegisterTypeInIl2Cpp]
 	public class PrefDropDown : DataEntry
 	{
-		protected ModelDataEntryBase _prefModel => (ModelDataEntryBase)EntryModel;
+		protected DataEntryModelBase _prefModel => (DataEntryModelBase)EntryModel;
 		public System.Collections.Generic.List<int> _indexToValueMap = new();
 		public TMP_Dropdown dropdown;
 
