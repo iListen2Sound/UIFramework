@@ -3,6 +3,7 @@ using MelonLoader;
 using MelonLoader.Logging;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using UIFramework.Models;
 namespace UIFramework.Adapters
 {
 
@@ -11,7 +12,7 @@ namespace UIFramework.Adapters
 	{
 
 		protected WindowCoordinator ParentWindow;
-		protected UIFModel.IHoldSubmodels _model => (UIFModel.IHoldSubmodels)_internalModel;
+		protected IHoldSubmodels _model => (IHoldSubmodels)_internalModel;
 
 		public override void ModelSet()
 		{
@@ -54,7 +55,7 @@ namespace UIFramework.Adapters
 	public class ModButtonView : TabButtonController, IChildable
 	{
 
-		protected UIFModel.ModelMod ModModel => (UIFModel.ModelMod)_internalModel;
+		protected ModelMod ModModel => (ModelMod)_internalModel;
 
 		public override void OnSelect()
 		{
@@ -74,7 +75,7 @@ namespace UIFramework.Adapters
 	{
 		public override void OnSelect()
 		{
-			ParentWindow.SetSelectedCategory((UIFModel.ModelCategoryItem)_internalModel);
+			ParentWindow.SetSelectedCategory((ModelCategoryItem)_internalModel);
 		}
 	}
 

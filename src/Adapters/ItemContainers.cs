@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using static UIFramework.Debug;
+using UIFramework.Models;
 namespace UIFramework.Adapters
 {
 
@@ -13,7 +14,7 @@ namespace UIFramework.Adapters
 	/// </summary>
 	public abstract class ListAreaAdapterBase : SubModelAdapter
 	{
-		protected UIFModel.IHoldSubmodels _model => (UIFModel.IHoldSubmodels)_internalModel;
+		protected IHoldSubmodels _model => (IHoldSubmodels)_internalModel;
 
 		public virtual void ContainerReset()
 		{
@@ -40,7 +41,7 @@ namespace UIFramework.Adapters
 		/// operations may depend on the newly set model.
 		/// </remarks>
 		/// <param name="model">The model to associate with this instance. Cannot be null.</param>
-		public virtual void SetModel(UIFModel.IHoldSubmodels model)
+		public virtual void SetModel(IHoldSubmodels model)
 		{
 			if (model == null)
 				return;
@@ -57,7 +58,7 @@ namespace UIFramework.Adapters
 		{
 			if (Model == null) return;
 			Infanticide();
-			foreach (UIFModel.IModelable model in _model.SubModels)
+			foreach (IModelable model in _model.SubModels)
 			{
 				if (model.IsHidden)
 				{
@@ -79,16 +80,16 @@ namespace UIFramework.Adapters
 
 				switch (model)
 				{
-					case UIFModel.IEntry entryModel:
+					case IEntry entryModel:
 
 						ViewController = uiElement.GetComponent<Entry>();
-						_rootWindow.CatRegistryPanel.SelectTab(Model as UIFModel.IHoldSubmodels);
+						_rootWindow.CatRegistryPanel.SelectTab(Model as IHoldSubmodels);
 						break;
-					case UIFModel.SelectableModelBase tabModel:
+					case SelectableModelBase tabModel:
 						ViewController = uiElement.GetComponent<TabButtonController>();
 						try
 						{
-							_rootWindow.ModRegistryPanel.SelectTab(Model as UIFModel.IHoldSubmodels);
+							_rootWindow.ModRegistryPanel.SelectTab(Model as IHoldSubmodels);
 						}
 						catch (Exception ex)
 						{
@@ -112,7 +113,7 @@ namespace UIFramework.Adapters
 		/// 
 		/// </summary>
 		/// <param name="buttonModel"></param>
-		public void SelectTab(UIFModel.IHoldSubmodels buttonModel)
+		public void SelectTab(IHoldSubmodels buttonModel)
 		{
 			for (int i = 0; i < transform.childCount; i++)
 			{
@@ -161,7 +162,7 @@ namespace UIFramework.Adapters
 
 	public class PrefListAdapter : ListAreaAdapterBase
 	{
-		public UIFModel.ModelCategoryItem SelectedCategory => Model as UIFModel.ModelCategoryItem;
+		public ModelCategoryItem SelectedCategory => Model as ModelCategoryItem;
 		/// <summary>
 		/// When the save button is clicked, the selected category save action will be called. The model is now in charge of what that means
 		/// </summary>

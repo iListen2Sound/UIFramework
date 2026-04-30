@@ -19,6 +19,7 @@ using UnityEngine.UI;
 using static UIFramework.Debug;
 //using static UI.UIFController;
 using static Unity.Collections.AllocatorManager;
+using UIFramework.Models;
 namespace UIFramework.Adapters
 {
 
@@ -33,12 +34,12 @@ namespace UIFramework.Adapters
 		/// <summary>
 		/// Reference to the model the controller works from.  
 		/// </summary>
-		public UIFModel.IModelable Model { get; set; }
+		public IModelable Model { get; set; }
 	}
 	public abstract class SubModelAdapter : MonoBehaviour
 	{
-		protected UIFModel.IModelable _internalModel;
-		public virtual UIFModel.IModelable Model
+		protected IModelable _internalModel;
+		public virtual IModelable Model
 		{
 			get
 			{
@@ -93,8 +94,8 @@ namespace UIFramework.Adapters
 		public Color defaultTabColor = new Color(0.22f, 0.22f, 0.22f, 1f);
 		public Color openTabColor = new Color(0.24f, 0.17f, 0.42f, 1f);
 
-		protected UIFModel.RootModel _model;
-		public UIFModel.IModelable Model { get { return _model; } }
+		protected RootModel _model;
+		public IModelable Model { get { return _model; } }
 
 		public GameObject MainCanvas;
 		public ModListAdapter ModRegistryPanel;
@@ -108,31 +109,31 @@ namespace UIFramework.Adapters
 		public TextMeshProUGUI TitleButtonText;
 		public DragHandle DragHandle;
 
-		public UIFModel.ModelModItem SelectedMod => _selectedMod;
-		private UIFModel.ModelModItem _selectedMod = null;
+		public ModelModItem SelectedMod => _selectedMod;
+		private ModelModItem _selectedMod = null;
 
-		public UIFModel.ModelCategoryItem SelectedCategory => _selectedCategory;
-		private UIFModel.ModelCategoryItem _selectedCategory = null;
+		public ModelCategoryItem SelectedCategory => _selectedCategory;
+		private ModelCategoryItem _selectedCategory = null;
 
-		public Dictionary<UIFModel.ModelModItem, UIFModel.ModelCategoryItem> LastCategorySelected = new();
+		public Dictionary<ModelModItem, ModelCategoryItem> LastCategorySelected = new();
 
 
-		public void SetSelectedMod(UIFModel.ModelModItem mod)
+		public void SetSelectedMod(ModelModItem mod)
 		{
 			_selectedMod = mod;
 			TitleButtonText.text = $"{mod.DisplayName}\n{mod.Instance.Info.Version}";
 
 			CatRegistryPanel.SetModel(mod);
 
-			UIFModel.ModelCategoryItem lastSelected = null;
-			if (LastCategorySelected.ContainsKey(mod as UIFModel.ModelModItem))
-				lastSelected = LastCategorySelected[mod as UIFModel.ModelModItem];
+			ModelCategoryItem lastSelected = null;
+			if (LastCategorySelected.ContainsKey(mod as ModelModItem))
+				lastSelected = LastCategorySelected[mod as ModelModItem];
 
 
-			PrefRegistryPanel.SetModel(lastSelected ?? (UIFModel.ModelCategoryItem)mod.SubModels[0]);
+			PrefRegistryPanel.SetModel(lastSelected ?? (ModelCategoryItem)mod.SubModels[0]);
 
 		}
-		public void SetSelectedCategory(UIFModel.ModelCategoryItem cat)
+		public void SetSelectedCategory(ModelCategoryItem cat)
 		{
 			_selectedCategory = cat;
 			PrefRegistryPanel.SetModel(cat);
@@ -141,7 +142,7 @@ namespace UIFramework.Adapters
 		}
 
 
-		public virtual void SetModel(UIFModel.RootModel model)
+		public virtual void SetModel(RootModel model)
 		{
 			_model = model;
 

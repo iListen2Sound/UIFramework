@@ -5,6 +5,7 @@ using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UIFramework.Adapters;
+using UIFramework.Models;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.LowLevel;
 
@@ -301,8 +302,8 @@ namespace UIFramework
 			else
 			{
 				ModModel = UI.Register(this, Preferences.CatUIFramework, Preferences.Experimental, Preferences.TestBooleans, Preferences.TestEmptyDisplayName);
-				UIFModel.ModelMelonCategory tester = (UIFModel.ModelMelonCategory)ModModel.GetSubmodel(Preferences.TestBooleans.Identifier);
-				UIFModel.ButtonEntry testButton = new UIFModel.ButtonEntry(CustomClick, "CustomButton", "just a test", "Custom Button");
+				ModelMelonCategory tester = (ModelMelonCategory)ModModel.GetSubmodel(Preferences.TestBooleans.Identifier);
+				ButtonEntry testButton = new ButtonEntry(CustomClick, "CustomButton", "just a test", "Custom Button");
 				tester.AddSubmodel(testButton);
 			}
 

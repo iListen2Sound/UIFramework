@@ -1,0 +1,85 @@
+﻿using MelonLoader;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using UIFramework.Models;
+using UIFramework.Adapters;
+using UnityEngine.Identifiers;
+namespace UIFramework
+{
+	/// <summary>
+	/// These are shim classes to keep backwards compatibility with old models. 
+	/// They don't do anything and just inherit from the new models so that existing mods
+	/// don't break using the old .Register function
+	/// </summary>
+	public class UIFModel
+	{
+
+		public interface IModelable : global::UIFramework.Models.IModelable
+		{
+			// No logic here
+		}
+		public abstract class SelectableModelBase : global::UIFramework.Models.SelectableModelBase
+		{
+			public void AddSubmodel(params IModelable[] submodel)
+			{
+				base.AddSubmodel((UIFramework.Models.IModelable[])submodel);
+			}
+		}
+		public abstract class ModelModItem : global::UIFramework.Models.ModelModItem
+		{
+			// No logic here
+		}
+
+		public class ModelMod : global::UIFramework.Models.ModelMod
+		{
+			public ModelMod(MelonBase instance, List<MelonPreferences_Category> categories) : base(instance, categories)
+			{
+			}
+			public ModelMod(MelonBase instance) : base(instance)
+			{ }
+		}
+
+		public abstract class ModelCategoryItem : global::UIFramework.Models.ModelCategoryItem
+		{
+			protected ModelCategoryItem(ModelModItem parentMod) : base(parentMod)
+			{
+			}
+			
+		}
+		public class ModelMelonCategory : global::UIFramework.Models.ModelMelonCategory
+		{
+			public ModelMelonCategory(MelonPreferences_Category cat, ModelModItem parentMod) : base(cat, parentMod)
+			{
+			}
+
+		}
+		public class EmptyCategory : global::UIFramework.Models.EmptyCategory
+		{
+			public EmptyCategory(string identifier, string displayName, ModelModItem parentMod = null)
+			: base(identifier, displayName, parentMod)
+			{
+			}
+			public EmptyCategory(string identifier, ModelModItem parentMod = null) : base(identifier, parentMod)
+			{
+			}
+
+		}
+
+		public abstract class ModelEntryItem : global::UIFramework.Models.ModelEntryItem
+		{
+			protected ModelEntryItem(ModelCategoryItem parentCategory) : base(parentCategory)
+			{
+			}
+		}
+		public class ButtonEntry : global::UIFramework.Models.ButtonEntry
+		{
+			public ButtonEntry(Action<ButtonEntryAdapter> onClick, string name, string description = "", string displayName = "", ModelCategoryItem parentCategory = null) : base(onClick, name, description, displayName, parentCategory)
+			{
+			}
+
+		}
+	}
+}

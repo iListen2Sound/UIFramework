@@ -3,6 +3,7 @@ using UnityEngine;
 using System.ComponentModel.DataAnnotations;
 using UIFramework.ValidatorExtensions;
 using UIFramework.Adapters;
+using UIFramework.Models;
 namespace UIFramework
 {
 	/// <summary>
@@ -11,7 +12,7 @@ namespace UIFramework
 	public static class UI
 	{
 
-		internal static UIFModel.RootModel ModelInstance = new();
+		internal static RootModel ModelInstance = new();
 		internal static GameObject MainWindow;
 		public static bool IsVisible { get { return MainWindow.activeSelf; }  }
 		internal static WindowCoordinator WindowInstance;

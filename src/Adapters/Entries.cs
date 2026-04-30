@@ -5,6 +5,7 @@ using System.Reflection;
 using Tomlet;
 using Tomlet.Models;
 using UIFramework.ValidatorExtensions;
+using UIFramework.Models;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -38,7 +39,7 @@ namespace UIFramework.Adapters
 		/// </summary>
 
 
-		public UIFModel.IEntry EntryModel => (UIFModel.IEntry)_internalModel;
+		public IEntry EntryModel => (IEntry)_internalModel;
 		/// <summary>
 		/// This is called when the Save button is pressed. Override to create custom behaviour.
 		/// </summary>
@@ -97,7 +98,7 @@ namespace UIFramework.Adapters
 		/// <inheritdoc/>
 		//public override void ModelSet() { base.ModelSet(); }
 
-		virtual protected UIFModel.ModelDataEntryBase _prefModel => (UIFModel.ModelDataEntryBase)EntryModel;
+		virtual protected ModelDataEntryBase _prefModel => (ModelDataEntryBase)EntryModel;
 
 		/// <inheritdoc/>
 		public virtual bool ValidationCheck()
@@ -126,7 +127,7 @@ namespace UIFramework.Adapters
 		/// <summary>
 		/// TODO: This is jank. Deal with this by creating a base class for preference entries that aren't based on melonloader.
 		/// </summary>
-		//protected UIFModel.ModelDataEntryBase _prefModel => (UIFModel.ModelDataEntryBase)EntryModel;
+		//protected ModelDataEntryBase _prefModel => (ModelDataEntryBase)EntryModel;
 
 		/// <summary>
 		/// Returns the textfield
@@ -282,7 +283,7 @@ namespace UIFramework.Adapters
 	public class PrefBool : DataEntry
 	{
 		protected Toggle toggle => this.gameObject.transform.Find("Data/ToggleControl").gameObject.GetComponent<Toggle>();
-		//protected override UIFModel.ModelDataEntryBase _prefModel => (UIFModel.ModelDataEntryBase)EntryModel;
+		//protected override ModelDataEntryBase _prefModel => (ModelDataEntryBase)EntryModel;
 		public bool EnteredValue => this.gameObject.transform.Find("Data/ToggleControl").gameObject.GetComponent<Toggle>().isOn;
 		/// <inheritdoc/>
 		public override void SetData()
@@ -324,7 +325,7 @@ namespace UIFramework.Adapters
 	[RegisterTypeInIl2Cpp]
 	public class PrefDropDown : DataEntry
 	{
-		protected UIFModel.ModelDataEntryBase _prefModel => (UIFModel.ModelDataEntryBase)EntryModel;
+		protected ModelDataEntryBase _prefModel => (ModelDataEntryBase)EntryModel;
 		public System.Collections.Generic.List<int> _indexToValueMap = new();
 		public TMP_Dropdown dropdown;
 
@@ -390,7 +391,7 @@ namespace UIFramework.Adapters
 	[RegisterTypeInIl2Cpp]
 	public class ButtonEntryAdapter : Entry
 	{
-		UIFModel.ButtonEntry ButtonModel => (UIFModel.ButtonEntry)EntryModel;
+		ButtonEntry ButtonModel => (ButtonEntry)EntryModel;
 		public GameObject ButtonGo;
 		/// <inheritdoc/>
 		public override void SetData()
