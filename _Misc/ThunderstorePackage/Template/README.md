@@ -7,59 +7,8 @@ This is a base MelonLoader problem. Not something that can be fixed in the UI.
 
 Naming collisions also means you might accidentally change another mod's preferences if you have the same category and entry identifiers.
 
-### New in 0.8.1/2
-<details> <summary>New Feature: Draggable UI Window!</summary>
-
-The UI window is now draggable by the title bar. 
-</details>
-<details><summary> Bug Fix: Empty string display name support </summary>
-Buttons with empty display names will not show "Placeholder xxxx" anymore. This also applies to entries in general. Only for empty strings though. If you pass null, it will show placeholder again. 
-</details>
-<details><summary> Feature change: VR toggle behavior now follows ModUI</summary>
-
-If ModUI is enabled, and it has the VR Menu Toggle setting enabled, UI Framework will follow  ModUI's visibility.
-If ModUI is visible (when the VR toggle is pressed), UI Framework will also be visible and vice versa.
-If you don't have ModUI or the setting is off, UI Framework will toggle normally with the VR toggle.
-
-The toggle with VR buttons preference is also no longer a thing. A new preference is added for toggling with VR, keyboard, or both.
-</details>
-<details><summary> Backend "enhancements"</summary>
-Don't worry about it lol.
-</details>
-
-### New in 0.8.0 (Highlights)
-
-
-<details><summary>New feature: Custom display name attribute</summary>
-
-Just add `[assembly: UIInfo("My Mod's Better\nDisplay Name")]` to your assembly attributes to display your 
-mod's name differently on its button in UI Framework. Yes, it supports line breaks
-
-</details>
-<details><summary>New Feature: Support IsHidden property for entries.</summary>
-
-Entries with `IsHidden` set to `true` won't be listed in the preferences list anymore.
-</details>
-
-<details><summary>New Feature: Sliders! (and maybe more eventually 👀)</summary>
-
-Modders can now implement sliders for numeric vlaues.
-```cs
-MySlider = Category.CreateEntry("MySlider", 0.5f, "My Slider", "Float Slider",false, false, new SliderDescriptor { Min = 0, Max = 1, DecimalPlaces = 3 });
-```
-
-</details>
-
-<details><summary> New Feature: Add Buttons to the Entry List</summary>
-
-Modders can now add their own buttons as entries into UI Framework. 
-
-```cs
-UI.CreateButtonEntry(MelonPreferences_Category category, string buttonText, string displayName, string description, Action handler)
-```
-
-Go to [Buttons](###buttons) for more details.
-
+### New in 0.9.0 
+<details><summary> Backend: Coalesced refresh system </summary>
 </details>
 
 

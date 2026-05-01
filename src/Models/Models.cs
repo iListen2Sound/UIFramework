@@ -177,7 +177,7 @@ namespace UIFramework.Models
 		}
 		protected void OnValueChanged(object oldVal, object newVal)
 		{
-			//SavedValue = newVal;
+			
 		}
 		/// <summary>
 		/// The value actually saved to the file. 

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using UIFramework.ValidatorExtensions;
 using UIFramework.Adapters;
 using UIFramework.Models;
+using System.Data;
 namespace UIFramework
 {
 	/// <summary>
@@ -110,7 +111,7 @@ namespace UIFramework
 			WindowInstance.SetModel(ModelInstance);
 
 		}
-
+		public static void RequestRefresh() => WindowInstance.RequestRefresh();
 		public static GameObject GetPrefab(InputType input)
 		{
 			GameObject selectedPrefab;

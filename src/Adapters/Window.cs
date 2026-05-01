@@ -52,9 +52,9 @@ namespace UIFramework.Adapters
 			}
 		}
 
-		public WindowCoordinator _rootWindow;
+		protected WindowCoordinator _rootWindow;
 
-		public WindowCoordinator FindRootWindow()
+		protected WindowCoordinator FindRootWindow()
 		{
 			WindowCoordinator foundRoot = null; ;
 			Transform ancestor = this.gameObject.transform.parent;
@@ -101,12 +101,12 @@ namespace UIFramework.Adapters
 		public ModListAdapter ModRegistryPanel;
 		public CategoryListAdapter CatRegistryPanel;
 		public PrefListAdapter PrefRegistryPanel;
-		public Button MainActionButton;
-		public Button DiscardActionButton;
-		public Button MinimizeButton;
-		public TextMeshProUGUI WindowTitle;
+		private Button MainActionButton;
+		private Button DiscardActionButton;
+		private Button MinimizeButton;
+		private TextMeshProUGUI WindowTitle;
 
-		public TextMeshProUGUI TitleButtonText;
+		private TextMeshProUGUI TitleButtonText;
 		public DragHandle DragHandle;
 
 		public ModModelBase SelectedMod => _selectedMod;
@@ -118,7 +118,7 @@ namespace UIFramework.Adapters
 		public Dictionary<ModModelBase, CategoryModelBase> LastCategorySelected = new();
 
 
-		public void SetSelectedMod(ModModelBase mod)
+		internal void SetSelectedMod(ModModelBase mod)
 		{
 			_selectedMod = mod;
 			TitleButtonText.text = $"{mod.DisplayName}\n{mod.Instance.Info.Version}";
@@ -181,7 +181,7 @@ namespace UIFramework.Adapters
 		/// <summary>
 		/// Resets the containers and build the modlist
 		/// </summary>
-		public virtual void BuildModList()
+		protected virtual void BuildModList()
 		{
 			ModRegistryPanel.ContainerReset();
 
@@ -200,7 +200,7 @@ namespace UIFramework.Adapters
 		/// But this iterates through the child controllers and call their SaveAction() method.
 		/// This allows for custom behavior before the actual category gets saved
 		/// </remarks>
-		public virtual void SaveButtonClick()
+		protected virtual void SaveButtonClick()
 		{
 
 			/*				for (int i = PrefRegistryPanel.gameObject.transform.childCount - 1; i >= 0; i--)
@@ -223,7 +223,7 @@ namespace UIFramework.Adapters
 			RequestRefresh();
 		}
 
-		public virtual void DiscardButtonClick()
+		protected virtual void DiscardButtonClick()
 		{
 			CatRegistryPanel.Model?.DiscardAction();
 			PrefRegistryPanel.DiscardAction();
