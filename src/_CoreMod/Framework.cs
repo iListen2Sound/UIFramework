@@ -111,7 +111,7 @@ namespace UIFramework
 			WindowInstance.SetModel(ModelInstance);
 
 		}
-		public static void RequestRefresh() => WindowInstance.RequestRefresh();
+		public static void RequestRefresh(ModModelBase modModel) => WindowInstance.RequestRefresh();
 		public static GameObject GetPrefab(InputType input)
 		{
 			GameObject selectedPrefab;

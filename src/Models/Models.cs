@@ -1,4 +1,5 @@
-﻿using MelonLoader;
+﻿using Il2CppRUMBLE.Utilities;
+using MelonLoader;
 using MelonLoader.Preferences;
 using System.Reflection;
 using UIFramework.ValidatorExtensions;
@@ -177,7 +178,8 @@ namespace UIFramework.Models
 		}
 		protected void OnValueChanged(object oldVal, object newVal)
 		{
-			
+			OnDataValueChanged(newVal);
+
 		}
 		/// <summary>
 		/// The value actually saved to the file. 

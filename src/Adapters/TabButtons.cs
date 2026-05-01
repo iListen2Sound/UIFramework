@@ -8,6 +8,7 @@ namespace UIFramework.Adapters
 {
 
 	//protected override GameObject UIPrefab { get { return Prefabs.TextPrefab; } }
+	[RegisterTypeInIl2Cpp]
 	public abstract class TabButtonController : SubModelAdapter, IChildable
 	{
 

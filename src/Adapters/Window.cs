@@ -20,6 +20,7 @@ using static UIFramework.Debug;
 //using static UI.UIFController;
 using static Unity.Collections.AllocatorManager;
 using UIFramework.Models;
+using Il2CppSystem.Threading.Tasks;
 namespace UIFramework.Adapters
 {
 
@@ -97,17 +98,17 @@ namespace UIFramework.Adapters
 		protected RootModel _model;
 		public IModelable Model { get { return _model; } }
 
-		public GameObject MainCanvas;
-		public ModListAdapter ModRegistryPanel;
-		public CategoryListAdapter CatRegistryPanel;
-		public PrefListAdapter PrefRegistryPanel;
+		protected GameObject MainCanvas;
+		protected ModListAdapter ModRegistryPanel;
+		protected CategoryListAdapter CatRegistryPanel;
+		protected PrefListAdapter PrefRegistryPanel;
 		private Button MainActionButton;
 		private Button DiscardActionButton;
 		private Button MinimizeButton;
 		private TextMeshProUGUI WindowTitle;
 
-		private TextMeshProUGUI TitleButtonText;
-		public DragHandle DragHandle;
+		protected TextMeshProUGUI TitleButtonText;
+		internal DragHandle DragHandle;
 
 		public ModModelBase SelectedMod => _selectedMod;
 		private ModModelBase _selectedMod = null;
@@ -139,6 +140,15 @@ namespace UIFramework.Adapters
 			PrefRegistryPanel.SetModel(cat);
 			LastCategorySelected[_selectedMod] = cat;
 
+		}
+
+		public void SelectInSideBar(IHoldSubmodels model)
+		{
+			ModRegistryPanel.SelectTab(model as IHoldSubmodels);
+		}
+		public void SelectInTopBar(IHoldSubmodels model)
+		{
+			CatRegistryPanel.SelectTab(model as IHoldSubmodels);
 		}
 
 		public void RequestRefresh()
@@ -202,22 +212,6 @@ namespace UIFramework.Adapters
 		/// </remarks>
 		protected virtual void SaveButtonClick()
 		{
-
-			/*				for (int i = PrefRegistryPanel.gameObject.transform.childCount - 1; i >= 0; i--)
-							{
-								//Error handling per child to prevent breaking the whole loop.
-								try
-								{
-									PrefEntryAdapter entry = PrefRegistryPanel.gameObject.transform.GetChild(i).gameObject.GetComponent<PrefEntryAdapter>();
-									entry.SaveAction();
-									entry.EntryModel.SaveAction();
-								}
-								catch (Exception ex)
-								{
-									Debug.Warning($"Error in entry saving loop {PrefRegistryPanel.gameObject.transform.childCount - i}:");
-									Debug.Error(ex.Message);
-								}
-							}*/
 
 			CatRegistryPanel.Model?.SaveAction();
 			RequestRefresh();

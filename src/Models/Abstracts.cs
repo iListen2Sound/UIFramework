@@ -228,6 +228,11 @@ namespace UIFramework.Models
 			}
 			return result;
 		}
+
+		protected virtual void OnDataValueChanged(object newValue)
+		{
+			UI.RequestRefresh(ParentCategory.ParentMod);
+		}
 		//untested AI generated codbe
 		public void SetDataValue(object newValue)
 		{

@@ -12,6 +12,7 @@ namespace UIFramework.Adapters
 	/// 2. CategoryTabView tab top bar
 	/// 3. Entries Content area
 	/// </summary>
+	[RegisterTypeInIl2Cpp]
 	public abstract class ListAreaAdapterBase : SubModelAdapter
 	{
 		protected IHoldSubmodels _model => (IHoldSubmodels)_internalModel;
@@ -84,13 +85,13 @@ namespace UIFramework.Adapters
 					case IEntry entryModel:
 
 						ViewController = uiElement.GetComponent<PrefEntryAdapter>();
-						_rootWindow.CatRegistryPanel.SelectTab(Model as IHoldSubmodels);
+						_rootWindow.SelectInTopBar(Model as IHoldSubmodels);
 						break;
 					case SelectableModelBase tabModel:
 						ViewController = uiElement.GetComponent<TabButtonController>();
 						try
 						{
-							_rootWindow.ModRegistryPanel.SelectTab(Model as IHoldSubmodels);
+							_rootWindow.SelectInSideBar(Model as IHoldSubmodels);
 						}
 						catch (Exception ex)
 						{

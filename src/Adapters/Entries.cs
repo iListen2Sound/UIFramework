@@ -13,6 +13,7 @@ using static UIFramework.Debug;
 namespace UIFramework.Adapters
 
 {
+	[RegisterTypeInIl2Cpp]
 	public abstract class PrefEntryAdapter : SubModelAdapter, IChildable
 	{
 		/// <summary>
@@ -91,6 +92,7 @@ namespace UIFramework.Adapters
 	/// Inherit this class to create your own custom entry controllers for your own input controls.
 	/// TODO: Refactor this to suggest non-melon related settings storage
 	/// </summary>
+	[RegisterTypeInIl2Cpp]
 	public abstract class DataEntryAdapter : PrefEntryAdapter
 	{
 
