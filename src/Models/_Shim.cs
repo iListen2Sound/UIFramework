@@ -86,7 +86,7 @@ namespace UIFramework
 		public class ButtonEntry : global::UIFramework.Models.ButtonEntry
 		{
 			[Obsolete("This class is just a shim for backwards compatibility and should not be used directly. Use the new models instead in UIFramework.Models")]
-			public ButtonEntry(Action<ButtonEntryAdapter> onClick, string name, string description = "", string displayName = "", ModelCategoryItem parentCategory = null) : base(onClick, name, description, displayName, parentCategory)
+			public ButtonEntry(Action<ButtonModelAdapter> onClick, string name, string description = "", string displayName = "", ModelCategoryItem parentCategory = null) : base(onClick, name, description, displayName, parentCategory)
 			{
 			}
 

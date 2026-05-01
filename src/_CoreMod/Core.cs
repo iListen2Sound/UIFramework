@@ -328,7 +328,7 @@ namespace UIFramework
 
 		}
 
-		public void CustomClick(ButtonEntryAdapter button)
+		public void CustomClick(ButtonModelAdapter button)
 		{
 			Debug.Log($"Clicked: {button.DisplayName} ");
 		}

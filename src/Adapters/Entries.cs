@@ -13,7 +13,7 @@ using static UIFramework.Debug;
 namespace UIFramework.Adapters
 
 {
-	public abstract class Entry : SubModelAdapter, IChildable
+	public abstract class PrefEntryAdapter : SubModelAdapter, IChildable
 	{
 		/// <summary>
 		/// Sets the description text
@@ -91,7 +91,7 @@ namespace UIFramework.Adapters
 	/// Inherit this class to create your own custom entry controllers for your own input controls.
 	/// TODO: Refactor this to suggest non-melon related settings storage
 	/// </summary>
-	public abstract class DataEntry : Entry
+	public abstract class DataEntryAdapter : PrefEntryAdapter
 	{
 
 
@@ -122,13 +122,8 @@ namespace UIFramework.Adapters
 	/// Base controller for text fields 
 	/// </summary>
 	[RegisterTypeInIl2Cpp]
-	public class TextInputEntry : DataEntry
+	public class TextEntryAdapter : DataEntryAdapter
 	{
-		/// <summary>
-		/// TODO: This is jank. Deal with this by creating a base class for preference entries that aren't based on melonloader.
-		/// </summary>
-		//protected DataEntryModelBase _prefModel => (DataEntryModelBase)EntryModel;
-
 		/// <summary>
 		/// Returns the textfield
 		/// </summary>
@@ -211,7 +206,7 @@ namespace UIFramework.Adapters
 
 
 	[RegisterTypeInIl2Cpp]
-	public class PrefSlider : TextInputEntry
+	public class NumSliderAdapter : TextEntryAdapter
 	{
 		protected Slider Slider => gameObject.transform.Find("Data/SliderControl").gameObject.GetComponent<UnityEngine.UI.Slider>();
 		protected TMP_InputField _textField => gameObject.transform.Find("Data/TextControl").gameObject.GetComponent<TMP_InputField>();
@@ -280,7 +275,7 @@ namespace UIFramework.Adapters
 	/// 
 	/// </summary>
 	[RegisterTypeInIl2Cpp]
-	public class PrefBool : DataEntry
+	public class BoolToggleAdapter : DataEntryAdapter
 	{
 		protected Toggle toggle => this.gameObject.transform.Find("Data/ToggleControl").gameObject.GetComponent<Toggle>();
 		//protected override DataEntryModelBase _prefModel => (DataEntryModelBase)EntryModel;
@@ -323,7 +318,7 @@ namespace UIFramework.Adapters
 	/// 
 	/// </summary>
 	[RegisterTypeInIl2Cpp]
-	public class PrefDropDown : DataEntry
+	public class EnumDropdownAdapter : DataEntryAdapter
 	{
 		protected DataEntryModelBase _prefModel => (DataEntryModelBase)EntryModel;
 		public System.Collections.Generic.List<int> _indexToValueMap = new();
@@ -371,7 +366,7 @@ namespace UIFramework.Adapters
 		}
 	}
 	[RegisterTypeInIl2Cpp]
-	public class PrefButton : DataEntry
+	public class ButtonEntryAdapter : DataEntryAdapter
 	{
 		GameObject _buttonGo;
 		Button _buttonComponent;
@@ -389,7 +384,7 @@ namespace UIFramework.Adapters
 	}
 
 	[RegisterTypeInIl2Cpp]
-	public class ButtonEntryAdapter : Entry
+	public class ButtonModelAdapter : PrefEntryAdapter
 	{
 		ButtonEntry ButtonModel => (ButtonEntry)EntryModel;
 		public GameObject ButtonGo;
@@ -416,7 +411,7 @@ namespace UIFramework.Adapters
 	/// 
 	/// </summary>
 	/*[RegisterTypeInIl2Cpp]
-	public class PrefMulti : DataEntry
+	public class PrefMulti : DataEntryAdapter
 	{
 
 	}
@@ -424,7 +419,7 @@ namespace UIFramework.Adapters
 	/// 
 	/// </summary>
 	[RegisterTypeInIl2Cpp]
-	public class PrefSlider : DataEntry
+	public class NumSliderAdapter : DataEntryAdapter
 	{
 
 	}

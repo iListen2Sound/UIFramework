@@ -74,10 +74,10 @@ namespace UIFramework.Models
 		//public object ModelBoxedValue { get; set; }
 
 		/// <summary>
-		/// Called when the Entry has been created.
+		/// Called when the PrefEntryAdapter has been created.
 		/// Useful when you wanna change specific elements after creation
 		/// </summary>
-		public Action<Entry> OnUICreated { get; set; }
+		public Action<PrefEntryAdapter> OnUICreated { get; set; }
 
 
 	}

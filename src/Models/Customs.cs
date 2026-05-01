@@ -52,10 +52,10 @@ namespace UIFramework.Models
 		/// <inheritdoc/>
 		public override void SaveAction() { }
 
-		public Action<ButtonEntryAdapter> OnClick;
+		public Action<ButtonModelAdapter> OnClick;
 
 
-		public ButtonEntry(Action<ButtonEntryAdapter> onClick, string name, string description = "", string displayName = "", CategoryModelBase parentCategory = null)
+		public ButtonEntry(Action<ButtonModelAdapter> onClick, string name, string description = "", string displayName = "", CategoryModelBase parentCategory = null)
 			: base(parentCategory)
 		{
 			_name = name;
@@ -67,7 +67,7 @@ namespace UIFramework.Models
 		public override GameObject GetNewUIInstance()
 		{
 			GameObject button = GameObject.Instantiate(UI.GetPrefab(InputType.Button));
-			ButtonEntryAdapter buttonEntry = button.GetComponent<ButtonEntryAdapter>();
+			ButtonModelAdapter buttonEntry = button.GetComponent<ButtonModelAdapter>();
 			return button;
 		}
 	}

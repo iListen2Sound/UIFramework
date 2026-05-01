@@ -188,7 +188,7 @@ namespace UIFramework.Models
 		/// <summary>
 		/// Called when the corresponding UI element is created
 		/// </summary>
-		public virtual Action<Entry> OnUICreated { get; set; }
+		public virtual Action<PrefEntryAdapter> OnUICreated { get; set; }
 
 		/// <summary>
 		/// 
@@ -269,7 +269,7 @@ namespace UIFramework.Models
 				if (Validator is IButtonDescriptor)
 				{
 					GameObject button = UI.GetPrefab(InputType.Button);
-					button.AddComponent<PrefButton>();
+					button.AddComponent<ButtonEntryAdapter>();
 					return button;
 				}
 				switch (ModelBoxedValue)

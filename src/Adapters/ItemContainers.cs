@@ -82,7 +82,7 @@ namespace UIFramework.Adapters
 				{
 					case IEntry entryModel:
 
-						ViewController = uiElement.GetComponent<Entry>();
+						ViewController = uiElement.GetComponent<PrefEntryAdapter>();
 						_rootWindow.CatRegistryPanel.SelectTab(Model as IHoldSubmodels);
 						break;
 					case SelectableModelBase tabModel:

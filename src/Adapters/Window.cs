@@ -202,7 +202,7 @@ namespace UIFramework.Adapters
 								//Error handling per child to prevent breaking the whole loop.
 								try
 								{
-									Entry entry = PrefRegistryPanel.gameObject.transform.GetChild(i).gameObject.GetComponent<Entry>();
+									PrefEntryAdapter entry = PrefRegistryPanel.gameObject.transform.GetChild(i).gameObject.GetComponent<PrefEntryAdapter>();
 									entry.SaveAction();
 									entry.EntryModel.SaveAction();
 								}
