@@ -127,6 +127,11 @@ namespace UIFramework.ValidatorExtensions
 		public event Action<EventArgs> Interaction;
 	}
 
+	public interface IUserEditedNotifier
+	{
+		public Action<object> Handler {get; set;}
+	}
+
 	public interface ICustomUIProvider
 	{
 		public GameObject WidgetPrefab { get; set; }

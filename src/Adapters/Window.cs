@@ -141,6 +141,10 @@ namespace UIFramework.Adapters
 
 		}
 
+		public void RequestRefresh()
+		{
+			_refreshPending = true;
+		}
 
 		public virtual void SetModel(RootModel model)
 		{
@@ -185,6 +189,8 @@ namespace UIFramework.Adapters
 			PrefRegistryPanel.GetComponent<PrefListAdapter>().ContainerReset();
 
 			ModRegistryPanel.SetModel(_model);
+
+			RequestRefresh();
 		}
 		/// <summary>
 		/// Gets called when the save button gets clicked. 
@@ -214,17 +220,14 @@ namespace UIFramework.Adapters
 							}*/
 
 			CatRegistryPanel.Model?.SaveAction();
-			//PrefRegistryPanel.SaveAction();
-			PrefRegistryPanel.Infanticide();
-			PrefRegistryPanel.BuildFromModelList();
+			RequestRefresh();
 		}
 
 		public virtual void DiscardButtonClick()
 		{
 			CatRegistryPanel.Model?.DiscardAction();
 			PrefRegistryPanel.DiscardAction();
-			PrefRegistryPanel.Infanticide();
-			PrefRegistryPanel.BuildFromModelList();
+			RequestRefresh();
 		}
 		void Update()
 		{
@@ -233,6 +236,23 @@ namespace UIFramework.Adapters
 				// Deselect the currently selected UI element
 				EventSystem.current.SetSelectedGameObject(null);
 			}
+			CheckRefresh();
+		}
+
+		private bool _refreshPending = false;
+
+		private void CheckRefresh()
+		{
+			if (!_refreshPending)
+				return;
+			
+
+			ModRegistryPanel.BuildFromModelList();
+			CatRegistryPanel.BuildFromModelList();
+			PrefRegistryPanel.BuildFromModelList();
+			_refreshPending = false;
+
+
 		}
 
 	}

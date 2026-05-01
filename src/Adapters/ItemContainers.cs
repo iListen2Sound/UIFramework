@@ -19,7 +19,7 @@ namespace UIFramework.Adapters
 		public virtual void ContainerReset()
 		{
 			Model = null;
-			Infanticide();
+			//Infanticide();
 		}
 
 
@@ -48,7 +48,8 @@ namespace UIFramework.Adapters
 			ContainerReset();
 			Model = model;
 			_rootWindow = FindRootWindow();
-			BuildFromModelList();
+			_rootWindow.RequestRefresh();
+			//BuildFromModelList();
 		}
 
 		///	<summary>
