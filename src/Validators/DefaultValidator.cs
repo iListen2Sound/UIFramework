@@ -1,5 +1,7 @@
 using Il2CppTMPro;
+using MelonLoader;
 using MelonLoader.Preferences;
+using UIFramework.Models;
 using UnityEngine;
 namespace UIFramework.ValidatorExtensions
 {
@@ -129,8 +131,34 @@ namespace UIFramework.ValidatorExtensions
 
 	public interface IUserEditedNotifier
 	{
-		public Action<object> Handler {get; set;}
+		public abstract Action<object> OnUserEdit { get; set; }
 	}
+
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public class UserEditDefaultNotifier : DefaultValidator, IUserEditedNotifier
+	{
+		public Action<object> OnUserEdit { get; set; }
+		MelonBase _modModel;
+		public UserEditDefaultNotifier(MelonBase melonInstance, Action<object> userEditHandler, bool refreshUI = false)
+		{
+			_modModel = melonInstance;
+			OnUserEdit += userEditHandler;
+			 
+			if (refreshUI)
+			{
+				OnUserEdit += RequestRefresh;
+			}
+		}
+		private void RequestRefresh(object _)
+		{
+			UI.RequestRefresh(_modModel);
+		}
+	}
+
+
 
 	public interface ICustomUIProvider
 	{
