@@ -160,7 +160,7 @@ namespace UIFramework.Adapters
 		{
 			if (_prefModel.ModelBoxedValue.GetType() == typeof(string))
 			{
-				_prefModel.SetDataValue(textField.text);
+				_prefModel.TryApply(textField.text);
 			}
 			else
 			{
@@ -168,7 +168,7 @@ namespace UIFramework.Adapters
 				{
 					if (textField.text.Trim() != "")
 					{
-						_prefModel.SetDataValue(FromTomlString(textField.text, _prefModel.ModelBoxedValue.GetType()));
+						_prefModel.TryApply(FromTomlString(textField.text, _prefModel.ModelBoxedValue.GetType()));
 						//Debug.Log($"Toml data parsed {FromTomlString(textField.text, _prefModel.ModelBoxedValue.GetType())}");
 					}
 				}
@@ -304,7 +304,7 @@ namespace UIFramework.Adapters
 		{
 			try
 			{
-				_prefModel.SetDataValue(EnteredValue);
+				_prefModel.TryApply(EnteredValue);
 			}
 			catch (Exception ex)
 			{
@@ -364,7 +364,7 @@ namespace UIFramework.Adapters
 		/// <inheritdoc/>
 		public override void ApplyValueToPref()
 		{
-			_prefModel.SetDataValue(Enum.ToObject(prefEnum, _indexToValueMap[dropdown.value]));
+			_prefModel.TryApply(Enum.ToObject(prefEnum, _indexToValueMap[dropdown.value]));
 		}
 	}
 	[RegisterTypeInIl2Cpp]

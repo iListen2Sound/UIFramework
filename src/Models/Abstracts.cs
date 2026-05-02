@@ -233,8 +233,8 @@ namespace UIFramework.Models
 		{
 			UI.RequestRefresh(ParentCategory.ParentMod);
 		}
-		//untested AI generated codbe
-		public void SetDataValue(object newValue)
+		
+		protected void SetDataValue(object newValue)
 		{
 			ModelBoxedValue = newValue;
 		}
