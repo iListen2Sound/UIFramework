@@ -160,7 +160,7 @@ namespace UIFramework.Models
 		/// </summary>
 		public override object ModelBoxedValue
 		{
-			get => PrefEntry.BoxedValue;
+			get => PrefEntry.BoxedEditedValue;
 			protected set => PrefEntry.BoxedEditedValue = value;
 		}
 		/// <summary>
@@ -195,7 +195,7 @@ namespace UIFramework.Models
 		{
 			//Debug.Log($"MelonEntry discard action called. Current BoxedEditedValue: {PrefEntry.BoxedEditedValue}, actual ModelBoxedValue: {PrefEntry.ModelBoxedValue}", true);
 			//Discard the BoxedEditedValue and reset it to the actual value of the preference
-			//PrefEntry.BoxedEditedValue = PrefEntry.BoxedValue;
+			PrefEntry.BoxedEditedValue = PrefEntry.BoxedValue;
 		}
 	}
 }
