@@ -151,11 +151,32 @@ namespace UIFramework.Adapters
 			CatRegistryPanel.SelectTab(model as IHoldSubmodels);
 		}
 
-		public void RequestRefresh()
+		protected void RequestRefresh()
 		{
 			_refreshPending = true;
 		}
 
+		public virtual void RequestRefresh(ModModelBase model)
+		{
+			ModModelBase callingMod = model;
+			Log($"Refresh Requested by {model.DisplayName}", true, 1);
+
+
+			if (callingMod != _selectedMod)
+			{
+				Log("Denied. Calling mod is not selected mod", true, 1);
+				return;
+			}
+
+			if (callingMod is null)
+			{
+				Log("Denied Refresh Request. Reason: Calling mod is null", true, 1);
+				return;
+			}
+
+			RequestRefresh();
+			Log("Refresh Request approved", true, 1);
+		}
 		public virtual void SetModel(RootModel model)
 		{
 			_model = model;
