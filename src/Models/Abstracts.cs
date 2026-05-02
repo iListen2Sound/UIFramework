@@ -228,6 +228,7 @@ namespace UIFramework.Models
 		protected void SetDataValue(object newValue)
 		{
 
+			Debug.Log($"New Value Applied {newValue}");
 			EditNotifier?.OnUserEdit?.Invoke(ModelBoxedValue);
 			ModelBoxedValue = newValue;
 			

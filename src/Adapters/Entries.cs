@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using static UIFramework.Debug;
+using UnityEngine.EventSystems;
 namespace UIFramework.Adapters
 
 {
@@ -223,6 +224,7 @@ namespace UIFramework.Adapters
 			Slider.maxValue = SliderSettings?.Max ?? 100;
 			Slider.value = Convert.ToSingle(_prefModel.ModelBoxedValue);
 			Slider.onValueChanged.AddListener((UnityAction<float>)OnValueChanged);
+			AddPointerUp();
 			if (_prefModel.ModelBoxedValue is int or byte or short or long or sbyte or ushort or uint or ulong)
 			{
 				Slider.wholeNumbers = true;
@@ -240,7 +242,7 @@ namespace UIFramework.Adapters
 		public void OnValueChanged(float newValue)
 		{
 			_textField.text = newValue.ToString(_textField.contentType == TMP_InputField.ContentType.IntegerNumber ? "F0" : "F" + SliderSettings?.DecimalPlaces);
-			ApplyValueToPref();
+			//ApplyValueToPref();
 			//Debug.Log($"Slider value changed to {newValue}", true);
 		}
 
@@ -270,6 +272,26 @@ namespace UIFramework.Adapters
 				Debug.Log($"Invalid input for slider: {s}", false, 2);
 				_textField.text = Slider.value.ToString(_textField.contentType == TMP_InputField.ContentType.IntegerNumber ? "F0" : "F" + SliderSettings?.DecimalPlaces);
 			}
+		}
+
+		//onpointerup
+
+		public void AddPointerUp ()
+		{
+			EventTrigger trigger = Slider.gameObject.AddComponent<EventTrigger>();
+
+			EventTrigger.Entry entry = new EventTrigger.Entry();
+			entry.eventID = EventTriggerType.PointerUp;
+
+			entry.callback.AddListener((UnityAction<BaseEventData>) PointerUP);
+
+			trigger.triggers.Add(entry);
+
+		}
+
+		protected void PointerUP(BaseEventData eventData)
+		{
+			ApplyValueToPref();
 		}
 	}
 
