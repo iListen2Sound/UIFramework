@@ -146,7 +146,7 @@ namespace UIFramework.ValidatorExtensions
 		{
 			_modModel = melonInstance;
 			OnUserEdit += userEditHandler;
-			 
+
 			if (refreshUI)
 			{
 				OnUserEdit += RequestRefresh;
@@ -154,6 +154,7 @@ namespace UIFramework.ValidatorExtensions
 		}
 		private void RequestRefresh(object _)
 		{
+			Debug.Log($"EditValueNotifier Requesting UI Refresh", true, 1);
 			UI.RequestRefresh(_modModel);
 		}
 	}

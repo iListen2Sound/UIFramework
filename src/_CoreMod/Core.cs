@@ -74,7 +74,7 @@ namespace UIFramework
 			//Debug.DiffLog($"UI is Visible {UI.IsVisible}",true);
 			AutoHideCheck();
 
-			
+
 		}
 		/// <summary>
 		/// Run OnUpdate. Check if the inputs for toggling the UI have been pressed.
@@ -272,8 +272,9 @@ namespace UIFramework
 					if (Preferences.HijackModUI.Value && (ModUIWindow?.activeSelf ?? false))
 						ModUIWindow?.SetActive(!(Preferences.AutoHideOnSceneLoad.Value));
 				}
+				Preferences.DemoString.Value = CurrentScene;
 			}
-			
+
 		}
 #pragma warning restore CS1591
 
@@ -297,18 +298,12 @@ namespace UIFramework
 			UIFModel.ModelMod MyModel;
 
 			//Show extra categories if debug mode is enabled
-			if (!Preferences.EnableDebugMode.Value)
-			{
-				MyModel = UI.Register(this, Preferences.CatUIFramework);
-			}
 
-			else
-			{
-				MyModel = UI.Register(this, Preferences.CatUIFramework, Preferences.Demo, Preferences.Experimental, Preferences.TestBooleans, Preferences.TestEmptyDisplayName);
-				MelonCategoryModel tester = (MelonCategoryModel)MyModel.GetSubmodel(Preferences.TestBooleans.Identifier);
-				ButtonEntry testButton = new ButtonEntry(CustomClick, "CustomButton", "just a test", "Custom Button");
-				tester.AddSubmodel(testButton);
-			}
+			MyModel = UI.Register(this, Preferences.CatUIFramework, Preferences.Demo, Preferences.Experimental, Preferences.TestBooleans, Preferences.TestEmptyDisplayName);
+			MelonCategoryModel tester = (MelonCategoryModel)MyModel.GetSubmodel(Preferences.TestBooleans.Identifier);
+			ButtonEntry testButton = new ButtonEntry(CustomClick, "CustomButton", "just a test", "Custom Button");
+			tester.AddSubmodel(testButton);
+
 
 			Prefabs.LoadAssetBundle();
 

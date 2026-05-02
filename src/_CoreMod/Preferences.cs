@@ -24,7 +24,7 @@ namespace UIFramework
 		internal static MelonPreferences_Entry<ToggleOptions> ToggleSettings;
 		internal static MelonPreferences_Entry<int> InactivityTimeout;
 		internal static MelonPreferences_Entry<Vector2> UiPosition;
-		
+
 		internal static MelonPreferences_Category Experimental;
 		internal static MelonPreferences_Entry<Color> ExperimentalColor;
 		internal static MelonPreferences_Entry<float> ExperimentalSlider;
@@ -35,7 +35,7 @@ namespace UIFramework
 		internal static MelonPreferences_Entry<float> TestFloat;
 		internal static MelonPreferences_Entry<double> TestDouble;
 		internal static MelonPreferences_Entry<InputType> TestEnum;
-		internal static MelonPreferences_Entry<List<int> > TestList;
+		internal static MelonPreferences_Entry<List<int>> TestList;
 		internal static MelonPreferences_Entry<List<string>> TestListString;
 		internal static MelonPreferences_Entry<NonZeroBased> NonZeroEnum;
 		internal static MelonPreferences_Entry<NonContiguous> NonContiguousEnum;
@@ -63,28 +63,28 @@ namespace UIFramework
 			AutoHideOnSceneLoad = CatUIFramework.CreateEntry("AutoHideOnSceneLoad", true, "Auto Hide On Scene Load", "Hides the UI Automatically in between scenes.");
 			AutoHideOnInactivity = CatUIFramework.CreateEntry("AutohideOnInactivity", true, "Auto Hide on Inactivity", "Hide the UI if mouse and keyboard are inactive");
 			InactivityTimeout = CatUIFramework.CreateEntry("InactivityTimeout", 30, "Inactivity Time Out (Seconds)", "Number of seconds of inactivity for UI to hide automatically");
-			VrInputToggle = CatUIFramework.CreateEntry("VrInputToggle", false, "Toggle with VR buttons", "Toggle UI window by pressing both trigger and primary (A/X) on both hands",true);
-			
+			VrInputToggle = CatUIFramework.CreateEntry("VrInputToggle", false, "Toggle with VR buttons", "Toggle UI window by pressing both trigger and primary (A/X) on both hands", true);
+
 			ToggleSettings = CatUIFramework.CreateEntry("ToggleSettings", ToggleOptions.Keyboard, "Toggle Options", "Select the input method for toggling the UI.\n" +
 				"Keyboard: F9 \n" +
 				"VR: Press both trigger and primary (A/X) buttons on both hands\n" +
 				"<sup>*If you have ModUI, VR Input matches ModUI. UI Framework will be visible when ModUI is visible\n</sup>");
-			
+
 			HijackModUI = CatUIFramework.CreateEntry("HijackModUI", false, "Force Hide ModButtonView UI", "If enabled, UI Framework will find the ModUI object and hide it whenever UI Framework is also hidden.\n" +
 				"<size=75%>*Might cause unintended effects. Next ModUI toggle will need to be done twice</size>");
 
-			
-			EnableDebugMode = CatUIFramework.CreateEntry("EnableDebugMode", false, "Enable Debug Logs", "Enables or disables debug logs for UIFramework.");
-			UiPosition = CatUIFramework.CreateEntry("UiPosition", new Vector2(970, -128f), "UI Position", "The position of the UI on the screen represented",true, true);
 
-			Experimental = MelonPreferences.CreateCategory("UIFrameworkExperimental", "Experimental Settings");
+			EnableDebugMode = CatUIFramework.CreateEntry("EnableDebugMode", false, "Enable Debug Logs", "Enables or disables debug logs for UIFramework.", false, false, new UserEditDefaultNotifier(Core.Instance, UpdateCategoryVis, true));
+			UiPosition = CatUIFramework.CreateEntry("UiPosition", new Vector2(970, -128f), "UI Position", "The position of the UI on the screen represented", true, true);
+
+			Experimental = MelonPreferences.CreateCategory("UIFrameworkExperimental", "Experimental Settings", true);
 			Experimental.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
 
 
-			ExperimentalColor = Experimental.CreateEntry("ColorTest", new UnityEngine.Color(50, 238, 165,255),"Test color", "ColorTest");
+			ExperimentalColor = Experimental.CreateEntry("ColorTest", new UnityEngine.Color(50, 238, 165, 255), "Test color", "ColorTest");
 			UI.CreateButtonEntry(Experimental, "Test Buttton", "", "This is a test button entry that should not be treated as an actual preference and should not be saved to the config file.", TestButtonAsEntry);
-			
-			ExperimentalSlider = Experimental.CreateEntry("SliderTest", 0.5f, "Test Slider", "This is a test slider with a range from 0 to 1",false, false, new ValidatorExtensions.SliderDescriptor { Min = 0, Max = 1, DecimalPlaces = 3 }); 
+
+			ExperimentalSlider = Experimental.CreateEntry("SliderTest", 0.5f, "Test Slider", "This is a test slider with a range from 0 to 1", false, false, new ValidatorExtensions.SliderDescriptor { Min = 0, Max = 1, DecimalPlaces = 3 });
 
 			ExperimentalIntSlider = Experimental.CreateEntry("IntSliderTest", 50, "Test Int Slider", "This is a test int slider with a range from 0 to 100", false, false, new ValidatorExtensions.SliderDescriptor { Min = 0, Max = 100 });
 			TestBool = Experimental.CreateEntry("TestBool", false, "Test Bool", "This is a test bool.");
@@ -93,30 +93,30 @@ namespace UIFramework
 			TestFloat = Experimental.CreateEntry("TestFloat", 3.14f, "Test Float", "This is a test float.");
 			TestDouble = Experimental.CreateEntry("TestDouble", 3.14159, "Test Double", "This is a test double.");
 			TestEnum = Experimental.CreateEntry("TestEnum", InputType.TextField, "Test Enum", "This is a test enum.");
-			NonZeroEnum = Experimental.CreateEntry("Non-Zero", NonZeroBased.a,"Non-zero-based enum test", "This tests enums that don't start from zero");
+			NonZeroEnum = Experimental.CreateEntry("Non-Zero", NonZeroBased.a, "Non-zero-based enum test", "This tests enums that don't start from zero");
 			NonContiguousEnum = Experimental.CreateEntry("Non-Cont", NonContiguous.z, "Non-Contiguous enum test", "This tests enums that have gaps in between the explicitlyi named values");
-			TestList = Experimental.CreateEntry("TestList", new List<int> { 1, 2, 3 }, "Test List", "This is a test list of integers.",true);
-			TestListString = Experimental.CreateEntry("TestStringList", new List<string> { "hello", "world", "hi" }, "this is a test list of strings"); 
-			
-			TestEmptyDisplayName = MelonPreferences.CreateCategory("EmptyDisplayName");
-			TestEmptyDisplayName.SetFilePath(Path.Combine(USER_DATA,CONFIG_FILE));
+			TestList = Experimental.CreateEntry("TestList", new List<int> { 1, 2, 3 }, "Test List", "This is a test list of integers.", true);
+			TestListString = Experimental.CreateEntry("TestStringList", new List<string> { "hello", "world", "hi" }, "this is a test list of strings");
 
-			TestEmptyDisplayPref = TestEmptyDisplayName.CreateEntry("NoDisplayName", "Hello, World!", null, "This is a test string."); 
+			TestEmptyDisplayName = MelonPreferences.CreateCategory("EmptyDisplayName", "Empty Display Name Test", true);
+			TestEmptyDisplayName.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
+
+			TestEmptyDisplayPref = TestEmptyDisplayName.CreateEntry("NoDisplayName", "Hello, World!", null, "This is a test string.");
 
 			CatUIFramework.SaveToFile();
 			Experimental.SaveToFile();
 
-			TestBooleans = MelonPreferences.CreateCategory("TestBooleans", "Test Booleans");
+			TestBooleans = MelonPreferences.CreateCategory("TestBooleans", "Test Booleans", true);
 			TestBooleans.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
 			for (int i = 0; i < 10; i++)
 			{
 				TestBoolList.Add(TestBooleans.CreateEntry("TestBool" + i, false, "Test Bool " + i));
 			}
 
-			Demo = MelonPreferences.CreateCategory("UIF_Demo", "Demos", false, false);
+			Demo = MelonPreferences.CreateCategory("UIF_Demo", "Demos", true);
 			Demo.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
 
-			HideReactivity = Demo.CreateEntry("Entry_Reactivity", false, "Show hidden Entry", "This is a demo preference to hide the reactivity demo button in the demo category.",false, false, new UserEditDefaultNotifier(Core.Instance, HideReaction, true));
+			HideReactivity = Demo.CreateEntry("Entry_Reactivity", false, "Show hidden Entry", "This is a demo preference to hide the reactivity demo button in the demo category.", false, false, new UserEditDefaultNotifier(Core.Instance, HideReaction, true));
 			DemoString = Demo.CreateEntry("DemoString", "Hello, World!", "Demo String", "This is a demo string preference. This should show the name of the current scene", true);
 			DemoInt = Demo.CreateEntry("DemoInt", 0, "Demo Int", "This is a demo int Preference", false, false, new UserEditDefaultNotifier(Core.Instance, null, true));
 
@@ -133,19 +133,29 @@ namespace UIFramework
 		internal static void HideReaction(object newValue)
 		{
 			Debug.Log($"HideReact: {newValue}");
-			DemoString.IsHidden = (bool)newValue;
+			DemoString.IsHidden = !(bool)newValue;
 		}
-		
+
 		internal static IEnumerator DemoCount()
 		{
-			while(true)
+			while (true)
 			{
 				yield return new WaitForSeconds(3f);
 
 				DemoInt.EditedValue++;
 			}
 		}
-		
+
+		internal static void UpdateCategoryVis(object newValue)
+		{
+			Debug.Log($"UpdateCategoryVis newValue = {newValue}", true);
+			Demo.IsHidden = !(bool)newValue;
+			Debug.Log($"UpdateCategoryVis Demo.IsHidden = {Demo.IsHidden}", true);
+			Experimental.IsHidden = !(bool)newValue;
+			TestBooleans.IsHidden = !(bool)newValue;
+			TestEmptyDisplayName.IsHidden = !(bool)newValue;
+		}
+
 
 	}
 

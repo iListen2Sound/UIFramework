@@ -15,7 +15,7 @@ namespace UIFramework.Models
 		public abstract GameObject GetNewUIInstance();
 		/// <inheritdoc/>
 		public abstract string DisplayName { get; }
-		public bool IsHidden { get; set; } = false;
+		public virtual bool IsHidden { get; set; } = false;
 
 
 		/// <inheritdoc/>
@@ -145,7 +145,7 @@ namespace UIFramework.Models
 	{
 		//public List<EntryModelBase> Entries => SubModels.Cast<EntryModelBase>().ToList();
 		public ModModelBase ParentMod { get; set; }
-		public abstract bool IsHidden { get; set; }
+		public override bool IsHidden { get; set; }
 		protected CategoryModelBase(ModModelBase parentMod)
 		{
 			ParentMod = parentMod;
@@ -171,7 +171,7 @@ namespace UIFramework.Models
 		}
 		/// <inheritdoc/>
 		public abstract string Description { get; }
-		public abstract bool IsHidden { get; set; }
+		public override bool IsHidden { get; set; }
 
 		/// <summary>
 		/// Called when the corresponding UI element is created
@@ -229,8 +229,8 @@ namespace UIFramework.Models
 		{
 
 			Debug.Log($"New Value Applied {newValue}");
-			EditNotifier?.OnUserEdit?.Invoke(ModelBoxedValue);
 			ModelBoxedValue = newValue;
+			EditNotifier?.OnUserEdit?.Invoke(ModelBoxedValue);
 			
 		}
 		protected GameObject _uiPrefabSource;

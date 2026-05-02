@@ -8,6 +8,18 @@ This is a base MelonLoader problem. Not something that can be fixed in the UI.
 Naming collisions also means you might accidentally change another mod's preferences if you have the same category and entry identifiers.
 
 ### New in 0.9.0 
+<details><summary> New Feature: Modders can now implement an IUserEditedNotifier interface.</summary>
+This can notify you when the user has edited their entry even when it hasn't been applied to their saved value yet
+</details>
+<details><summary> New Feature: Modders can now request the window to refresh its UI. </summary>
+
+Just call `UI.RequestRefresh(modInstance)`
+Combired with the previous new feature, you can now adjust your UI according to your users' inputs
+</details>
+<details><summary> New Feature: UI now refreshes when an entry value for a mod changes. </summary>
+
+</details>
+
 <details><summary> Backend: Coalesced refresh system </summary>
 </details>
 
