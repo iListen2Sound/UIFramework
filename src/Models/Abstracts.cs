@@ -137,18 +137,7 @@ namespace UIFramework.Models
 		/// This will only run if your mod is the currently selelcted mod. 
 		/// </summary>
 		public event Action OnModSaved;
-
-		public event Action<ModModelBase> OnUiUpdateRequest;
-
-		private bool _isUpdateRequestQueued = false;
-		public void RequestUpdateUI() => _isUpdateRequestQueued = true;
-		void Update()
-		{
-			if (!_isUpdateRequestQueued)
-				return;
-
-			OnUiUpdateRequest?.Invoke(this);
-			_isUpdateRequestQueued = false;
+		public void RequestUpdateUI() => UI.RequestRefresh(this);
 
 		}
 
