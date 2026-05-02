@@ -132,6 +132,7 @@ namespace UIFramework.Adapters
 
 
 			PrefRegistryPanel.SetModel(lastSelected ?? (CategoryModelBase)mod.SubModels[0]);
+			RequestRefresh();
 
 		}
 		public void SetSelectedCategory(CategoryModelBase cat)
@@ -139,7 +140,7 @@ namespace UIFramework.Adapters
 			_selectedCategory = cat;
 			PrefRegistryPanel.SetModel(cat);
 			LastCategorySelected[_selectedMod] = cat;
-
+			RequestRefresh();
 		}
 
 		public void SelectInSideBar(IHoldSubmodels model)

@@ -138,8 +138,7 @@ namespace UIFramework.Models
 		/// </summary>
 		public event Action OnModSaved;
 		public void RequestUpdateUI() => UI.RequestRefresh(this);
-
-		}
+	
 
 	}
 	public abstract class CategoryModelBase : SelectableModelBase
@@ -199,15 +198,18 @@ namespace UIFramework.Models
 	{
 		protected DataEntryModelBase(CategoryModelBase parentCategory) : base(parentCategory) { }
 		public abstract DefaultValidator Validator { get; }
-
+		public abstract IUserEditedNotifier EditNotifier { get; }
 		public abstract object ModelBoxedValue { get; protected set; }
 		public virtual bool TryApply(object value)
 		{
 			bool result = false;
 			try
 			{
-				ModelBoxedValue = value;
+				//ModelBoxedValue = value;
+				SetDataValue(value);
 				result = true;
+				
+				//ParentCategory.ParentMod.RequestUpdateUI();
 			}
 			catch (Exception ex)
 			{
@@ -225,7 +227,10 @@ namespace UIFramework.Models
 		
 		protected void SetDataValue(object newValue)
 		{
+
+			EditNotifier?.OnUserEdit?.Invoke(ModelBoxedValue);
 			ModelBoxedValue = newValue;
+			
 		}
 		protected GameObject _uiPrefabSource;
 		/*/// <summary>

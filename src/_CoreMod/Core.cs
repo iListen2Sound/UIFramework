@@ -46,6 +46,7 @@ namespace UIFramework
 		internal int inactiveTimeLimit => (Preferences.InactivityTimeout?.Value * 1000) ?? 30000;
 
 
+
 #pragma warning disable CS1591
 		public override void OnInitializeMelon()
 		{
@@ -73,6 +74,7 @@ namespace UIFramework
 			//Debug.DiffLog($"UI is Visible {UI.IsVisible}",true);
 			AutoHideCheck();
 
+			
 		}
 		/// <summary>
 		/// Run OnUpdate. Check if the inputs for toggling the UI have been pressed.
@@ -90,12 +92,12 @@ namespace UIFramework
 				MelonCoroutines.Start(InputToggled(true));
 			}
 
-			if(Input.GetKeyDown(KeyCode.F10))
+			if (Input.GetKeyDown(KeyCode.F10))
 			{
 				MelonCoroutines.Start(SyncModUIState());
 			}
 
-			
+
 		}
 		/// <summary>
 		/// The actual coroutine that toggles the UI. Has to be in a coroutine to allow for a delay if ModUI is present.
@@ -114,7 +116,7 @@ namespace UIFramework
 			}
 			if (ModUIWindow is not null && matchModUI)
 			{
-				
+
 				yield return new WaitForSeconds(0.04f);
 				bool uifPrevState = UI.MainWindow.activeSelf;
 				if (ModUIWindow.activeSelf == lastModUIState)
@@ -271,6 +273,7 @@ namespace UIFramework
 						ModUIWindow?.SetActive(!(Preferences.AutoHideOnSceneLoad.Value));
 				}
 			}
+			
 		}
 #pragma warning restore CS1591
 
@@ -291,18 +294,18 @@ namespace UIFramework
 		internal void BuildUI()
 		{
 			Preferences.InitializePrefs();
-			UIFModel.ModelMod ModModel;
+			UIFModel.ModelMod MyModel;
 
 			//Show extra categories if debug mode is enabled
 			if (!Preferences.EnableDebugMode.Value)
 			{
-				ModModel = UI.Register(this, Preferences.CatUIFramework);
+				MyModel = UI.Register(this, Preferences.CatUIFramework);
 			}
 
 			else
 			{
-				ModModel = UI.Register(this, Preferences.CatUIFramework, Preferences.Experimental, Preferences.TestBooleans, Preferences.TestEmptyDisplayName);
-				MelonCategoryModel tester = (MelonCategoryModel)ModModel.GetSubmodel(Preferences.TestBooleans.Identifier);
+				MyModel = UI.Register(this, Preferences.CatUIFramework, Preferences.Demo, Preferences.Experimental, Preferences.TestBooleans, Preferences.TestEmptyDisplayName);
+				MelonCategoryModel tester = (MelonCategoryModel)MyModel.GetSubmodel(Preferences.TestBooleans.Identifier);
 				ButtonEntry testButton = new ButtonEntry(CustomClick, "CustomButton", "just a test", "Custom Button");
 				tester.AddSubmodel(testButton);
 			}

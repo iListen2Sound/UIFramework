@@ -88,6 +88,21 @@ namespace UIFramework
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="melonInstance"></param>
+		/// <param name="categories"></param>
+		/// <returns></returns>
+		public static MelonModel RegisterMelon(MelonBase melonInstance, params MelonPreferences_Category[] categories)
+		{
+			MelonModel NewModModel = new(melonInstance, categories.ToList());
+			ModelInstance.AddSubmodel(NewModModel);
+			return NewModModel;
+		}
+
+
+
+		/// <summary>
+		/// 
+		/// </summary>
 		internal static void InitializeUIObjects()
 		{
 			MainWindow = GameObject.Instantiate(Prefabs.MainWindowSource, Prefabs.Canvas.transform);
@@ -111,7 +126,18 @@ namespace UIFramework
 			WindowInstance.SetModel(ModelInstance);
 
 		}
-		public static void RequestRefresh(ModModelBase modModel) => WindowInstance.RequestRefresh();
+		internal static void RequestRefresh(ModModelBase modModel)
+		{
+			Debug.Log("RefreshRequested in Framework.cs RequestRefresh(ModModelBase modModel)", true, 1);
+			WindowInstance.RequestRefresh(modModel); }
+		public static void RequestRefresh(MelonBase melonInstance)
+		{
+			Debug.Log("Refresh requested in Framework.cs RequestRefresh(MelonBase melonInstance)", true, 1);
+			ModModelBase model = ModelInstance.GetModModel(melonInstance.Info.Name);
+			WindowInstance.RequestRefresh(model);
+		}
+		
+
 		public static GameObject GetPrefab(InputType input)
 		{
 			GameObject selectedPrefab;

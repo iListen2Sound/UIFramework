@@ -62,10 +62,6 @@ namespace UIFramework.Adapters
 		{
 
 			ParentWindow.SetSelectedMod(ModModel);
-
-
-
-
 		}
 
 	}

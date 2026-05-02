@@ -49,8 +49,6 @@ namespace UIFramework.Adapters
 			ContainerReset();
 			Model = model;
 			_rootWindow = FindRootWindow();
-			_rootWindow.RequestRefresh();
-			//BuildFromModelList();
 		}
 
 		///	<summary>

@@ -1,6 +1,9 @@
 using MelonLoader;
 using UnityEngine;
 using System.ComponentModel.DataAnnotations;
+using UIFramework.ValidatorExtensions;
+using System.Collections;
+using UIFramework.Adapters;
 namespace UIFramework
 {
 	/// <summary>
@@ -36,6 +39,11 @@ namespace UIFramework
 		internal static MelonPreferences_Entry<List<string>> TestListString;
 		internal static MelonPreferences_Entry<NonZeroBased> NonZeroEnum;
 		internal static MelonPreferences_Entry<NonContiguous> NonContiguousEnum;
+
+		internal static MelonPreferences_Category Demo;
+		internal static MelonPreferences_Entry<bool> HideReactivity;
+		internal static MelonPreferences_Entry<string> DemoString;
+		internal static MelonPreferences_Entry<int> DemoInt;
 
 		internal static MelonPreferences_Category TestEmptyDisplayName;
 		internal static MelonPreferences_Entry<string> TestEmptyDisplayPref;
@@ -104,12 +112,40 @@ namespace UIFramework
 			{
 				TestBoolList.Add(TestBooleans.CreateEntry("TestBool" + i, false, "Test Bool " + i));
 			}
+
+			Demo = MelonPreferences.CreateCategory("UIF_Demo", "Demos", false, false);
+			Demo.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
+
+			HideReactivity = Demo.CreateEntry("Entry_Reactivity", false, "Show hidden Entry", "This is a demo preference to hide the reactivity demo button in the demo category.",false, false, new UserEditDefaultNotifier(Core.Instance, HideReaction, true));
+			DemoString = Demo.CreateEntry("DemoString", "Hello, World!", "Demo String", "This is a demo string preference. This should show the name of the current scene", true);
+			DemoInt = Demo.CreateEntry("DemoInt", 0, "Demo Int", "This is a demo int Preference", false, false, new UserEditDefaultNotifier(Core.Instance, null, true));
+
+			DemoInt.Value = 0;
+			DemoString.IsHidden = !HideReactivity.Value;
+
+			MelonCoroutines.Start(DemoCount());
 		}
 		internal static void TestButtonAsEntry()
 		{
 			Debug.Log($"This is a test for submitting a button as a preference entry. \n" +
 				$"This should not be treated as an actual preference and should not be saved to the config file.", true);
 		}
+		internal static void HideReaction(object newValue)
+		{
+			Debug.Log($"HideReact: {newValue}");
+			DemoString.IsHidden = (bool)newValue;
+		}
+		
+		internal static IEnumerator DemoCount()
+		{
+			while(true)
+			{
+				yield return new WaitForSeconds(3f);
+
+				DemoInt.EditedValue++;
+			}
+		}
+		
 
 	}
 
