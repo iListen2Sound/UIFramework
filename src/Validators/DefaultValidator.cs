@@ -142,20 +142,10 @@ namespace UIFramework.ValidatorExtensions
 	{
 		public Action<object> OnUserEdit { get; set; }
 		MelonBase _modModel;
-		public UserEditDefaultNotifier(MelonBase melonInstance, Action<object> userEditHandler, bool refreshUI = false)
+		public UserEditDefaultNotifier(MelonBase melonInstance, Action<object> userEditHandler)
 		{
 			_modModel = melonInstance;
 			OnUserEdit += userEditHandler;
-
-			if (refreshUI)
-			{
-				OnUserEdit += RequestRefresh;
-			}
-		}
-		private void RequestRefresh(object _)
-		{
-			Debug.Log($"EditValueNotifier Requesting UI Refresh", true, 1);
-			UI.RequestRefresh(_modModel);
 		}
 	}
 
