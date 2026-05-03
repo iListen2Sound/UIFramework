@@ -1,6 +1,9 @@
+# UI Framework API overview
+UI Framework builds a UI for modders' configuration for their mods. Particularly MelonPreferences but hopefully expanded to more
 ## MelonPreferences
 MelonPreferences are the built-in configuration and persistent storage system in MelonLoader. 
 
+<details><summary>Expand to see how to initialize and use MelonPreferences</summary>
 ### Categories
 Categories are a base MelonPreferences feature to group entries together. 
 #### Variable declarotion
@@ -59,3 +62,16 @@ Entries are objects. You need to access their Value property to get or set the a
 string value1 = TestEntry11.Value;
 TestEntry11.Value = "New Value";
 ```
+</details>
+
+## UI Framework
+### Registration
+Once you have your MelonPreferences set up, registering to UI Framework is simple.
+Just call 
+```cs
+UI.RegisterMelon(MelonBase modInstance, params MelonPreferences_Category[])
+```
+
+
+
+
