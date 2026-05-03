@@ -178,7 +178,7 @@ namespace UIFramework.Models
 		}
 		protected void OnValueChanged(object oldVal, object newVal)
 		{
-			Debug.Log("MelonEntryModel: OnValueChanged()");
+
 			OnDataValueChanged(newVal);
 
 		}

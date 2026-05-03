@@ -138,7 +138,7 @@ namespace UIFramework.Models
 		/// </summary>
 		public event Action OnModSaved;
 		public void RequestUpdateUI() => UI.RequestRefresh(this);
-	
+
 
 	}
 	public abstract class CategoryModelBase : SelectableModelBase
@@ -197,7 +197,7 @@ namespace UIFramework.Models
 	public abstract class DataEntryModelBase : EntryModelBase
 	{
 		protected DataEntryModelBase(CategoryModelBase parentCategory) : base(parentCategory) { }
-		
+
 
 		public abstract object ModelBoxedValue { get; protected set; }
 		public virtual bool TryApply(object value)
@@ -208,7 +208,7 @@ namespace UIFramework.Models
 				//ModelBoxedValue = value;
 				SetDataValue(value);
 				result = true;
-				
+
 				//ParentCategory.ParentMod.RequestUpdateUI();
 			}
 			catch (Exception ex)
@@ -222,15 +222,16 @@ namespace UIFramework.Models
 
 		protected virtual void OnDataValueChanged(object newValue)
 		{
-			if(!(RefreshInhibitor?.InhibitRefreshOnValueChange ?? false))
+			if (!(RefreshInhibitor?.InhibitRefreshOnValueChange ?? false))
 			{
-				Debug.Log($"UI Refresh inhibited when entry value changes", true);
 				UI.RequestRefresh(ParentCategory.ParentMod);
 			}
+			else
+				Debug.Log($"UI Refresh inhibited when entry value changes", true);
 		}
-		
+
 		public abstract DefaultValidator Validator { get; }
-		public virtual IUserEditedNotifier EditNotifier => Validator as DefaultValidator;
+		public virtual IUserEditedNotifier EditNotifier => Validator as IUserEditedNotifier;
 		public virtual IRefreshInhibitor RefreshInhibitor => Validator as IRefreshInhibitor;
 
 
@@ -241,12 +242,13 @@ namespace UIFramework.Models
 			ModelBoxedValue = newValue;
 			EditNotifier?.OnUserEdit?.Invoke(ModelBoxedValue);
 			//Block refresh only if RefreshInhibitorExists with the InhibitRefresh property set to true.
-			if(!(RefreshInhibitor?.InhibitRefreshOnEdit ?? false))
+			if (!(RefreshInhibitor?.InhibitRefreshOnEdit ?? false))
 			{
-				Debug.Log($"UI Refresh inhibited when user edits values", true)
 				ParentCategory.ParentMod.RequestUpdateUI();
 			}
-			
+			else
+				Debug.Log($"UI Refresh inhibited when user edits values", true);
+
 		}
 		protected GameObject _uiPrefabSource;
 		/*/// <summary>

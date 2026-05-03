@@ -74,7 +74,7 @@ namespace UIFramework
 				"<size=75%>*Might cause unintended effects. Next ModUI toggle will need to be done twice</size>");
 
 
-			EnableDebugMode = CatUIFramework.CreateEntry("EnableDebugMode", false, "Enable Debug Logs", "Enables or disables debug logs for UIFramework.", false, false, new UserEditDefaultNotifier(Core.Instance, UpdateCategoryVis));
+			EnableDebugMode = CatUIFramework.CreateEntry("EnableDebugMode", false, "Enable Debug Logs", "Enables or disables debug logs for UIFramework.", false, false, new UserEditDefaultNotifier { OnUserEdit = UpdateCategoryVis });
 			UiPosition = CatUIFramework.CreateEntry("UiPosition", new Vector2(970, -128f), "UI Position", "The position of the UI on the screen represented", true, true);
 
 			Experimental = MelonPreferences.CreateCategory("UIFrameworkExperimental", "Experimental Settings", true);
@@ -113,7 +113,7 @@ namespace UIFramework
 				TestBoolList.Add(TestBooleans.CreateEntry("TestBool" + i, false, "Test Bool " + i));
 			}
 
-			Demo = MelonPreferences.CreateCategory("UIF_Demo", "Demos", true);
+			Demo = MelonPreferences.CreateCategory("UIF_Demo", "Demos");
 			Demo.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
 
 			HideReactivity = Demo.CreateEntry("Entry_Reactivity", false, "Show hidden Entry", "This is a demo preference to hide the reactivity demo button in the demo category.", false, false, new UserEditDefaultNotifier{OnUserEdit = HideReaction});
@@ -123,6 +123,7 @@ namespace UIFramework
 			DemoInt.Value = 0;
 			DemoString.IsHidden = !HideReactivity.Value;
 
+			UpdateCategoryVis(EnableDebugMode.Value);
 			MelonCoroutines.Start(DemoCount());
 		}
 		internal static void TestButtonAsEntry()
@@ -142,14 +143,14 @@ namespace UIFramework
 			{
 				yield return new WaitForSeconds(3f);
 
-				DemoInt.EditedValue++;
+				DemoInt.Value++;
 			}
 		}
 
 		internal static void UpdateCategoryVis(object newValue)
 		{
 			Debug.Log($"UpdateCategoryVis newValue = {newValue}", true);
-			Demo.IsHidden = !(bool)newValue;
+				
 			Debug.Log($"UpdateCategoryVis Demo.IsHidden = {Demo.IsHidden}", true);
 			Experimental.IsHidden = !(bool)newValue;
 			TestBooleans.IsHidden = !(bool)newValue;
