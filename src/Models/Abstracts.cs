@@ -222,7 +222,11 @@ namespace UIFramework.Models
 
 		protected virtual void OnDataValueChanged(object newValue)
 		{
-			UI.RequestRefresh(ParentCategory.ParentMod);
+			if(!(RefreshInhibitor?.InhibitRefreshOnValueChange ?? false))
+			{
+				Debug.Log($"UI Refresh inhibited when entry value changes", true);
+				UI.RequestRefresh(ParentCategory.ParentMod);
+			}
 		}
 		
 		public abstract DefaultValidator Validator { get; }
@@ -238,7 +242,10 @@ namespace UIFramework.Models
 			EditNotifier?.OnUserEdit?.Invoke(ModelBoxedValue);
 			//Block refresh only if RefreshInhibitorExists with the InhibitRefresh property set to true.
 			if(!(RefreshInhibitor?.InhibitRefreshOnEdit ?? false))
+			{
+				Debug.Log($"UI Refresh inhibited when user edits values", true)
 				ParentCategory.ParentMod.RequestUpdateUI();
+			}
 			
 		}
 		protected GameObject _uiPrefabSource;

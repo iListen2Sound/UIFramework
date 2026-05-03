@@ -129,24 +129,26 @@ namespace UIFramework.ValidatorExtensions
 		public event Action<EventArgs> Interaction;
 	}
 
+	/// <summary>
+	/// Use this if you wanna be informed of edits made by the user that aren't applied to the Value property yet
+	/// </summary>
 	public interface IUserEditedNotifier
 	{
+		/// <summary>
+		/// Subscribe to this action the method you want to run when the edits a value in the UI.
+		/// It must take an object parameter for the new value
+		/// </summary>
 		public abstract Action<object> OnUserEdit { get; set; }
 	}
 
 
 	/// <summary>
-	/// 
+	/// Default implementation of IUserEditedNotifier
+	/// Use this if you wanna be informed of edits made by the user that aren't applied to the Value property yet
 	/// </summary>
 	public class UserEditDefaultNotifier : DefaultValidator, IUserEditedNotifier
 	{
 		public Action<object> OnUserEdit { get; set; }
-		MelonBase _modModel;
-		public UserEditDefaultNotifier(MelonBase melonInstance, Action<object> userEditHandler)
-		{
-			_modModel = melonInstance;
-			OnUserEdit += userEditHandler;
-		}
 	}
 
 	public interface IRefreshInhibitor
@@ -157,6 +159,7 @@ namespace UIFramework.ValidatorExtensions
 	public class DefaultRefreshInhibitor : DefaultValidator, IRefreshInhibitor
 	{
 		public bool InhibitRefreshOnEdit {get; set;} = false;
+		public bool InhibitRefreshOnValueChange {get; set;} = false;
 	}
 
 	public interface ICustomUIProvider

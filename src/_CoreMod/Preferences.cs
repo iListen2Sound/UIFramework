@@ -116,9 +116,9 @@ namespace UIFramework
 			Demo = MelonPreferences.CreateCategory("UIF_Demo", "Demos", true);
 			Demo.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
 
-			HideReactivity = Demo.CreateEntry("Entry_Reactivity", false, "Show hidden Entry", "This is a demo preference to hide the reactivity demo button in the demo category.", false, false, new UserEditDefaultNotifier(Core.Instance, HideReaction));
+			HideReactivity = Demo.CreateEntry("Entry_Reactivity", false, "Show hidden Entry", "This is a demo preference to hide the reactivity demo button in the demo category.", false, false, new UserEditDefaultNotifier{OnUserEdit = HideReaction});
 			DemoString = Demo.CreateEntry("DemoString", "Hello, World!", "Demo String", "This is a demo string preference. This should show the name of the current scene", true);
-			DemoInt = Demo.CreateEntry("DemoInt", 0, "Demo Int", "This is a demo int Preference", false, false, new UserEditDefaultNotifier(Core.Instance, null, true));
+			DemoInt = Demo.CreateEntry("DemoInt", 0, "Demo Int", "This is a demo int Preference", false, false, new DefaultRefreshInhibitor{InhibitRefreshOnValueChange = true});
 
 			DemoInt.Value = 0;
 			DemoString.IsHidden = !HideReactivity.Value;
