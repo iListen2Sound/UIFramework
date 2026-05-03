@@ -154,6 +154,7 @@ namespace UIFramework.ValidatorExtensions
 	public interface IRefreshInhibitor
 	{
 		public bool InhibitRefreshOnEdit {get; set;}
+		public bool InhibitRefreshOnValueChange {get; set;}
 	}
 
 	public class DefaultRefreshInhibitor : DefaultValidator, IRefreshInhibitor
