@@ -41,9 +41,12 @@ namespace UIFramework
 		internal static MelonPreferences_Entry<NonContiguous> NonContiguousEnum;
 
 		internal static MelonPreferences_Category Demo;
-		internal static MelonPreferences_Entry<bool> HideReactivity;
-		internal static MelonPreferences_Entry<string> DemoString;
+		internal static MelonPreferences_Entry<bool> ShowReactivity;
+		internal static MelonPreferences_Entry<bool> InhibitRefreshForCount;
 		internal static MelonPreferences_Entry<int> DemoInt;
+		internal static MelonPreferences_Entry<string> DemoString;
+
+		internal static DefaultRefreshInhibitor InhibitRefresh = new DefaultRefreshInhibitor { InhibitRefreshOnValueChange = true };
 
 		internal static MelonPreferences_Category TestEmptyDisplayName;
 		internal static MelonPreferences_Entry<string> TestEmptyDisplayPref;
@@ -116,14 +119,16 @@ namespace UIFramework
 			Demo = MelonPreferences.CreateCategory("UIF_Demo", "Demos");
 			Demo.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
 
-			HideReactivity = Demo.CreateEntry("Entry_Reactivity", false, "Show hidden Entry", "This is a demo preference to hide the reactivity demo button in the demo category.", false, false, new UserEditDefaultNotifier{OnUserEdit = HideReaction});
+			ShowReactivity = Demo.CreateEntry("Entry_Reactivity", false, "Show hidden Entry", "This is a demo preference to hide the reactivity demo button in the demo category.", false, false, new UserEditDefaultNotifier{OnUserEdit = HideReaction});
+			InhibitRefreshForCount = Demo.CreateEntry("InhibitDemoCount", true, "Inhibit Count Refresh", "Inhibit refreshing the UI when the demo int counts up",false, false, new UserEditDefaultNotifier { OnUserEdit = UpdateInhibitDemo});
+			DemoInt = Demo.CreateEntry("DemoInt", 0, "Demo Int", "This is a demo int Preference", false, false, InhibitRefresh);
 			DemoString = Demo.CreateEntry("DemoString", "Hello, World!", "Demo String", "This is a demo string preference. This should show the name of the current scene", true);
-			DemoInt = Demo.CreateEntry("DemoInt", 0, "Demo Int", "This is a demo int Preference", false, false, new DefaultRefreshInhibitor{InhibitRefreshOnValueChange = true});
 
 			DemoInt.Value = 0;
-			DemoString.IsHidden = !HideReactivity.Value;
+			DemoString.IsHidden = !ShowReactivity.Value;
 
 			UpdateCategoryVis(EnableDebugMode.Value);
+			InhibitRefreshForCount.Value = true;
 			MelonCoroutines.Start(DemoCount());
 		}
 		internal static void TestButtonAsEntry()
@@ -134,17 +139,23 @@ namespace UIFramework
 		internal static void HideReaction(object newValue)
 		{
 			Debug.Log($"HideReact: {newValue}");
-			DemoString.IsHidden = !(bool)newValue;
+			DemoInt.IsHidden = !(bool)newValue;
+			ShowReactivity.Value = (bool)newValue;
 		}
 
 		internal static IEnumerator DemoCount()
 		{
 			while (true)
 			{
-				yield return new WaitForSeconds(3f);
-
-				DemoInt.Value++;
+				yield return new WaitForSeconds(1.5f);
+				if(ShowReactivity.Value)
+					DemoInt.Value++;
 			}
+		}
+
+		internal static void UpdateInhibitDemo(object newValue)
+		{
+			InhibitRefresh.InhibitRefreshOnValueChange = (bool)newValue;
 		}
 
 		internal static void UpdateCategoryVis(object newValue)
