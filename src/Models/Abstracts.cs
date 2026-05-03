@@ -197,8 +197,8 @@ namespace UIFramework.Models
 	public abstract class DataEntryModelBase : EntryModelBase
 	{
 		protected DataEntryModelBase(CategoryModelBase parentCategory) : base(parentCategory) { }
-		public abstract DefaultValidator Validator { get; }
-		public abstract IUserEditedNotifier EditNotifier { get; }
+		
+
 		public abstract object ModelBoxedValue { get; protected set; }
 		public virtual bool TryApply(object value)
 		{
@@ -225,12 +225,20 @@ namespace UIFramework.Models
 			UI.RequestRefresh(ParentCategory.ParentMod);
 		}
 		
+		public abstract DefaultValidator Validator { get; }
+		public virtual IUserEditedNotifier EditNotifier => Validator as DefaultValidator;
+		public virtual IRefreshInhibitor RefreshInhibitor => Validator as IRefreshInhibitor;
+
+
 		protected void SetDataValue(object newValue)
 		{
 
 			Debug.Log($"New Value Applied {newValue}");
 			ModelBoxedValue = newValue;
 			EditNotifier?.OnUserEdit?.Invoke(ModelBoxedValue);
+			//Block refresh only if RefreshInhibitorExists with the InhibitRefresh property set to true.
+			if(!(RefreshInhibitor?.InhibitRefreshOnEdit ?? false))
+				ParentCategory.ParentMod.RequestUpdateUI();
 			
 		}
 		protected GameObject _uiPrefabSource;

@@ -149,7 +149,15 @@ namespace UIFramework.ValidatorExtensions
 		}
 	}
 
+	public interface IRefreshInhibitor
+	{
+		public bool InhibitRefreshOnEdit {get; set;}
+	}
 
+	public class DefaultRefreshInhibitor : DefaultValidator, IRefreshInhibitor
+	{
+		public bool InhibitRefreshOnEdit {get; set;} = false;
+	}
 
 	public interface ICustomUIProvider
 	{

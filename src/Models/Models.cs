@@ -154,7 +154,6 @@ namespace UIFramework.Models
 
 		public ValueValidator MelonValidator => PrefEntry.Validator;
 		public override DefaultValidator Validator => MelonValidator as DefaultValidator;
-		public override IUserEditedNotifier EditNotifier => Validator as IUserEditedNotifier;
 
 		/// <summary>
 		/// Direct access to the PrefEntry boxedvalue property
