@@ -120,7 +120,7 @@ namespace UIFramework.ValidatorExtensions
 	///<inheritdoc cref="INumericUpDownDescriptor"/>
 	public class NumericUpDownDescriptor : DefaultValidator, INumericUpDownDescriptor
 	{
-		/// <inheritdoc>
+		/// <inheritdoc/>
 		public float Increments { get; set; }
 	}
 
@@ -147,19 +147,43 @@ namespace UIFramework.ValidatorExtensions
 	/// Use this if you wanna be informed of edits made by the user that aren't applied to the Value property yet
 	/// </summary>
 	public class UserEditDefaultNotifier : DefaultValidator, IUserEditedNotifier
-	{
+	{ 
+		///<inheritdoc/>
 		public Action<object> OnUserEdit { get; set; }
 	}
 
+	/// <summary>
+	/// Prevent entry from triggering a refresh when a user edits values in the UI or when the entry value changes in code
+	/// Useful for making sure the UI doesn't refresh while the user is actively editing an entry 
+	/// </summary>
+	/// <remarks>
+	/// These prevent the entry from <em>causing</em> the UI to refresh
+	/// This does not mean the entry prevents interruptions from refreshes
+	/// </remarks>
 	public interface IRefreshInhibitor
 	{
+		/// <summary>
+		/// Prevents the UI from automatically refreshing when the user edits an entry
+		/// Use this when the entry involves a control that has continuous input with no easy way to detect when user input has ended
+		/// </summary>
 		public bool InhibitRefreshOnEdit {get; set;}
+		/// <summary>
+		/// Prevents the UI from refreshing when the value of the entry changes in the background. 
+		/// Use this on entries where your code might change its values while the user is using the UI
+		/// <remarks>
+		/// This also means that the entry's value won't be reflected in the UI.
+		/// </remarks>
+		/// </summary>
 		public bool InhibitRefreshOnValueChange {get; set;}
 	}
-
+	/// <summary>
+	/// Default implementation of IRefreshInhibitor
+	/// </summary>
 	public class DefaultRefreshInhibitor : DefaultValidator, IRefreshInhibitor
 	{
+		///<inheritdoc/>	
 		public bool InhibitRefreshOnEdit {get; set;} = false;
+		///<inheritdoc/>
 		public bool InhibitRefreshOnValueChange {get; set;} = false;
 	}
 
