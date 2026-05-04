@@ -5,17 +5,16 @@ using UIFramework.Models;
 using UnityEngine;
 namespace UIFramework.ValidatorExtensions
 {
-	public interface IValidatorExtension
+	public interface IUiExtension
 	{
-		public bool IsValid(object value);
-		public override object EnsureValid(object value);
+		
 	}
 	/// <summary>
 	/// Default implementation of the MelonLoader ValueValidator class.
 	/// This satisfies the required members but just acts as a passthrough. 
 	/// It's the equivalent of not having a validator at all, but it allows for the use of the other descriptor interfaces without needing to implement a custom validator.
 	/// </summary>
-	public partial class DefaultValidator : ValueValidator, IValidatorExtension
+	public partial class DefaultValidator : ValueValidator, IUiExtension
 	{
 		public override bool IsValid(object value) { return true; }
 		public override object EnsureValid(object value) { return value; }
@@ -23,7 +22,7 @@ namespace UIFramework.ValidatorExtensions
 	/// <summary>
 	/// Describes properties for text inputs that define its behavior.
 	/// </summary>
-	public interface ITextInputBehaviorDescriptor
+	public interface ITextInputBehaviorDescriptor : IUiExtension
 	{
 		/// <summary>
 		/// What type of content is going into the textinput
@@ -44,7 +43,7 @@ namespace UIFramework.ValidatorExtensions
 	/// <summary>
 	/// Describes properties of text inputs that define how it looks
 	/// </summary>
-	public interface ITextInputAppearanceDescriptor
+	public interface ITextInputAppearanceDescriptor : IUiExtension
 	{
 		public int FontSize { get; set; }
 		/// <summary>
@@ -72,7 +71,7 @@ namespace UIFramework.ValidatorExtensions
 	///	<summary>
 	/// Presents the entry as a dropdown and describes the options within it.
 	/// </summary>
-	public interface IDynamicDropdownDescriptor
+	public interface IDynamicDropdownDescriptor : IUiExtension
 	{
 		public List<string> DropdownOptionNames { get; set; }
 	}
@@ -86,7 +85,7 @@ namespace UIFramework.ValidatorExtensions
 	/// <summary>
 	/// Implementing this will present the entry as a slider in the UI
 	/// </summary>
-	public interface ISliderDescriptor
+	public interface ISliderDescriptor : IUiExtension
 	{
 		public float Min { get; set; }
 		public float Max { get; set; }
@@ -115,7 +114,7 @@ namespace UIFramework.ValidatorExtensions
 	/// <summary>
 	/// Describes numeric up down controls
 	/// </summary>
-	public interface INumericUpDownDescriptor
+	public interface INumericUpDownDescriptor : IUiExtension
 	{
 		/// <summary>
 		/// 0 = default (1 for ints, 0.1 for floats). 
@@ -129,7 +128,7 @@ namespace UIFramework.ValidatorExtensions
 		public float Increments { get; set; }
 	}
 
-	public interface IInteractable
+	public interface IInteractable : IUiExtension
 	{
 		public event Action<EventArgs> Interaction;
 	}
@@ -137,7 +136,7 @@ namespace UIFramework.ValidatorExtensions
 	/// <summary>
 	/// Use this if you wanna be informed of edits made by the user that aren't applied to the Value property yet
 	/// </summary>
-	public interface IUserEditedNotifier
+	public interface IUserEditedNotifier : IUiExtension
 	{
 		/// <summary>
 		/// Subscribe to this action the method you want to run when the edits a value in the UI.
@@ -170,7 +169,7 @@ namespace UIFramework.ValidatorExtensions
 	/// This does not mean the entry prevents interruptions from refreshes
 	/// 
 	/// </remarks>
-	public interface IRefreshInhibitor
+	public interface IRefreshInhibitor : IUiExtension
 	{
 		/// <summary>
 		/// Prevents the UI from automatically refreshing when the user edits an entry
@@ -207,13 +206,13 @@ namespace UIFramework.ValidatorExtensions
 		public bool InhibitRefreshOnValueChange {get; set;} = false;
 	}
 
-	public interface ICustomUIProvider
+	public interface ICustomUIProvider : IUiExtension
 	{
 		public GameObject WidgetPrefab { get; set; }
 	}
 
 
-	public interface IButtonDescriptor
+	public interface IButtonDescriptor : IUiExtension
 	{
 		public string ButtonText { get; set; }
 		public string DisplayName { get; set; }
