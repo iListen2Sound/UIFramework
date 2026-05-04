@@ -1,7 +1,7 @@
 using MelonLoader;
 using UnityEngine;
 using System.ComponentModel.DataAnnotations;
-using UIFramework.ValidatorExtensions;
+using UIFramework.UiExtensions;
 using System.Collections;
 using UIFramework.Adapters;
 namespace UIFramework
@@ -88,9 +88,9 @@ namespace UIFramework
 			ExperimentalColor = Experimental.CreateEntry("ColorTest", new UnityEngine.Color(50, 238, 165, 255), "Test color", "ColorTest");
 			UI.CreateButtonEntry(Experimental, "Test Buttton", "", "This is a test button entry that should not be treated as an actual preference and should not be saved to the config file.", TestButtonAsEntry);
 
-			ExperimentalSlider = Experimental.CreateEntry("SliderTest", 0.5f, "Test Slider", "This is a test slider with a range from 0 to 1", false, false, new ValidatorExtensions.SliderDescriptor { Min = 0, Max = 1, DecimalPlaces = 3 });
+			ExperimentalSlider = Experimental.CreateEntry("SliderTest", 0.5f, "Test Slider", "This is a test slider with a range from 0 to 1", false, false, new UiExtensions.SliderDescriptor { Min = 0, Max = 1, DecimalPlaces = 3 });
 
-			ExperimentalIntSlider = Experimental.CreateEntry("IntSliderTest", 50, "Test Int Slider", "This is a test int slider with a range from 0 to 100", false, false, new ValidatorExtensions.SliderDescriptor { Min = 0, Max = 100 });
+			ExperimentalIntSlider = Experimental.CreateEntry("IntSliderTest", 50, "Test Int Slider", "This is a test int slider with a range from 0 to 100", false, false, new UiExtensions.SliderDescriptor { Min = 0, Max = 100 });
 			TestBool = Experimental.CreateEntry("TestBool", false, "Test Bool", "This is a test bool.");
 			TestString = Experimental.CreateEntry("TestString", "Hello, World!", "Test String", "This is a test string.");
 			TestInt = Experimental.CreateEntry("TestInt", 42, "Test Int", "This is a test int.");

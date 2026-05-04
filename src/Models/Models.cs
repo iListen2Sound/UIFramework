@@ -2,7 +2,7 @@
 using MelonLoader;
 using MelonLoader.Preferences;
 using System.Reflection;
-using UIFramework.ValidatorExtensions;
+using UIFramework.UiExtensions;
 using UnityEngine;
 
 namespace UIFramework.Models
@@ -153,7 +153,7 @@ namespace UIFramework.Models
 		public override string Description => PrefEntry.Description;
 
 		public ValueValidator MelonValidator => PrefEntry.Validator;
-		public override DefaultValidator Validator => MelonValidator as DefaultValidator;
+		public override IUiExtension UiExtension => MelonValidator as IUiExtension;
 
 		/// <summary>
 		/// Direct access to the PrefEntry boxedvalue property

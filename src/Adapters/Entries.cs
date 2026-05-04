@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using Tomlet;
 using Tomlet.Models;
-using UIFramework.ValidatorExtensions;
+using UIFramework.UiExtensions;
 using UIFramework.Models;
 using UnityEngine;
 using UnityEngine.Events;
@@ -213,7 +213,7 @@ namespace UIFramework.Adapters
 	{
 		protected Slider Slider => gameObject.transform.Find("Data/SliderControl").gameObject.GetComponent<UnityEngine.UI.Slider>();
 		protected TMP_InputField _textField => gameObject.transform.Find("Data/TextControl").gameObject.GetComponent<TMP_InputField>();
-		protected virtual ISliderDescriptor SliderSettings => _prefModel.Validator as ISliderDescriptor;
+		protected virtual ISliderDescriptor SliderSettings => _prefModel.UiExtension as ISliderDescriptor;
 
 		public override void SetData()
 		{
@@ -394,7 +394,7 @@ namespace UIFramework.Adapters
 	{
 		GameObject _buttonGo;
 		Button _buttonComponent;
-		IButtonDescriptor _buttonDescrictor => _prefModel?.Validator as IButtonDescriptor;
+		IButtonDescriptor _buttonDescrictor => _prefModel?.UiExtension as IButtonDescriptor;
 		public override void SetData()
 		{
 			_buttonGo = this.gameObject.transform.Find("Data/ButtonControl").gameObject;

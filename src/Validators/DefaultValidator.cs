@@ -3,7 +3,7 @@ using MelonLoader;
 using MelonLoader.Preferences;
 using UIFramework.Models;
 using UnityEngine;
-namespace UIFramework.ValidatorExtensions
+namespace UIFramework.UiExtensions
 {
 	public interface IUiExtension
 	{

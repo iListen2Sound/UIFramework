@@ -1,7 +1,7 @@
 using MelonLoader;
 using UnityEngine;
 using System.ComponentModel.DataAnnotations;
-using UIFramework.ValidatorExtensions;
+using UIFramework.UiExtensions;
 using UIFramework.Adapters;
 using UIFramework.Models;
 using System.Data;

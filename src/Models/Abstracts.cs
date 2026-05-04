@@ -1,6 +1,6 @@
 ﻿using MelonLoader;
 using UnityEngine;
-using UIFramework.ValidatorExtensions;
+using UIFramework.UiExtensions;
 using UIFramework.Adapters;
 
 namespace UIFramework.Models
@@ -230,9 +230,9 @@ namespace UIFramework.Models
 				Debug.Log($"UI Refresh inhibited when entry value changes", true);
 		}
 
-		public abstract DefaultValidator Validator { get; }
-		public virtual IUserEditedNotifier EditNotifier => Validator as IUserEditedNotifier;
-		public virtual IRefreshInhibitor RefreshInhibitor => Validator as IRefreshInhibitor;
+		public abstract IUiExtension UiExtension { get; }
+		public virtual IUserEditedNotifier EditNotifier => UiExtension as IUserEditedNotifier;
+		public virtual IRefreshInhibitor RefreshInhibitor => UiExtension as IRefreshInhibitor;
 
 
 		protected void SetDataValue(object newValue)
@@ -271,7 +271,7 @@ namespace UIFramework.Models
 		public override GameObject GetNewUIInstance()
 		{
 			//Make the custom UI provided by the validator the first priority if it exists.	
-			if (Validator is ICustomUIProvider uiProvider)
+			if (UiExtension is ICustomUIProvider uiProvider)
 			{
 				if (uiProvider?.WidgetPrefab is not null)
 					return GameObject.Instantiate(uiProvider.WidgetPrefab);
@@ -281,9 +281,9 @@ namespace UIFramework.Models
 			{
 
 
-				if (Validator is ISliderDescriptor)
+				if (UiExtension is ISliderDescriptor)
 					return UI.GetPrefab(InputType.Slider);
-				if (Validator is IButtonDescriptor)
+				if (UiExtension is IButtonDescriptor)
 				{
 					GameObject button = UI.GetPrefab(InputType.Button);
 					button.AddComponent<ButtonEntryAdapter>();
