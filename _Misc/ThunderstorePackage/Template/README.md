@@ -14,7 +14,7 @@ This can notify you when the user has edited their entry even when it hasn't bee
 <details><summary> New Feature: Modders can now request the window to refresh its UI. </summary>
 
 Just call `UI.RequestRefresh(modInstance)`
-Combired with the previous new feature, you can now adjust your UI according to your users' inputs
+Combined with the previous new feature, you can now adjust your UI according to your users' inputs
 </details>
 <details><summary> New Feature: UI now refreshes when an entry value for a mod changes. </summary>
 
@@ -90,7 +90,7 @@ in the UI. Line breaks are supported.
 </summary>
 
 ## Interaction Type Configuration
-### Validator Extension system 
+### UI Extension system 
 
 Melonloader has a custom validator feature that you can use by inheriting the ValueValidator class.
 Here's an example of a custom validator that approves everything.
@@ -111,8 +111,8 @@ This is done through implementing interfaces in the UIFramework.ValidationExtens
 UI Framework's ValidationControls namespace contains interfaces you can implement into your validator class. 
 Each interface has required member implementations. So, if you want a slider, the declaration for your validator becomes
 ```cs
-using UIFramework.ValidationExtensions;
-public class CustomValidator : ValueValidator, SliderDescriptor
+using UIFramework.UiExtensions;
+public class CustomValidator : ValueValidator, ISliderDescriptor
 {
     // These two are required members from MelonPreferences Value Validator. 
     // You can implement actual validators here or just return true and return the same value
@@ -143,7 +143,9 @@ The UI will represent your entry with a slider if you add a validator that imple
 
 
 
-`MySlider = Category.CreateEntry("MySlider", 0.5f, "My Slider", "Float Slider",false, false, new SliderDescriptor { Min = 0, Max = 1, DecimalPlaces = 3 });`
+```cs
+MySlider = Category.CreateEntry("MySlider", 0.5f, "My Slider", "Float Slider",false, false, new SliderDescriptor { Min = 0, Max = 1, DecimalPlaces = 3 });
+```
 
 -----
 ### Buttons
