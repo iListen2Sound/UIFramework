@@ -201,7 +201,7 @@ TestCategory2.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
 TestEntry11 = TestCategory1.CreateEntry("Entry 1-1", "Test Val", "Display Name1", "Test String");
 TestEntry12 = TestCategory1.CreateEntry("Entry 1-2", 1, "Display Name2", "Test Int");
 
-TestEntry21 = TestCategory2.CreateEntry("Entry 2-1", "0.5126", "Display Name 3", "Test float");
+TestEntry21 = TestCategory2.CreateEntry("Entry 2-1", 0.5126, "Display Name 3", "Test float");
 TestEntry22 = TestCategory2.CreateEntry("Entry 2-2", true, "Display Name 4", "Test bool");
 ```
 https://melonwiki.xyz/#/modders/preferences?id=melon-preferences
