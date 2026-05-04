@@ -85,7 +85,7 @@ The UI will automatically present your entries according to their data types. Bo
 ## UI Presentation control: Validator Extensions
 
 UI Framework piggybacks off of the existing MelonPreferences custom validator system. 
-You can influence how the UI is presented by using custom validator classes that implement certain interfaces.
+You can influence how the UI is presented by using custom validator classes that implement certain interfaces that act as descriptors.
 
 <details><summary>  <strong>MelonPreferences custom validator system details</strong> </summary>
 
@@ -115,7 +115,19 @@ But UI Framework already has its own default implementation that validates every
 
 -----
 
+UI Framework provides default validator classes for the most common interfaces. So for most of them, you just need to pass 
+```cs
+new DefaultDescriptor {Property = value}
+```
+into your CreateEntry method along with your other parameters.
+
+Expand the next section if you want to make your own custom validator or combine multiple extensions ↓
 <details><summary><strong>UI Framework Validator Extensions details</strong></summary>
+
+### Actual validation
+The `DefaultValidator` just approves every value you pass to its functions. 
+
+You can inherit it and override the `IsValid` and `EnsureValid` functions to implement your own.
 
 
 </details>
@@ -124,10 +136,28 @@ But UI Framework already has its own default implementation that validates every
 #### Sliders
 ##### Interface: `ISliderDescriptor`
 ##### Default extended validator: `SliderDescriptor`
-The UI will represent your entry with a slider if you add a validator that implements `SliderDescriptor`.
+The UI will represent your entry with a slider if you add a validator that implements `ISliderDescriptor`.
 
 
 ```cs
-MySlider = Category.CreateEntry("MySlider", 0.5f, "My Slider", "Float Slider",false, false, new SliderDescriptor { Min = 0, Max = 1, DecimalPlaces = 3 });
+MySlider = MyCategory.CreateEntry("MySlider", 0.5f, "My Slider", "Float Slider",false, false, new SliderDescriptor { Min = 0, Max = 1, DecimalPlaces = 3 });
+```
+
+#### User Edit Notifiers
+##### Interface: `IUserEditedNotifier`
+##### Default extended validator: `UserEditDefaultNotifier`
+This doesn't change the UIs presentation but it does notify you when the user inputs a new value into the UI e.g. when they're done editing a text input, clicked a toggle or finished moving a slider. It also provides you with the new value
+
+```cs
+//Define an event handler you can pass into the notifier. It must take an object that represents the new value
+void MyToggleToggled(object newValue)
+{
+    newBool = (bool) newValue;
+    LoggerInstance.Msg($"MyToggle has been set to {newBool}");
+}
+```
+```cs
+//Instantiate a new UserEditDefaultNotifier and assign your delegate to OnUserEdit.
+MyToggle = MyCategory.CreateEntry("MyToggle", true, "My Toggle", "Example Toggle", false, false, new UserEditDefaultNotifier {OnUserEdit = MyToggleToggled})
 ```
 
