@@ -66,12 +66,68 @@ TestEntry11.Value = "New Value";
 
 ## UI Framework
 ### Registration
+
 Once you have your MelonPreferences set up, registering to UI Framework is simple.
 Just call 
 ```cs
 UI.RegisterMelon(MelonBase modInstance, params MelonPreferences_Category[])
 ```
+So `UI.RegisterMelon(this, TestCategory1, TestCategory2);`
+if you're calling it from your main MelonMod class.
+
+Your categories will display as tabs in the order that you put them in the parameter array 
+and your entries will show in the order thatw you created them.
 
 
+**For most usage, this will be enough.**
+The UI will automatically present your entries according to their data types. Bools will show as toggles, enums will show as dropdowns, strings and numbers will show as text inputs with the appropriate filters, etc.
 
+## UI Presentation control: Validator Extensions
+
+UI Framework piggybacks off of the existing MelonPreferences custom validator system. 
+You can influence how the UI is presented by using custom validator classes that implement certain interfaces.
+
+<details><summary>  <strong>MelonPreferences custom validator system details</strong> </summary>
+
+CreateEntry takes an optional parameter for a custom validator
+```cs 
+CreateEntry(string identifier, T default_value, string display_name = null, string description = null, bool is_hidden = false, bool dont_save_default = false, Preferences.ValueValidator validator = null)
+```
+
+You can make your own custom validator by inheriting the ValueValidator class.
+
+```cs 
+public class CustomValidator : ValueValidator
+{
+    //These two are required members. If you don't care about validation, you can just always say that the passed object is valid
+    public override bool IsValid(object value)
+    {
+        return true;
+    }
+    public override object EnsureValid(object value)
+    {
+        return value;
+    }
+}
+```
+But UI Framework already has its own default implementation that validates everything in the `UIFramework.ValidatorExtensions` namespace as `DevaultValidator`.
+</details>
+
+-----
+
+<details><summary><strong>UI Framework Validator Extensions details</strong></summary>
+
+
+</details>
+
+### Implemented Extensions
+#### Sliders
+##### Interface: `ISliderDescriptor`
+##### Default extended validator: `SliderDescriptor`
+The UI will represent your entry with a slider if you add a validator that implements `SliderDescriptor`.
+
+
+```cs
+MySlider = Category.CreateEntry("MySlider", 0.5f, "My Slider", "Float Slider",false, false, new SliderDescriptor { Min = 0, Max = 1, DecimalPlaces = 3 });
+```
 
