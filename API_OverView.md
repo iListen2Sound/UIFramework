@@ -154,7 +154,7 @@ public class NotifyingSlider : DefaultValidator, ISliderDEscriptor, IUserEditedN
 MySlider = MyCategory.CreateEntry("MySlider", 0, "My Slider", "Example Slider", false, false, new NotifyingSlider {Min = 0, Max = 1, OnUserEdit = MySliderSlid})
 ```
 </details>
-
+-----
 ### Implemented Extensions
 #### Sliders
 ##### Interface: `ISliderDescriptor`
@@ -166,6 +166,7 @@ The UI will represent your entry with a slider if you add a validator that imple
 MySlider = MyCategory.CreateEntry("MySlider", 0.5f, "My Slider", "Float Slider",false, false, new SliderDescriptor { Min = 0, Max = 1, DecimalPlaces = 3 });
 ```
 
+-----
 #### User Edit Notifiers
 ##### Interface: `IUserEditedNotifier`
 ##### Default extended validator: `UserEditDefaultNotifier`
@@ -183,4 +184,12 @@ void MyToggleToggled(object newValue)
 //Instantiate a new UserEditDefaultNotifier and assign your delegate to OnUserEdit.
 MyToggle = MyCategory.CreateEntry("MyToggle", true, "My Toggle", "Example Toggle", false, false, new UserEditDefaultNotifier {OnUserEdit = MyToggleToggled})
 ```
-
+-----
+#### Buttons
+##### Interface: `IButtonDescriptor`
+##### Default extended validator: `ButtonAsEntry` (internal)
+This is a special case. You don't need to implement this yourself. Instead, you call 
+```cs
+UI.CreateButtonEntry(MelonPreferences_Category category, string buttonText, string displayName, string description, Action handler)
+```
+This method will handle the implementation for you and it will show the button in the entries list.
