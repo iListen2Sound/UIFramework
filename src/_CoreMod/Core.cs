@@ -8,6 +8,7 @@ using UIFramework.Adapters;
 using UIFramework.Models;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.CrashReportHandler;
 
 [assembly: MelonInfo(typeof(UIFramework.Core), UIFramework.BuildInfo.Name, UIFramework.BuildInfo.Version, UIFramework.BuildInfo.Author)]
 [assembly: MelonGame("Buckethead Entertainment", "RUMBLE")]
@@ -62,7 +63,7 @@ namespace UIFramework
 		}
 		public override void OnLateInitializeMelon()
 		{
-
+			CrashReportHandler.enableCaptureExceptions = false;
 		}
 
 		public override void OnUpdate()
