@@ -129,7 +129,30 @@ The `DefaultValidator` just approves every value you pass to its functions.
 
 You can inherit it and override the `IsValid` and `EnsureValid` functions to implement your own.
 
+### Combining Extension types
+Some extension types are cross-compatible. If they're not, they shouldn't break, it'll just pick the first one by priority.
 
+<details>
+Generally extension types that change what prefab represents the entry aren't compatible. You can't be a slider *and* a dropdown at the same time.
+</details>
+
+But you can easily combine `ISliderDescriptor` and `IUserEditedNotifier` to make it a slider *and* notify you of user edits.
+
+You do that by inheriting both into your custom validator
+
+```cs
+//Assuming you still don't wanna do validation, you can just inherit from the DefaultValidatorClass
+public class NotifyingSlider : DefaultValidator, ISliderDEscriptor, IUserEditedNotifier
+{
+    public float Min {get; set;}
+    public float Max {get; set;}
+    public Action<object> OnUserEdit {get; set;}
+}
+```
+```cs
+//Pass it into the validator parameter
+MySlider = MyCategory.CreateEntry("MySlider", 0, "My Slider", "Example Slider", false, false, new NotifyingSlider {Min = 0, Max = 1, OnUserEdit = MySliderSlid})
+```
 </details>
 
 ### Implemented Extensions
