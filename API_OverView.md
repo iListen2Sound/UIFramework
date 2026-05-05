@@ -4,6 +4,7 @@ UI Framework builds a UI for modders' configuration for their mods. Particularly
 MelonPreferences are the built-in configuration and persistent storage system in MelonLoader. 
 
 <details><summary>Expand to see how to initialize and use MelonPreferences</summary>
+
 ### Categories
 Categories are a base MelonPreferences feature to group entries together. 
 #### Variable declarotion
@@ -132,8 +133,8 @@ You can inherit it and override the `IsValid` and `EnsureValid` functions to imp
 ### Combining Extension types
 Some extension types are cross-compatible. If they're not, they shouldn't break, it'll just pick the first one by priority.
 
-<details>
-Generally extension types that change what prefab represents the entry aren't compatible. You can't be a slider *and* a dropdown at the same time.
+<details> <summary>Notes on compatibility</summary>
+<sup>Generally extension types that change what prefab represents the entry aren't compatible. You can't be a slider *and* a dropdown at the same time.</sup>
 </details>
 
 But you can easily combine `ISliderDescriptor` and `IUserEditedNotifier` to make it a slider *and* notify you of user edits.
@@ -154,6 +155,7 @@ public class NotifyingSlider : DefaultValidator, ISliderDEscriptor, IUserEditedN
 MySlider = MyCategory.CreateEntry("MySlider", 0, "My Slider", "Example Slider", false, false, new NotifyingSlider {Min = 0, Max = 1, OnUserEdit = MySliderSlid})
 ```
 </details>
+
 -----
 ### Implemented Extensions
 #### Sliders
