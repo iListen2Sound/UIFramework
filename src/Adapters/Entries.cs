@@ -390,6 +390,11 @@ namespace UIFramework.Adapters
 		}
 	}
 	[RegisterTypeInIl2Cpp]
+	public class DynamicDopdownAdapter : DataEntryAdapter
+	{
+		
+	}
+	[RegisterTypeInIl2Cpp]
 	public class ButtonEntryAdapter : DataEntryAdapter
 	{
 		GameObject _buttonGo;
