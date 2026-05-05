@@ -296,8 +296,10 @@ namespace UIFramework.Models
 					case string:
 						return UI.GetPrefab(InputType.TextField);
 					case Enum:
-						return UI.GetPrefab(InputType.Dropdown);
-
+						GameObject dropdown = UI.GetPrefab(InputType.Dropdown);
+						dropdown.AddComponent<EnumDropdownAdapter>();
+						return 
+						
 					//numerics
 					//integer types
 					case sbyte:

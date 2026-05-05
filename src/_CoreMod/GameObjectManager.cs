@@ -136,7 +136,7 @@ namespace UIFramework
 			FloatPrefab.AddComponent<TextEntryAdapter>();
 			//DoublePrefab.AddComponent<   TextEntryAdapter>();
 
-			DropDownPrefab.AddComponent<EnumDropdownAdapter>();
+			//DropDownPrefab.AddComponent<EnumDropdownAdapter>();
 			SliderPrefab.AddComponent<NumSliderAdapter>();
 
 			//ButtonPrefab.AddComponent<   ButtonModelAdapter>();
