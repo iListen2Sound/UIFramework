@@ -298,7 +298,7 @@ namespace UIFramework.Models
 					case Enum:
 						GameObject dropdown = UI.GetPrefab(InputType.Dropdown);
 						dropdown.AddComponent<EnumDropdownAdapter>();
-						return 
+						return dropdown; 
 						
 					//numerics
 					//integer types
