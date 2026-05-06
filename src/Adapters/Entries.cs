@@ -335,24 +335,46 @@ namespace UIFramework.Adapters
 		}
 	}
 
-
-
-
-	/// <summary>
-	/// 
-	/// </summary>
 	[RegisterTypeInIl2Cpp]
-	public class EnumDropdownAdapter : DataEntryAdapter
+	public abstract class DropDownAdapterBase : DataEntryAdapter
 	{
 		protected DataEntryModelBase _prefModel => (DataEntryModelBase)EntryModel;
 		public System.Collections.Generic.List<int> _indexToValueMap = new();
 		public TMP_Dropdown dropdown;
 
-		public Type prefEnum;
-		/// <inheritdoc/>
 		public override void SetData()
 		{
 			dropdown = this.gameObject.transform.Find("Data/DropdownControl").GetComponent<TMP_Dropdown>();
+
+			GetDropdownData();
+
+			dropdown.value = _indexToValueMap.IndexOf((int)_prefModel.ModelBoxedValue);
+
+			dropdown.onValueChanged.AddListener((UnityAction<int>)OnValueChanged);
+		}
+		public void OnValueChanged(int index)
+		{
+			ApplyValueToPref();
+		}
+
+		public virtual void GetDropdownData()
+		{
+
+		}
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	[RegisterTypeInIl2Cpp]
+	public class EnumDropdownAdapter : DropDownAdapterBase
+	{
+		
+
+		public Type prefEnum;
+
+		public override void GetDropdownData()
+		{
 			prefEnum = _prefModel.ModelBoxedValue.GetType();
 
 			//Get a list of display name attributes or the enum name if not available
@@ -368,21 +390,16 @@ namespace UIFramework.Adapters
 
 			dropdown.ClearOptions();
 			dropdown.AddOptions(enumNames);
-
-			dropdown.value = _indexToValueMap.IndexOf((int)_prefModel.ModelBoxedValue);
-
-			dropdown.onValueChanged.AddListener((UnityAction<int>)OnValueChanged);
 		}
+		/// <inheritdoc/>
+		
 		/// <inheritdoc/>
 		public override void EditCheck()
 		{
 
 		}
 
-		public void OnValueChanged(int index)
-		{
-			ApplyValueToPref();
-		}
+		
 		/// <inheritdoc/>
 		public override void ApplyValueToPref()
 		{
