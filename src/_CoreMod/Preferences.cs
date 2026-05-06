@@ -121,7 +121,7 @@ namespace UIFramework
 			Demo.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
 
 			ShowReactivity = Demo.CreateEntry("Entry_Reactivity", false, "Show hidden Entry", "This is a demo preference to hide the reactivity demo button in the demo category.", false, false, new UserEditDefaultNotifier{OnUserEdit = HideReaction});
-			DemoCounting = Demo.CreateEntry("EnableCount", false, "Enable counting demo", "This is a demo for how the UI can update by a change of values in the background",false, false, new UserEditDefaultNotifier { OnUserEdit = (newVal) => { DemoCounting.Value = (bool)newVal; } });
+			DemoCounting = Demo.CreateEntry("EnableCount", false, "Enable counting demo", "This is a demo for how the UI can update by a change of values in the background",false, false, new UserEditDefaultNotifier { OnUserEdit = (newVal) => { DemoCounting.EditedValue = (bool)newVal; UI.RequestRefresh(Core.Instance); } });
 
 			InhibitRefreshForCount = Demo.CreateEntry("InhibitDemoCount", true, "Inhibit Count Refresh", "Inhibit refreshing the UI when the demo int counts up",false, false, new UserEditDefaultNotifier { OnUserEdit = UpdateInhibitDemo});
 			DemoInt = Demo.CreateEntry("DemoInt", 0, "Demo Int", "This is a demo int Preference", false, false, InhibitRefresh);
@@ -152,7 +152,7 @@ namespace UIFramework
 			while (true)
 			{
 				yield return new WaitForSeconds(1.5f);
-				if(DemoCounting.Value)
+				if(DemoCounting.EditedValue)
 					DemoInt.Value++;
 			}
 		}
