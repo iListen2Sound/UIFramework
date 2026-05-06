@@ -41,7 +41,14 @@ namespace UIFramework.UiExtensions
 	/// <see cref="IDynamicDropdownDescriptor"/>
 	public class DynamicDropdownDescriptor : DefaultValidator, IDynamicDropdownDescriptor
 	{
-		public List<string> DropdownOptionNames { get; set; } = new List<string>();
+		private List<DropdownItem> _dropdownItems;
+		public List<DropdownItem> GetDropdownItems() { return _dropdownItems; }
+		public void SetDropdownItems(List<DropdownItem> items)
+		{
+			_dropdownItems = items;
+			OnDropdownItemsUpdated?.Invoke();
+		}
+		public Action OnDropdownItemsUpdated { get; set; }
 	}
 
 

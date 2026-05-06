@@ -49,7 +49,38 @@ namespace UIFramework.UiExtensions
 	/// </summary>
 	public interface IDynamicDropdownDescriptor : IUiExtension
 	{
-		public List<string> DropdownOptionNames { get; set; }
+		//public List<DropdownItem> DropdownItems { get; set; }
+		public List<DropdownItem> GetDropdownItems();
+		/// <summary>
+		/// Sets the items to be displayed in the dropdown. 
+		/// 
+		/// When doing a custom implementation, make sure to fire OnDropdownItemsUpdated after storing your data
+		/// 
+		/// </summary>
+		/// <param name="items"></param>
+		public void SetDropdownItems(List<DropdownItem> items);
+		public Action OnDropdownItemsUpdated { get; set; }
+
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public class DropdownItem
+	{
+		string DisplayName { get; set; }
+		object Value { get; set; }
+		public DropdownItem(string displayName, object value)
+		{
+			DisplayName = displayName;
+			Value = value;
+		}
+
+		public DropdownItem(string value)
+		{
+			DisplayName = value;
+			Value = value;
+		}
 	}
 
 
