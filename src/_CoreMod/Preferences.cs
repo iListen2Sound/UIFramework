@@ -41,6 +41,8 @@ namespace UIFramework
 		internal static MelonPreferences_Entry<NonContiguous> NonContiguousEnum;
 
 		internal static MelonPreferences_Category Demo;
+		internal static MelonPreferences_Entry<int> DropdownTest;
+		internal static MelonPreferences_Entry<int> DropdownSelection;
 		internal static MelonPreferences_Entry<bool> ShowReactivity;
 		internal static MelonPreferences_Entry<bool> DemoCounting;
 		internal static MelonPreferences_Entry<bool> InhibitRefreshForCount;
@@ -120,10 +122,15 @@ namespace UIFramework
 			Demo = MelonPreferences.CreateCategory("UIF_Demo", "Demos");
 			Demo.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
 
-			ShowReactivity = Demo.CreateEntry("Entry_Reactivity", false, "Show hidden Entry", "This is a demo preference to hide the reactivity demo button in the demo category.", false, false, new UserEditDefaultNotifier{OnUserEdit = HideReaction});
-			DemoCounting = Demo.CreateEntry("EnableCount", false, "Enable counting demo", "This is a demo for how the UI can update by a change of values in the background",false, false, new UserEditDefaultNotifier { OnUserEdit = (newVal) => { DemoCounting.EditedValue = (bool)newVal; UI.RequestRefresh(Core.Instance); } });
+			UI.CreateButtonEntry(Demo, "Add Entry", "Dropdown Test", "this should add another entry to the dropdown demo", AddDropdownDemo);
 
-			InhibitRefreshForCount = Demo.CreateEntry("InhibitDemoCount", true, "Inhibit Count Refresh", "Inhibit refreshing the UI when the demo int counts up",false, false, new UserEditDefaultNotifier { OnUserEdit = UpdateInhibitDemo});
+			DropdownTest = Demo.CreateEntry("DropdownDemo", -1, "Dropdown Demo", "Dynamic dropdown test. Add items by clicking the button", false, false, demoDropdownDescriptor);
+			DropdownSelection = Demo.CreateEntry("SelectedDropdownItem", DropdownTest.Value, "Selected Item", "The item selected in the dropdown demo");
+			ShowReactivity = Demo.CreateEntry("Entry_Reactivity", false, "Show hidden Entry", "This is a demo preference to hide the reactivity demo button in the demo category.", false, false, new UserEditDefaultNotifier { OnUserEdit = HideReaction });
+			DemoCounting = Demo.CreateEntry("EnableCount", false, "Enable counting demo", "This is a demo for how the UI can update by a change of values in the background", false, false, new UserEditDefaultNotifier { OnUserEdit = (newVal) => { DemoCounting.EditedValue = (bool)newVal; UI.RequestRefresh(Core.Instance); } });
+
+
+			InhibitRefreshForCount = Demo.CreateEntry("InhibitDemoCount", true, "Inhibit Count Refresh", "Inhibit refreshing the UI when the demo int counts up", false, false, new UserEditDefaultNotifier { OnUserEdit = UpdateInhibitDemo });
 			DemoInt = Demo.CreateEntry("DemoInt", 0, "Demo Int", "This is a demo int Preference", false, false, InhibitRefresh);
 			DemoString = Demo.CreateEntry("DemoString", "Hello, World!", "Demo String", "This is a demo string preference. This should show the name of the current scene", true);
 
@@ -134,6 +141,25 @@ namespace UIFramework
 			InhibitRefreshForCount.Value = true;
 			DemoCounting.Value = false;
 			MelonCoroutines.Start(DemoCount());
+
+			DropdownTest.OnEntryValueChanged.Subscribe(ItemSelectionChanged);
+		}
+		static List<DropdownItem> demoItems = new();
+		public static DynamicDropdownDescriptor demoDropdownDescriptor = new();
+		internal static void AddDropdownDemo()
+		{
+			int nextItem = demoItems.Count + 1;
+			string nextName = new string('+', nextItem);
+
+			demoItems.Add(new DropdownItem(nextName, nextItem));
+
+			demoDropdownDescriptor.SetDropdownItems(demoItems);
+		}
+		
+		internal static void ItemSelectionChanged(int old, int neew)
+		{
+			Debug.Log($"Selected Item: {neew}");
+			DropdownSelection.Value = neew;
 		}
 		internal static void TestButtonAsEntry()
 		{
@@ -152,7 +178,7 @@ namespace UIFramework
 			while (true)
 			{
 				yield return new WaitForSeconds(1.5f);
-				if(DemoCounting.EditedValue)
+				if (DemoCounting.EditedValue)
 					DemoInt.Value++;
 			}
 		}
@@ -166,7 +192,7 @@ namespace UIFramework
 		internal static void UpdateCategoryVis(object newValue)
 		{
 			Debug.Log($"UpdateCategoryVis newValue = {newValue}", true);
-				
+
 			Debug.Log($"UpdateCategoryVis Demo.IsHidden = {Demo.IsHidden}", true);
 			Experimental.IsHidden = !(bool)newValue;
 			TestBooleans.IsHidden = !(bool)newValue;
