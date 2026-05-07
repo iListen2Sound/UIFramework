@@ -50,7 +50,7 @@ namespace UIFramework.UiExtensions
 	public interface IDynamicDropdownDescriptor : IUiExtension
 	{
 		//public List<DropdownItem> DropdownItems { get; set; }
-		public List<DropdownItem> GetDropdownItems();
+		public List <DropdownItem> GetDropdownItems();
 		/// <summary>
 		/// Sets the items to be displayed in the dropdown. 
 		/// 
@@ -68,8 +68,8 @@ namespace UIFramework.UiExtensions
 	/// </summary>
 	public class DropdownItem
 	{
-		string DisplayName { get; set; }
-		object Value { get; set; }
+		public string DisplayName { get; set; }
+		public object Value { get; set; }
 		public DropdownItem(string displayName, object value)
 		{
 			DisplayName = displayName;
