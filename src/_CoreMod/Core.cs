@@ -110,6 +110,7 @@ namespace UIFramework
 		/// <remarks>This is for ModUI Compatibility. If ModUI is installed, it ensures that UI Framework and ModUI always stay in sync</remarks>
 		private IEnumerator InputToggled(bool matchModUI)
 		{
+			Prefabs.UIFGameObjects.SetActive(true);
 			if (CurrentScene == "loader")
 			{
 				Debug.Warning("UIFramework does not work in the loader. Please finish calibrating.");
@@ -256,7 +257,7 @@ namespace UIFramework
 
 		public override void OnSceneWasLoaded(int buildIndex, string sceneName)
 		{
-			Debug.Log($"Current buildIndex = {buildIndex} was loaded. sceneName = {sceneName}");
+			Debug.Log($"Current buildIndex = {buildIndex} was loaded. sceneName = {sceneName}", true);
 			CurrentScene = sceneName.ToNormal();
 			if (CurrentScene == "loader")
 			{
@@ -329,7 +330,7 @@ namespace UIFramework
 
 		public void CustomClick(ButtonModelAdapter button)
 		{
-			Debug.Log($"Clicked: {button.DisplayName} ");
+			Debug.Log($"Clicked: {button.DisplayName} ", false);
 		}
 		private void SinglesaveClick()
 		{
