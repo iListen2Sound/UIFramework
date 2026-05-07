@@ -148,12 +148,12 @@ namespace UIFramework
 		public static DynamicDropdownDescriptor demoDropdownDescriptor = new();
 		internal static void AddDropdownDemo()
 		{
-			int nextItem = demoItems.Count + 1;
+			int nextItem = demoDropdownDescriptor.GetDropdownItems().Count;
 			string nextName = new string('+', nextItem);
 
-			demoItems.Add(new DropdownItem(" - " + nextName, nextItem));
+			demoDropdownDescriptor.AddDropdownItem(new DropdownItem(" - " + nextName, nextItem));
 
-			demoDropdownDescriptor.SetDropdownItems(demoItems);
+			//demoDropdownDescriptor.SetDropdownItems(demoItems);
 		}
 		
 		internal static void ItemSelectionChanged(int old, int neew)
