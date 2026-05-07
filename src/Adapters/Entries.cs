@@ -424,7 +424,6 @@ namespace UIFramework.Adapters
 				dropdown.ClearOptions();
 				dropdown.AddOptions(dropdownItems);
 				int itemToLoad = DropdownContents.GetDropdownItems().FindIndex(x => object.Equals(x.Value, _prefModel.ModelBoxedValue));
-				Debug.Deb($"{itemToLoad}");
 				dropdown.value = itemToLoad;
 
 			}
