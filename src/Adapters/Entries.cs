@@ -385,12 +385,12 @@ namespace UIFramework.Adapters
 				DisplayAttribute attr = info?.GetCustomAttribute<DisplayAttribute>();
 				enumNames.Add(attr?.GetName() ?? value.ToString());
 				_indexToValueMap.Add(Convert.ToInt32(value));
-				dropdown.value = _indexToValueMap.IndexOf((int)_prefModel.ModelBoxedValue);
 			}
 
 
 			dropdown.ClearOptions();
 			dropdown.AddOptions(enumNames);
+			dropdown.value = _indexToValueMap.IndexOf((int)_prefModel.ModelBoxedValue);
 		}
 		/// <inheritdoc/>
 
@@ -423,8 +423,10 @@ namespace UIFramework.Adapters
 				}
 				dropdown.ClearOptions();
 				dropdown.AddOptions(dropdownItems);
+				int itemToLoad = DropdownContents.GetDropdownItems().FindIndex(x => object.Equals(x.Value, _prefModel.ModelBoxedValue));
+				Debug.Deb($"{itemToLoad}");
+				dropdown.value = itemToLoad;
 
-				dropdown.value = DropdownContents.GetDropdownItems().FindIndex(x => x.Value == _prefModel.ModelBoxedValue);
 			}
 			catch (Exception ex) { Debug.Log($"{ex}"); }
 

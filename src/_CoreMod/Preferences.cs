@@ -151,7 +151,7 @@ namespace UIFramework
 			int nextItem = demoItems.Count + 1;
 			string nextName = new string('+', nextItem);
 
-			demoItems.Add(new DropdownItem(nextName, nextItem));
+			demoItems.Add(new DropdownItem(" - " + nextName, nextItem));
 
 			demoDropdownDescriptor.SetDropdownItems(demoItems);
 		}
