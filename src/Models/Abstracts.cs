@@ -289,6 +289,13 @@ namespace UIFramework.Models
 					button.AddComponent<ButtonEntryAdapter>();
 					return button;
 				}
+
+				if (UiExtension is DynamicDropdownDescriptor)
+				{
+					GameObject dropdown = UI.GetPrefab(InputType.Dropdown);
+					dropdown.AddComponent<DynamicDopdownAdapter>();
+					return dropdown;
+				}	
 				switch (ModelBoxedValue)
 				{
 					case bool:
