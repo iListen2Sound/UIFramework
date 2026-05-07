@@ -276,14 +276,14 @@ namespace UIFramework.Adapters
 
 		//onpointerup
 
-		public void AddPointerUp ()
+		public void AddPointerUp()
 		{
 			EventTrigger trigger = Slider.gameObject.AddComponent<EventTrigger>();
 
 			EventTrigger.Entry entry = new EventTrigger.Entry();
 			entry.eventID = EventTriggerType.PointerUp;
 
-			entry.callback.AddListener((UnityAction<BaseEventData>) PointerUP);
+			entry.callback.AddListener((UnityAction<BaseEventData>)PointerUP);
 
 			trigger.triggers.Add(entry);
 
@@ -348,7 +348,7 @@ namespace UIFramework.Adapters
 
 			GetDropdownData();
 
-			dropdown.value = _indexToValueMap.IndexOf((int)_prefModel.ModelBoxedValue);
+			
 
 			dropdown.onValueChanged.AddListener((UnityAction<int>)OnValueChanged);
 		}
@@ -369,7 +369,7 @@ namespace UIFramework.Adapters
 	[RegisterTypeInIl2Cpp]
 	public class EnumDropdownAdapter : DropDownAdapterBase
 	{
-		
+
 
 		public Type prefEnum;
 
@@ -385,6 +385,7 @@ namespace UIFramework.Adapters
 				DisplayAttribute attr = info?.GetCustomAttribute<DisplayAttribute>();
 				enumNames.Add(attr?.GetName() ?? value.ToString());
 				_indexToValueMap.Add(Convert.ToInt32(value));
+				dropdown.value = _indexToValueMap.IndexOf((int)_prefModel.ModelBoxedValue);
 			}
 
 
@@ -392,14 +393,14 @@ namespace UIFramework.Adapters
 			dropdown.AddOptions(enumNames);
 		}
 		/// <inheritdoc/>
-		
+
 		/// <inheritdoc/>
 		public override void EditCheck()
 		{
 
 		}
 
-		
+
 		/// <inheritdoc/>
 		public override void ApplyValueToPref()
 		{
@@ -407,9 +408,43 @@ namespace UIFramework.Adapters
 		}
 	}
 	[RegisterTypeInIl2Cpp]
-	public class DynamicDopdownAdapter : DataEntryAdapter
+	public class DynamicDopdownAdapter : DropDownAdapterBase
 	{
-		
+		public IDynamicDropdownDescriptor DropdownContents => _prefModel.UiExtension as IDynamicDropdownDescriptor;
+
+		public override void GetDropdownData()
+		{
+			try
+			{
+				Il2CppSystem.Collections.Generic.List<string> dropdownItems = new();
+				foreach (DropdownItem item in DropdownContents.GetDropdownItems())
+				{
+					dropdownItems.Add(item.DisplayName);
+				}
+				dropdown.ClearOptions();
+				dropdown.AddOptions(dropdownItems);
+
+				dropdown.value = DropdownContents.GetDropdownItems().FindIndex(x => x.Value == _prefModel.ModelBoxedValue);
+			}
+			catch (Exception ex) { Debug.Log($"{ex}"); }
+
+		}
+
+		public override void SetData()
+		{
+			base.SetData();
+			DropdownContents.OnDropdownItemsUpdated = GetDropdownData;
+
+		}
+		public override void ApplyValueToPref()
+		{
+			_prefModel.TryApply((DropdownContents.GetDropdownItems()[dropdown.value]).Value);
+		}
+
+		void OnDestroy()
+		{
+			DropdownContents.OnDropdownItemsUpdated -= GetDropdownData;
+		}
 	}
 	[RegisterTypeInIl2Cpp]
 	public class ButtonEntryAdapter : DataEntryAdapter
