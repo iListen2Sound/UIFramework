@@ -238,7 +238,7 @@ namespace UIFramework.Models
 		protected void SetDataValue(object newValue)
 		{
 
-			Debug.Log($"New Value Applied {newValue}");
+			Debug.Log($"New Value Applied {newValue}", true);
 			ModelBoxedValue = newValue;
 			EditNotifier?.OnUserEdit?.Invoke(ModelBoxedValue);
 			//Block refresh only if RefreshInhibitorExists with the InhibitRefresh property set to true.
@@ -251,18 +251,6 @@ namespace UIFramework.Models
 
 		}
 		protected GameObject _uiPrefabSource;
-		/*/// <summary>
-		/// Use this function to provide your own prefab for this entry. 
-		/// The prefab must have a component that implements IUIFrameworkEntry and properly handles the value changes and saving. 
-		/// If no prefab is provided, a default one will be used based on the type of the preference 
-		/// (bools will be toggles, strings will be text input fields and so would numerics).
-		/// 
-		/// </summary>
-		/// <param name="prefab"></param>
-		public void SetUIPrefabSource(GameObject prefab)
-		{
-			_uiPrefabSource = prefab;
-		}*/
 		/// <summary>
 		/// Returns an instance of the game object associated with the MelonPreferences_Entry type.
 		/// If a custom one is provided, it will return an instance of that instead
@@ -277,61 +265,57 @@ namespace UIFramework.Models
 					return GameObject.Instantiate(uiProvider.WidgetPrefab);
 			}
 
-			if (_uiPrefabSource == null)
+			if (UiExtension is DynamicDropdownDescriptor)
 			{
+				GameObject dropdown = UI.GetPrefab(InputType.Dropdown);
+				dropdown.AddComponent<DynamicDopdownAdapter>();
+				return dropdown;
+			}
+
+			if (UiExtension is ISliderDescriptor)
+				return UI.GetPrefab(InputType.Slider);
+			if (UiExtension is IButtonDescriptor)
+			{
+				GameObject button = UI.GetPrefab(InputType.Button);
+				button.AddComponent<ButtonEntryAdapter>();
+				return button;
+			}
+
+			
 
 
-				if (UiExtension is ISliderDescriptor)
-					return UI.GetPrefab(InputType.Slider);
-				if (UiExtension is IButtonDescriptor)
-				{
-					GameObject button = UI.GetPrefab(InputType.Button);
-					button.AddComponent<ButtonEntryAdapter>();
-					return button;
-				}
-
-				if (UiExtension is DynamicDropdownDescriptor)
-				{
+			switch (ModelBoxedValue)
+			{
+				case bool:
+					return UI.GetPrefab(InputType.Toggle);
+				case string:
+					return UI.GetPrefab(InputType.TextField);
+				case Enum:
 					GameObject dropdown = UI.GetPrefab(InputType.Dropdown);
-					dropdown.AddComponent<DynamicDopdownAdapter>();
+					dropdown.AddComponent<EnumDropdownAdapter>();
 					return dropdown;
-				}	
-				switch (ModelBoxedValue)
-				{
-					case bool:
-						return UI.GetPrefab(InputType.Toggle);
-					case string:
-						return UI.GetPrefab(InputType.TextField);
-					case Enum:
-						GameObject dropdown = UI.GetPrefab(InputType.Dropdown);
-						dropdown.AddComponent<EnumDropdownAdapter>();
-						return dropdown; 
-						
-					//numerics
-					//integer types
-					case sbyte:
-					case byte:
-					case short:
-					case ushort:
-					case int:
-					case uint:
-					case long:
-					case ulong:
-						return UI.GetPrefab(InputType.NumericInt);
-					//floating point types
-					case float:
-					case double:
-					case decimal:
-						return UI.GetPrefab(InputType.NumericFloat);
-					default:
-						//Debug.Log("Unsupported type detected with no custom widget prefab provided. Defaulting to text input. Creating custom component recommended", true, 1);
-						return UI.GetPrefab(InputType.TextField);
-				}
+
+				//numerics
+				//integer types
+				case sbyte:
+				case byte:
+				case short:
+				case ushort:
+				case int:
+				case uint:
+				case long:
+				case ulong:
+					return UI.GetPrefab(InputType.NumericInt);
+				//floating point types
+				case float:
+				case double:
+				case decimal:
+					return UI.GetPrefab(InputType.NumericFloat);
+				default:
+					//Debug.Log("Unsupported type detected with no custom widget prefab provided. Defaulting to text input. Creating custom component recommended", true, 1);
+					return UI.GetPrefab(InputType.TextField);
 			}
-			else
-			{
-				return GameObject.Instantiate(_uiPrefabSource);
-			}
+
 		}
 
 	}
