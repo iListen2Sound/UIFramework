@@ -65,6 +65,12 @@ TestEntry11.Value = "New Value";
 ```
 </details>
 
+
+### Events
+- `MelonPreferences_Entry.OnEntryValueChanged`: Event that fires when the value is changed (Value is applied when you hit the save button in the UI Framework window). Provides oldValue and newValue parameters so you can monitor if it's been changed from the previous values. 
+Must be subscribed with via the `.Subscribe()` method instead of `+=`
+
+-----
 ## UI Framework
 ### Registration
 
@@ -83,6 +89,22 @@ and your entries will show in the order thatw you created them.
 **For most usage, this will be enough.**
 The UI will automatically present your entries according to their data types. Bools will show as toggles, enums will show as dropdowns, strings and numbers will show as text inputs with the appropriate filters, etc.
 
+### Optional: Custom display names
+Add `[assembly: UIInfo("My Mod's Better\nDisplay Name")]` to your assembly attributes to change how the mod's name is displayed
+in the UI. Line breaks are supported.
+### Enum Display Names
+Enum dropdowns support the Display(Name) attribute. If unavailable, it will fall back to the default enum value name. 
+```cs
+using System.ComponentModel.DataAnnotations;
+public enum Example
+{
+    [Display(Name = "DisplayName")]
+    value1,
+    [Display(Name = "Other Value")]
+    value2
+}
+```
+-----
 ## UI Presentation control: Validator Extensions
 
 UI Framework piggybacks off of the existing MelonPreferences custom validator system. 
@@ -166,6 +188,35 @@ The UI will represent your entry with a slider if you add a validator that imple
 
 ```cs
 MySlider = MyCategory.CreateEntry("MySlider", 0.5f, "My Slider", "Float Slider",false, false, new SliderDescriptor { Min = 0, Max = 1, DecimalPlaces = 3 });
+```
+
+-----
+#### Dynamically Editable Dropdown
+#### Interface: `IDynamicDropdownDescriptor`
+#### Default extended validator: `DynamicDropdownDescriptor`
+
+This lets you have a dropdown where you can edit the contents 
+
+Create an items list
+
+```cs
+List<DropdownItem> itemList = new();
+```
+Create an instance of the `DynamicDropdownDescriptor` class passing the item list as a parameter in the constructor
+```cs
+public static DynamicDropdownDescriptor DropdownDescriptor = new(itemList);
+```
+Add items with 
+```cs
+DropdownDescriptor.AddDropdownItem(new DropdownItem("Display Name", value)); 
+```
+or declare a list separately and set it with SetDropdownItems
+
+
+
+Pass it into the CreateEntry validator parameter
+```cs
+DropdownTest = Category.CreateEntry("DropdownTest", -1, "Dropdown Test", "Dynamic dropdown test.", false, false, DropdownDescriptor);
 ```
 
 -----

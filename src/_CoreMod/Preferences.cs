@@ -80,7 +80,7 @@ namespace UIFramework
 				"<size=75%>*Might cause unintended effects. Next ModUI toggle will need to be done twice</size>");
 
 
-			EnableDebugMode = CatUIFramework.CreateEntry("EnableDebugMode", false, "Enable Debug Logs", "Enables or disables debug logs for UIFramework.", false, false, new UserEditDefaultNotifier { OnUserEdit = UpdateCategoryVis });
+			EnableDebugMode = CatUIFramework.CreateEntry("EnableDebugMode", false, "Enable Debug Logs", "Enables or disables debug logs for UIFramework.", false, false, new UserEditNotifier { OnUserEdit = UpdateCategoryVis });
 			UiPosition = CatUIFramework.CreateEntry("UiPosition", new Vector2(970, -128f), "UI Position", "The position of the UI on the screen represented", true, true);
 
 			Experimental = MelonPreferences.CreateCategory("UIFrameworkExperimental", "Experimental Settings", true);
@@ -124,13 +124,13 @@ namespace UIFramework
 
 			UI.CreateButtonEntry(Demo, "Add Entry", "Dropdown Test", "this should add another entry to the dropdown demo", AddDropdownDemo);
 
-			DropdownTest = Demo.CreateEntry("DropdownDemo", -1, "Dropdown Demo", "Dynamic dropdown test. Add items by clicking the button", false, false, demoDropdownDescriptor);
+			DropdownTest = Demo.CreateEntry("DropdownDemo", -1, "Dropdown Demo", "Dynamic dropdown test. Add items by clicking the button", false, false, demoDropdownDescriptor.WithDropdownItemList(demoItems));
 			DropdownSelection = Demo.CreateEntry("SelectedDropdownItem", DropdownTest.Value, "Selected Item", "The item selected in the dropdown demo");
-			ShowReactivity = Demo.CreateEntry("Entry_Reactivity", false, "Show hidden Entry", "This is a demo preference to hide the reactivity demo button in the demo category.", false, false, new UserEditDefaultNotifier { OnUserEdit = HideReaction });
-			DemoCounting = Demo.CreateEntry("EnableCount", false, "Enable counting demo", "This is a demo for how the UI can update by a change of values in the background", false, false, new UserEditDefaultNotifier { OnUserEdit = (newVal) => { DemoCounting.EditedValue = (bool)newVal; UI.RequestRefresh(Core.Instance); } });
+			ShowReactivity = Demo.CreateEntry("Entry_Reactivity", false, "Show hidden Entry", "This is a demo preference to hide the reactivity demo button in the demo category.", false, false, new UserEditNotifier { OnUserEdit = HideReaction });
+			DemoCounting = Demo.CreateEntry("EnableCount", false, "Enable counting demo", "This is a demo for how the UI can update by a change of values in the background", false, false, new UserEditNotifier { OnUserEdit = (newVal) => { DemoCounting.EditedValue = (bool)newVal; UI.RequestRefresh(Core.Instance); } });
 
 
-			InhibitRefreshForCount = Demo.CreateEntry("InhibitDemoCount", true, "Inhibit Count Refresh", "Inhibit refreshing the UI when the demo int counts up", false, false, new UserEditDefaultNotifier { OnUserEdit = UpdateInhibitDemo });
+			InhibitRefreshForCount = Demo.CreateEntry("InhibitDemoCount", true, "Inhibit Count Refresh", "Inhibit refreshing the UI when the demo int counts up", false, false, new UserEditNotifier { OnUserEdit = UpdateInhibitDemo });
 			DemoInt = Demo.CreateEntry("DemoInt", 0, "Demo Int", "This is a demo int Preference", false, false, InhibitRefresh);
 			DemoString = Demo.CreateEntry("DemoString", "Hello, World!", "Demo String", "This is a demo string preference. This should show the name of the current scene", true);
 
@@ -144,7 +144,9 @@ namespace UIFramework
 
 			DropdownTest.OnEntryValueChanged.Subscribe(ItemSelectionChanged);
 		}
-		static List<DropdownItem> demoItems = new();
+		static List<DropdownItem> demoItems = new List<DropdownItem> { new DropdownItem("zero", 0), new DropdownItem("one", 1) };
+
+
 		public static DynamicDropdownDescriptor demoDropdownDescriptor = new();
 		internal static void AddDropdownDemo()
 		{
