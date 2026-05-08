@@ -133,7 +133,7 @@ public class CustomValidator : ValueValidator
     }
 }
 ```
-But UI Framework already has its own default implementation that validates everything in the `UIFramework.ValidatorExtensions` namespace as `DevaultValidator`.
+But UI Framework already has its own default implementation that validates everything in the `UIFramework.UiExtensions` namespace as `DevaultValidator`.
 </details>
 
 -----
