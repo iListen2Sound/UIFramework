@@ -55,7 +55,7 @@ namespace UIFramework
 			rightPrimary.AddBinding("<XRController>{RightHand}/primaryButton");
 			leftGrip.AddBinding("<XRController>{LeftHand}/Trigger");
 			leftPrimary.AddBinding("<XRController>{LeftHand}/primaryButton");
-			map.Enable();
+			map.Enable();	
 			Instance = this;
 			MelonPreferences.OnPreferencesSaved.Subscribe(MelPrefsSaved);
 			LoggerInstance.Msg("Initialized.");
@@ -73,7 +73,8 @@ namespace UIFramework
 			if (isFirstLoad)
 				return;
 			//Debug.DiffLog($"UI is Visible {UI.IsVisible}",true);
-			AutoHideCheck();
+			ActivityCheck();
+			
 
 
 		}
@@ -197,25 +198,19 @@ namespace UIFramework
 
 		}
 
-		#endregion
-		private void AutoHideCheck()
+		private void ActivityCheck()
 		{
-			//Don't proceed if Autohide preference is set to false or null
-			//Don't proceed if UI is inactive. Reset stopwatch if running
-			if (!UI.MainWindow.activeSelf || Preferences.AutoHideOnInactivity?.Value != true)
-			{
-				if (displayTime.IsRunning)
-					displayTime.Reset();
-				return;
-			}
-
 			//Stop and reset stopwatch if user has interacted with mouse or keyboard
 			if (UserInteracted())
 			{
 				if (displayTime.IsRunning)
+				{
+					UI.Unfade();
 					displayTime.Reset();
-			}
+				}
 
+
+			}
 			//Start stopwatch if user stopped interacting
 			else
 			{
@@ -223,6 +218,25 @@ namespace UIFramework
 					displayTime.Start();
 			}
 
+
+			AutoHideCheck();
+			FadeCheck();
+
+		}
+
+		#endregion
+		private void AutoHideCheck()
+		{
+			//Don't proceed if Autohide preference is set to false or null
+			//Don't proceed if UI is inactive. Reset stopwatch if running
+			if (!UI.MainWindow.activeSelf || Preferences.AutoHideOnInactivity?.Value != true)
+			{
+				return;
+			}
+
+			
+
+			
 			//Once user hasn't interacted with mouse or keyboard abev the inactive time limit, hide the UI window
 			if (displayTime.ElapsedMilliseconds >= inactiveTimeLimit)
 			{
@@ -234,6 +248,13 @@ namespace UIFramework
 			}
 		}
 
+		private void FadeCheck()
+		{
+			if (displayTime.ElapsedMilliseconds > Preferences.FadeTimer.Value * 1000)
+			{
+				UI.Fade();
+			}
+		}
 		private bool UserInteracted()
 		{
 			if (Mouse.current != null)

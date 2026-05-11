@@ -18,6 +18,7 @@ namespace UIFramework
 		internal static MelonPreferences_Entry<bool> EnableDebugMode;
 		internal static MelonPreferences_Entry<bool> AutoHideOnSceneLoad;
 		internal static MelonPreferences_Entry<bool> AutoHideOnInactivity;
+		internal static MelonPreferences_Entry<int> FadeTimer;
 		internal static MelonPreferences_Entry<bool> VrInputToggle;
 		internal static MelonPreferences_Entry<bool> HijackModUI;
 
@@ -68,6 +69,7 @@ namespace UIFramework
 			CatUIFramework.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
 			AutoHideOnSceneLoad = CatUIFramework.CreateEntry("AutoHideOnSceneLoad", true, "Auto Hide On Scene Load", "Hides the UI Automatically in between scenes.");
 			AutoHideOnInactivity = CatUIFramework.CreateEntry("AutohideOnInactivity", true, "Auto Hide on Inactivity", "Hide the UI if mouse and keyboard are inactive");
+			FadeTimer = CatUIFramework.CreateEntry("FadeTimer", 10, "Fade Out Time", "Fade UI after this amount of time. Set 0 to disable");
 			InactivityTimeout = CatUIFramework.CreateEntry("InactivityTimeout", 30, "Inactivity Time Out (Seconds)", "Number of seconds of inactivity for UI to hide automatically");
 			VrInputToggle = CatUIFramework.CreateEntry("VrInputToggle", false, "Toggle with VR buttons", "Toggle UI window by pressing both trigger and primary (A/X) on both hands", true);
 
