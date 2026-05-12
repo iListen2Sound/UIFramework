@@ -15,8 +15,10 @@ namespace UIFramework
 
 		internal static RootModel ModelInstance = new();
 		internal static GameObject MainWindow;
-		public static bool IsVisible { get { return MainWindow.activeSelf; }  }
+		public static bool IsVisible { get => MainWindow.activeSelf; internal set => MainWindow.SetActive(value); }
 		internal static WindowCoordinator WindowInstance;
+
+		private static CanvasGroup CanvasGroup => MainWindow.GetComponent<CanvasGroup>();
 		/// <summary>
 		/// Registers a mod and its categories to the UI instance. 
 		/// </summary>
@@ -99,6 +101,7 @@ namespace UIFramework
 		}
 
 
+		
 
 		/// <summary>
 		/// 
@@ -126,6 +129,8 @@ namespace UIFramework
 			WindowInstance.SetModel(ModelInstance);
 
 		}
+
+		
 		internal static void RequestRefresh(ModModelBase modModel)
 		{
 			Debug.Log("RefreshRequested in Framework.cs RequestRefresh(ModModelBase modModel)", true, 1);
@@ -137,7 +142,14 @@ namespace UIFramework
 			WindowInstance.RequestRefresh(model);
 		}
 		
-
+		internal static void Fade()
+		{
+			CanvasGroup.alpha = 0.25f;
+		}
+		internal static void Unfade()
+		{
+			CanvasGroup.alpha = 1f;
+		}
 		public static GameObject GetPrefab(InputType input)
 		{
 			GameObject selectedPrefab;
