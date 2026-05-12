@@ -85,7 +85,7 @@ If none is provided, it will default to the [standard input](#defaults) based on
 
 # Design Pattern
 
-# MVC/MVP(ish)-Inspired Pattern
+# Component-based MVA(ish)-Inspired Pattern
 
 The intention is to have separation of UI and data logic. Make the UI itself disposable while the model would be the one source of truth it can be rebuilt from every time.
 
@@ -117,7 +117,7 @@ A wrapper/adapter class around a MelonPreferences_Category type.
 Their equivalent UI elements will show up in the main panel when their category is selected.
 They have a description, a label/ID, and an actual input area
 
-## Controllers: 
+## Adapters: 
 Custom components added to the ugui game objects that controls them based on the model
 Each controller has a reference to the model they're supposed to represent to the user. 
 
