@@ -229,7 +229,7 @@ namespace UIFramework
 		{
 			//Don't proceed if Autohide preference is set to false or null
 			//Don't proceed if UI is inactive. Reset stopwatch if running
-			if (!UI.MainWindow.activeSelf || Preferences.AutoHideOnInactivity?.Value != true)
+			if (!UI.MainWindow.activeSelf || Preferences.InactivityTimeout.Value <= 0)
 			{
 				return;
 			}

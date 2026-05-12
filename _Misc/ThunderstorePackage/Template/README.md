@@ -1,4 +1,14 @@
 <sup> btw: The changelog doubles as a feature list </sup>
+
+### New in 0.9.1
+<details><summary>Bug Fix: Add Rock cam preview support </summary>
+Rock cam detached preview won't cover UI Framework anymore
+</details>
+
+<details> <summary>New Feature: Fadeout on inactivity </summary>
+New setting added
+</details>
+
 ### New in 0.9.0 
 <details><summary> New Feature: Reactivity Update! </summary>
 UI Framework can now refresh without the user having to press save or manually reloading the tab

@@ -68,9 +68,11 @@ namespace UIFramework
 			CatUIFramework = MelonPreferences.CreateCategory("UI", "UI Settings");
 			CatUIFramework.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
 			AutoHideOnSceneLoad = CatUIFramework.CreateEntry("AutoHideOnSceneLoad", true, "Auto Hide On Scene Load", "Hides the UI Automatically in between scenes.");
-			AutoHideOnInactivity = CatUIFramework.CreateEntry("AutohideOnInactivity", true, "Auto Hide on Inactivity", "Hide the UI if mouse and keyboard are inactive");
-			FadeTimer = CatUIFramework.CreateEntry("FadeTimer", 10, "Fade Out Time", "Fade UI after this amount of time. Set 0 to disable");
-			InactivityTimeout = CatUIFramework.CreateEntry("InactivityTimeout", 30, "Inactivity Time Out (Seconds)", "Number of seconds of inactivity for UI to hide automatically");
+			AutoHideOnInactivity = CatUIFramework.CreateEntry("AutohideOnInactivity", true, "(Deprecated)Auto Hide on Inactivity", "Hide the UI if mouse and keyboard are inactive", true);
+			FadeTimer = CatUIFramework.CreateEntry("FadeTimer", 10, "Fade Out Time", "Fade UI after this many seconds.\nSet 0 to disable", false, false);
+			InactivityTimeout = CatUIFramework.CreateEntry("InactivityTimeout", 30, "Inactivity Time Out", "Hide UI After this many seconds.\nSet 0 to disable", false, false);
+			
+			
 			VrInputToggle = CatUIFramework.CreateEntry("VrInputToggle", false, "Toggle with VR buttons", "Toggle UI window by pressing both trigger and primary (A/X) on both hands", true);
 
 			ToggleSettings = CatUIFramework.CreateEntry("ToggleSettings", ToggleOptions.Keyboard, "Toggle Options", "Select the input method for toggling the UI.\n" +
@@ -143,6 +145,15 @@ namespace UIFramework
 			InhibitRefreshForCount.Value = true;
 			DemoCounting.Value = false;
 			MelonCoroutines.Start(DemoCount());
+
+			if (!AutoHideOnInactivity.Value)
+			{
+				Debug.Log("AutoHideOnInactivity is deprecated. Applying setting to InactivityTimeout and deleting", false, 1);
+				InactivityTimeout.Value = 0;
+			}
+
+
+			CatUIFramework.DeleteEntry("AutohideOnInactivity");
 
 			DropdownTest.OnEntryValueChanged.Subscribe(ItemSelectionChanged);
 		}
