@@ -6,7 +6,12 @@ Rock cam detached preview won't cover UI Framework anymore
 </details>
 
 <details> <summary>New Feature: Fadeout on inactivity </summary>
-New setting added
+UI Framework can now fade to lower opacity after a set amount of time. 
+</details>
+
+<details><summary>Feature change: Inactivity timer disables when set to 0</summary>
+The separate toggle setting for enabling inactivity time out is deprecated and removed. 
+Now disabled by setting the inactivity timer to 0
 </details>
 
 ### New in 0.9.0 
