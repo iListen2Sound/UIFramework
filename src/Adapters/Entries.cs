@@ -15,7 +15,7 @@ namespace UIFramework.Adapters
 
 {
 	[RegisterTypeInIl2Cpp]
-	public abstract class PrefEntryAdapter : SubModelAdapter, IChildable
+	public abstract class PrefEntryAdapter : SubModelAdapter
 	{
 		/// <summary>
 		/// Sets the description text

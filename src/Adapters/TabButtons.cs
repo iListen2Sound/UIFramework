@@ -9,7 +9,7 @@ namespace UIFramework.Adapters
 
 	//protected override GameObject UIPrefab { get { return Prefabs.TextPrefab; } }
 	[RegisterTypeInIl2Cpp]
-	public abstract class TabButtonController : SubModelAdapter, IChildable
+	public abstract class TabButtonController : SubModelAdapter
 	{
 
 		protected WindowCoordinator ParentWindow;
@@ -53,7 +53,7 @@ namespace UIFramework.Adapters
 	/// 
 	/// </summary>
 	[RegisterTypeInIl2Cpp]
-	public class ModButtonView : TabButtonController, IChildable
+	public class ModButtonView : TabButtonController
 	{
 
 		protected MelonModel ModModel => (MelonModel)_internalModel;
@@ -68,7 +68,7 @@ namespace UIFramework.Adapters
 	/// <summary>
 	/// </summary>
 	[RegisterTypeInIl2Cpp]
-	public class CategoryTabView : TabButtonController, IChildable
+	public class CategoryTabView : TabButtonController
 	{
 		public override void OnSelect()
 		{

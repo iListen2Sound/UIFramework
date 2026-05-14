@@ -73,7 +73,7 @@ namespace UIFramework.Adapters
 				uiElement.transform.localPosition = Vector3.zero;
 
 
-				IChildable ViewController;
+				SubModelAdapter ViewController;
 
 				//Retrieve the appropriate game object controller component depending on the model type. 
 				//Switch statement could be unnecessary if interface was replaced with an abstract class

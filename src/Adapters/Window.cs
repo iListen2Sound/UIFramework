@@ -24,23 +24,10 @@ using Il2CppSystem.Threading.Tasks;
 namespace UIFramework.Adapters
 {
 
-	/// <summary>
-	/// Controllers for models that can be submodels of other models. 
-	/// Preference Entries
-	/// ModButtonView Buttons
-	/// CategoryTabView Buttons
-	/// </summary>
-	public interface IChildable
-	{
-		/// <summary>
-		/// Reference to the model the controller works from.  
-		/// </summary>
-		public IModelable Model { get; set; }
-	}
 	public abstract class SubModelAdapter : MonoBehaviour
 	{
 		protected IModelable _internalModel;
-		public virtual IModelable Model
+		public IModelable Model
 		{
 			get
 			{
