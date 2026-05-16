@@ -65,7 +65,8 @@ namespace UIFramework.Adapters
 		{
 			_rootWindow = FindRootWindow();
 		}
-		public virtual void ModelSet() { }
+		protected virtual void ModelSet() { }
+		protected virtual void DisplayMetadata() { }
 	}
 
 	/// <summary>

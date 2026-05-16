@@ -15,7 +15,7 @@ namespace UIFramework.Adapters
 		protected WindowCoordinator ParentWindow;
 		protected IHoldSubmodels _model => (IHoldSubmodels)_internalModel;
 
-		public override void ModelSet()
+		protected override void ModelSet()
 		{
 			Label = _model.DisplayName;
 			ParentWindow = _rootWindow;

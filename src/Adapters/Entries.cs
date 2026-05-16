@@ -20,7 +20,7 @@ namespace UIFramework.Adapters
 		/// <summary>
 		/// Sets the description text
 		/// </summary>
-		public virtual string DescriptionText
+		protected virtual string DescriptionText
 		{
 			get { return this.gameObject.transform.Find("Description").gameObject.GetComponent<TextMeshProUGUI>().text; }
 			set { this.gameObject.transform.Find("Description").gameObject.GetComponent<TextMeshProUGUI>().text = value; }
@@ -28,13 +28,13 @@ namespace UIFramework.Adapters
 		/// <summary>
 		/// Sets the identifier text
 		/// </summary>
-		public virtual string DisplayName
+		protected virtual string DisplayName
 		{
 			get { return this.gameObject.gameObject.transform.Find("Data/Label").gameObject.GetComponent<TextMeshProUGUI>().text; }
 			set { this.gameObject.gameObject.transform.Find("Data/Label").gameObject.GetComponent<TextMeshProUGUI>().text = value; }
 		}
 
-		public virtual EntryState EntryStatus { get; set; }
+		protected virtual EntryState EntryStatus { get; set; }
 
 		/// <summary>
 		/// Runs when the model property has been set. 
@@ -52,13 +52,17 @@ namespace UIFramework.Adapters
 		/// <summary>
 		/// 
 		/// </summary>
-		public override void ModelSet()
+		protected sealed override void ModelSet()
 		{
-			SetData();
+			DisplayData();
+			DisplayMetadata();
+		}
+		protected override void DisplayMetadata()
+		{
 			DescriptionText = EntryModel.Description;
 			DisplayName = EntryModel.DisplayName;
 		}
-		public virtual void SetData()
+		protected virtual void DisplayData()
 		{
 
 		}
@@ -130,13 +134,13 @@ namespace UIFramework.Adapters
 		/// <summary>
 		/// Returns the textfield
 		/// </summary>
-		public TMP_InputField textField => this.gameObject.transform.Find("Data/TextControl").gameObject.GetComponent<TMP_InputField>();
+		protected TMP_InputField textField => this.gameObject.transform.Find("Data/TextControl").gameObject.GetComponent<TMP_InputField>();
 		/// <summary>
 		/// Sets the placeholder text in the textField
 		/// </summary>
-		public string PlaceHolderText { set { this.gameObject.transform.Find("Data/TextControl/Text Area/Placeholder").gameObject.GetComponent<TextMeshProUGUI>().text = value; } }
+		protected string PlaceHolderText { set { this.gameObject.transform.Find("Data/TextControl/Text Area/Placeholder").gameObject.GetComponent<TextMeshProUGUI>().text = value; } }
 		/// <inheritdoc/>
-		public override void SetData()
+		protected override void DisplayData()
 		{
 			//textField.text = _prefModel.ModelBoxedValue.ToString();
 			//TomletMain.TomlStringFrom(_prefModel.ModelBoxedValue).Trim();
@@ -215,7 +219,7 @@ namespace UIFramework.Adapters
 		protected TMP_InputField _textField => gameObject.transform.Find("Data/TextControl").gameObject.GetComponent<TMP_InputField>();
 		protected virtual ISliderDescriptor SliderSettings => _prefModel.UiExtension as ISliderDescriptor;
 
-		public override void SetData()
+		protected override void DisplayData()
 		{
 			_textField.onEndEdit.AddListener((UnityAction<string>)EditEnd);
 			_textField.onSelect.AddListener((UnityAction<string>)EditStart);
@@ -305,7 +309,7 @@ namespace UIFramework.Adapters
 		//protected override DataEntryModelBase _prefModel => (DataEntryModelBase)EntryModel;
 		public bool EnteredValue => this.gameObject.transform.Find("Data/ToggleControl").gameObject.GetComponent<Toggle>().isOn;
 		/// <inheritdoc/>
-		public override void SetData()
+		protected override void DisplayData()
 		{
 			toggle.isOn = (bool)_prefModel.ModelBoxedValue;
 			toggle.onValueChanged.AddListener((UnityAction<bool>)OnValueChanged);
@@ -342,7 +346,7 @@ namespace UIFramework.Adapters
 		public System.Collections.Generic.List<int> _indexToValueMap = new();
 		public TMP_Dropdown dropdown;
 
-		public override void SetData()
+		protected override void DisplayData()
 		{
 			dropdown = this.gameObject.transform.Find("Data/DropdownControl").GetComponent<TMP_Dropdown>();
 
@@ -431,9 +435,9 @@ namespace UIFramework.Adapters
 
 		}
 
-		public override void SetData()
+		protected override void DisplayData()
 		{
-			base.SetData();
+			base.DisplayData();
 			DropdownContents.OnDropdownItemsUpdated = GetDropdownData;
 
 		}
@@ -453,7 +457,7 @@ namespace UIFramework.Adapters
 		GameObject _buttonGo;
 		Button _buttonComponent;
 		IButtonDescriptor _buttonDescrictor => _prefModel?.UiExtension as IButtonDescriptor;
-		public override void SetData()
+		protected override void DisplayData()
 		{
 			_buttonGo = this.gameObject.transform.Find("Data/ButtonControl").gameObject;
 
@@ -471,11 +475,11 @@ namespace UIFramework.Adapters
 		ButtonEntry ButtonModel => (ButtonEntry)EntryModel;
 		public GameObject ButtonGo;
 		/// <inheritdoc/>
-		public override void SetData()
+		protected override void DisplayData()
 		{
 			ButtonGo = this.gameObject.transform.Find("Data/ButtonControl").gameObject;
 			ButtonGo.GetComponent<Button>().onClick.AddListener((UnityAction)OnClickRelay);
-			base.SetData();
+			base.DisplayData();
 		}
 
 		public void OnClickRelay()
