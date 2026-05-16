@@ -21,14 +21,14 @@ namespace UIFramework.Adapters
 			ParentWindow = _rootWindow;
 		}
 
-		public string Label { set { gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = value; } }
-		public ColorARGB TabColor { get; set; }
+		private string Label { set { gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = value; } }
+		private ColorARGB TabColor { get; set; }
 		/// <summary>
 		/// Runs when the button is clicked. Implement this in inheriting classes. 
 		/// </summary>
 		/// <exception cref="NotImplementedException"></exception>
 		/// <remarks>IL2CPP does not like abstract methods 😭</remarks>
-		public virtual void OnSelect()
+		protected virtual void OnSelect()
 		{
 			throw new NotImplementedException("Implement OnSelect in inheriting class");
 			//this.gameObject.GetComponent<Image>().color = ParentWindow.openTabColor;
@@ -58,7 +58,7 @@ namespace UIFramework.Adapters
 
 		protected MelonModel ModModel => (MelonModel)_internalModel;
 
-		public override void OnSelect()
+		protected override void OnSelect()
 		{
 
 			ParentWindow.SetSelectedMod(ModModel);
@@ -70,7 +70,7 @@ namespace UIFramework.Adapters
 	[RegisterTypeInIl2Cpp]
 	public class CategoryTabView : TabButtonController
 	{
-		public override void OnSelect()
+		protected override void OnSelect()
 		{
 			ParentWindow.SetSelectedCategory((CategoryModelBase)_internalModel);
 		}

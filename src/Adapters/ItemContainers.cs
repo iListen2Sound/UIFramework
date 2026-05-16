@@ -42,7 +42,7 @@ namespace UIFramework.Adapters
 		/// operations may depend on the newly set model.
 		/// </remarks>
 		/// <param name="model">The model to associate with this instance. Cannot be null.</param>
-		public virtual void SetModel(IHoldSubmodels model)
+		public virtual void SetContainerModel(IHoldSubmodels model)
 		{
 			if (model == null)
 				return;
