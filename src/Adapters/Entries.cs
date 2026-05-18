@@ -15,7 +15,7 @@ namespace UIFramework.Adapters
 
 {
 	[RegisterTypeInIl2Cpp]
-	public abstract class PrefEntryAdapter : SubModelAdapter
+	public abstract class PrefEntryAdapterBase : SubModelAdapter
 	{
 		/// <summary>
 		/// Sets the description text
@@ -98,7 +98,7 @@ namespace UIFramework.Adapters
 	/// TODO: Refactor this to suggest non-melon related settings storage
 	/// </summary>
 	[RegisterTypeInIl2Cpp]
-	public abstract class DataEntryAdapter : PrefEntryAdapter
+	public abstract class DataEntryAdapter : PrefEntryAdapterBase
 	{
 
 
@@ -470,7 +470,7 @@ namespace UIFramework.Adapters
 	}
 
 	[RegisterTypeInIl2Cpp]
-	public class ButtonModelAdapter : PrefEntryAdapter
+	public class ButtonModelAdapter : PrefEntryAdapterBase
 	{
 		ButtonEntry ButtonModel => (ButtonEntry)EntryModel;
 		public GameObject ButtonGo;

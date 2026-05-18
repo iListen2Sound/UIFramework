@@ -104,7 +104,7 @@ namespace UIFramework.Adapters
 		internal CategoryModelBase SelectedCategory => _selectedCategory;
 		private CategoryModelBase _selectedCategory = null;
 
-		public Dictionary<ModModelBase, CategoryModelBase> LastCategorySelected = new();
+		internal Dictionary<ModModelBase, CategoryModelBase> LastCategorySelected = new();
 
 
 		internal void SetSelectedMod(ModModelBase mod)

@@ -174,11 +174,6 @@ namespace UIFramework.Models
 		public override bool IsHidden { get; set; }
 
 		/// <summary>
-		/// Called when the corresponding UI element is created
-		/// </summary>
-		public virtual Action<PrefEntryAdapter> OnUICreated { get; set; }
-
-		/// <summary>
 		/// 
 		/// </summary>
 		public virtual EntryState SaveState { get; set; }
