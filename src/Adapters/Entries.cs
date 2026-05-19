@@ -54,8 +54,8 @@ namespace UIFramework.Adapters
 		/// </summary>
 		protected sealed override void ModelSet()
 		{
-			DisplayData();
 			DisplayMetadata();
+			DisplayData();
 		}
 		protected override void DisplayMetadata()
 		{
