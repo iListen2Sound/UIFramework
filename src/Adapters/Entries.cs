@@ -194,11 +194,11 @@ namespace UIFramework.Adapters
 
 
 
-		public virtual void EditStart(string s)
+		protected virtual void EditStart(string s)
 		{
 			textField.textComponent.fontStyle = FontStyles.Normal;
 		}
-		public virtual void EditEnd(string s)
+		protected virtual void EditEnd(string s)
 		{
 			textField.textComponent.fontStyle = FontStyles.Italic;
 			ApplyValueToPref();
@@ -243,7 +243,7 @@ namespace UIFramework.Adapters
 			}
 		}
 
-		public void OnValueChanged(float newValue)
+		protected void OnValueChanged(float newValue)
 		{
 			_textField.text = newValue.ToString(_textField.contentType == TMP_InputField.ContentType.IntegerNumber ? "F0" : "F" + SliderSettings?.DecimalPlaces);
 			//ApplyValueToPref();
@@ -254,11 +254,11 @@ namespace UIFramework.Adapters
 		{
 			_prefModel.TryApply(Convert.ChangeType(Slider.value, _prefModel.ModelBoxedValue.GetType()));
 		}
-		public virtual void EditStart(string s)
+		protected override void EditStart(string s)
 		{
 			_textField.textComponent.fontStyle = FontStyles.Normal;
 		}
-		public virtual void EditEnd(string s)
+		protected override void EditEnd(string s)
 		{
 			_textField.textComponent.fontStyle = FontStyles.Italic;
 
