@@ -149,6 +149,10 @@ namespace UIFramework.UiExtensions
 		public bool InhibitRefreshOnValueChange { get; set; }
 	}
 
+	/// <summary>
+	/// Provide your own custom entry presentation.
+	/// You need to add a custom component that inherits from DataEntryAdapter
+	/// </summary>
 	public interface ICustomUIProvider : IUiExtension
 	{
 		public GameObject WidgetPrefab { get; set; }

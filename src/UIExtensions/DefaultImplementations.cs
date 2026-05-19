@@ -138,6 +138,11 @@ namespace UIFramework.UiExtensions
 		public bool InhibitRefreshOnValueChange {get; set;} = false;
 	}
 
+	///<inheritdoc cref="ICustomUIProvider"/>
+	public class DefaultCustomUIProvider : DefaultValidator, ICustomUIProvider
+	{
+		public GameObject WidgetPrefab { get; set; }
+	}
 
 	internal class ButtonAsEntry : DefaultValidator, IButtonDescriptor
 	{
