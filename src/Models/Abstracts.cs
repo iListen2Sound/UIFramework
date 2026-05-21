@@ -101,7 +101,7 @@ namespace UIFramework.Models
 			AddSubmodel(categoryModel.Cast<IModelable>().ToArray());
 		}
 		/// <summary>
-		/// Calls individual category models' SaveAction method.
+		/// Calls individual category models' PreSaveAction method.
 		/// </summary>
 		public override void SaveAction()
 		{

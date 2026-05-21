@@ -217,7 +217,7 @@ namespace UIFramework.Adapters
 		/// </summary>
 		/// <remarks>
 		/// Generally Melonpreferences are saved by category. 
-		/// But this iterates through the child controllers and call their SaveAction() method.
+		/// But this iterates through the child controllers and call their PreSaveAction() method.
 		/// This allows for custom behavior before the actual category gets saved
 		/// </remarks>
 		protected virtual void SaveButtonClick()

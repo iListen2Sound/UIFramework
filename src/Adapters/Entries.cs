@@ -41,12 +41,12 @@ namespace UIFramework.Adapters
 		/// </summary>
 
 
-		public IEntry EntryModel => (IEntry)_internalModel;
+		protected private EntryModelBase EntryModel => (EntryModelBase)_internalModel;
 		/// <summary>
 		/// This is called when the Save button is pressed. Override to create custom behaviour.
 		/// </summary>
 		/// <remarks>Generally MelonPreferences are saved from the category, not the indivial entries.</remarks>
-		public virtual void SaveAction()
+		public virtual void PreSaveAction()
 		{
 		}
 		/// <summary>
@@ -105,7 +105,7 @@ namespace UIFramework.Adapters
 		/// <inheritdoc/>
 		//public override void ModelSet() { base.ModelSet(); }
 
-		virtual protected DataEntryModelBase DataEntry => (DataEntryModelBase)EntryModel;
+		private protected DataEntryModelBase DataEntry => (DataEntryModelBase)EntryModel;
 
 		/// <inheritdoc/>
 		public virtual bool ValidationCheck()
@@ -114,11 +114,9 @@ namespace UIFramework.Adapters
 		}
 
 		public virtual void EditCheck() { }
-
-		public override void SaveAction()
+		/// <inheritdoc/>
+		public override void PreSaveAction()
 		{
-			ApplyValueToPref();
-			base.SaveAction();
 		}
 
 		protected sealed override void DisplayContents()
@@ -130,7 +128,15 @@ namespace UIFramework.Adapters
 		{
 
 		}
-		public virtual void ApplyValueToPref() { }
+		/// <summary>
+		/// Submits the value to the model
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		protected bool SubmitValue(object value)
+		{
+			return DataEntry.TryApply(value);
+		}
 	}
 
 
@@ -148,12 +154,16 @@ namespace UIFramework.Adapters
 		/// Sets the placeholder text in the textField
 		/// </summary>
 		protected string PlaceHolderText { set { this.gameObject.transform.Find("Data/TextControl/Text Area/Placeholder").gameObject.GetComponent<TextMeshProUGUI>().text = value; } }
-		/// <inheritdoc/>
+
+		Type boxedValueType = null;
+		
+		/// <inheritdoc/>/// 
 		protected override void DisplayData(object boxedValue)
 		{
 			//textField.text = DataEntry.ModelBoxedValue.ToString();
 			//TomletMain.TomlStringFrom(DataEntry.ModelBoxedValue).Trim();
-			if (boxedValue?.GetType() == typeof(string))
+			boxedValueType = boxedValue.GetType();
+			if (boxedValueType == typeof(string))
 			{
 				textField.text = (string)boxedValue;
 			}
@@ -170,11 +180,11 @@ namespace UIFramework.Adapters
 				}
 			}
 		}
-		public override void ApplyValueToPref()
+		protected void ParseThenSubmit()
 		{
-			if (DataEntry.ModelBoxedValue.GetType() == typeof(string))
+			if (boxedValueType == typeof(string))
 			{
-				DataEntry.TryApply(textField.text);
+				SubmitValue(textField.text);
 			}
 			else
 			{
@@ -182,8 +192,7 @@ namespace UIFramework.Adapters
 				{
 					if (textField.text.Trim() != "")
 					{
-						DataEntry.TryApply(FromTomlString(textField.text, DataEntry.ModelBoxedValue.GetType()));
-						//Debug.Log($"Toml data parsed {FromTomlString(textField.text, DataEntry.ModelBoxedValue.GetType())}");
+						SubmitValue(FromTomlString(textField.text, DataEntry.ModelBoxedValue.GetType()));
 					}
 				}
 				catch (Exception ex)
@@ -210,7 +219,7 @@ namespace UIFramework.Adapters
 		protected virtual void EditEnd(string s)
 		{
 			textField.textComponent.fontStyle = FontStyles.Italic;
-			ApplyValueToPref();
+			ParseThenSubmit();
 		}
 
 		protected virtual void Start()
@@ -259,9 +268,9 @@ namespace UIFramework.Adapters
 			//Debug.Log($"Slider value changed to {newValue}", true);
 		}
 
-		public override void ApplyValueToPref()
+		public void SubmitSliderValue()
 		{
-			DataEntry.TryApply(Convert.ChangeType(Slider.value, DataEntry.ModelBoxedValue.GetType()));
+			SubmitValue(Convert.ChangeType(Slider.value, DataEntry.ModelBoxedValue.GetType()));
 		}
 		protected override void EditStart(string s)
 		{
@@ -278,7 +287,7 @@ namespace UIFramework.Adapters
 					result = Mathf.Clamp(result, SliderSettings.Min, SliderSettings.Max);
 				}
 				Slider.value = result;
-				ApplyValueToPref();
+				SubmitSliderValue();
 			}
 			else
 			{
@@ -304,7 +313,7 @@ namespace UIFramework.Adapters
 
 		protected void PointerUP(BaseEventData eventData)
 		{
-			ApplyValueToPref();
+			SubmitSliderValue();
 		}
 	}
 
@@ -324,53 +333,43 @@ namespace UIFramework.Adapters
 			toggle.onValueChanged.AddListener((UnityAction<bool>)OnValueChanged);
 
 		}
-		/// <inheritdoc/>
-		public override void EditCheck()
-		{
-
-		}
 
 		public void OnValueChanged(bool newValue)
 		{
-			ApplyValueToPref();
-		}
-		/// <inheritdoc/>
-		public override void ApplyValueToPref()
-		{
-			try
-			{
-				DataEntry.TryApply(EnteredValue);
-			}
-			catch (Exception ex)
-			{
-				Log(ex.Message, false, 2);
-			}
+			SubmitValue(newValue);
 		}
 	}
 
 	[RegisterTypeInIl2Cpp]
 	public abstract class DropDownAdapterBase : DataEntryAdapter
 	{
-		protected DataEntryModelBase _prefModel => (DataEntryModelBase)EntryModel;
-		public System.Collections.Generic.List<int> _indexToValueMap = new();
-		public TMP_Dropdown dropdown;
+		//protected DataEntryModelBase _prefModel => (DataEntryModelBase)EntryModel;
+		protected System.Collections.Generic.List<int> _indexToValueMap = new();
+		protected TMP_Dropdown dropdown;
 
+
+		protected object EntryValue { get; set; }
 		protected override void DisplayData(object boxedValue)
 		{
 
 			dropdown = this.gameObject.transform.Find("Data/DropdownControl").GetComponent<TMP_Dropdown>();
+			EntryValue = boxedValue;
 			GetDropdownData();
 			SelectDropDownItem(boxedValue);
-			
+
 
 			dropdown.onValueChanged.AddListener((UnityAction<int>)OnValueChanged);
 		}
 		public void OnValueChanged(int index)
 		{
-			ApplyValueToPref();
+			SubmitDropdownValue();
 		}
 
-		public virtual void GetDropdownData()
+		public virtual void SubmitDropdownValue()
+		{
+
+		}
+		protected virtual void GetDropdownData()
 		{
 			Debug.Log("GetDropdownData not implemented for " + this.GetType().Name, false, 2);
 		}
@@ -380,7 +379,7 @@ namespace UIFramework.Adapters
 		}
 		void Start()
 		{
-			
+
 		}
 	}
 
@@ -392,11 +391,11 @@ namespace UIFramework.Adapters
 	{
 
 
-		public Type prefEnum;
+		protected Type prefEnum;
 
-		public override void GetDropdownData()
+		protected override void GetDropdownData()
 		{
-			prefEnum = _prefModel.ModelBoxedValue.GetType();
+			prefEnum = EntryValue.GetType();
 
 			//Get a list of display name attributes or the enum name if not available
 			Il2CppSystem.Collections.Generic.List<string> enumNames = new();
@@ -411,7 +410,7 @@ namespace UIFramework.Adapters
 
 			dropdown.ClearOptions();
 			dropdown.AddOptions(enumNames);
-			
+
 		}
 
 		protected override void SelectDropDownItem(object boxedValue)
@@ -428,19 +427,19 @@ namespace UIFramework.Adapters
 
 
 		/// <inheritdoc/>
-		public override void ApplyValueToPref()
+		public override void SubmitDropdownValue()
 		{
-			_prefModel.TryApply(Enum.ToObject(prefEnum, _indexToValueMap[dropdown.value]));
+			SubmitValue(Enum.ToObject(prefEnum, _indexToValueMap[dropdown.value]));
 		}
 	}
 	[RegisterTypeInIl2Cpp]
 	public class DynamicDopdownAdapter : DropDownAdapterBase
 	{
-		public IDynamicDropdownDescriptor DropdownContents => _prefModel.UiExtension as IDynamicDropdownDescriptor;
+		public IDynamicDropdownDescriptor DropdownContents => DataEntry.UiExtension as IDynamicDropdownDescriptor;
 
-		public override void GetDropdownData()
+		protected override void GetDropdownData()
 		{
-			DropdownContents.OnDropdownItemsUpdated =  GetDropdownData;
+			DropdownContents.OnDropdownItemsUpdated = GetDropdownData;
 			try
 			{
 				Il2CppSystem.Collections.Generic.List<string> dropdownItems = new();
@@ -450,12 +449,10 @@ namespace UIFramework.Adapters
 				}
 				dropdown.ClearOptions();
 				dropdown.AddOptions(dropdownItems);
-				
-
 			}
-			
+
 			catch (Exception ex) { Debug.Log($"{ex}"); }
-			SelectDropDownItem(_prefModel.ModelBoxedValue);
+			SelectDropDownItem(EntryValue);
 
 		}
 
@@ -465,9 +462,9 @@ namespace UIFramework.Adapters
 			dropdown.value = itemToLoad;
 		}
 
-		public override void ApplyValueToPref()
+		public override void SubmitDropdownValue()
 		{
-			_prefModel.TryApply((DropdownContents.GetDropdownItems()[dropdown.value]).Value);
+			SubmitValue((DropdownContents.GetDropdownItems()[dropdown.value]).Value);
 		}
 
 		void OnDestroy()
