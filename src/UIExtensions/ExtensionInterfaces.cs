@@ -153,8 +153,11 @@ namespace UIFramework.UiExtensions
 	/// Provide your own custom entry presentation.
 	/// You need to add a custom component that inherits from DataEntryAdapter
 	/// </summary>
-	public interface ICustomUIProvider : IUiExtension
+	public interface ICustomViewProvider : IUiExtension
 	{
+		/// <summary>
+		/// 
+		/// </summary>
 		public GameObject WidgetPrefab { get; set; }
 	}
 

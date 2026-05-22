@@ -106,6 +106,7 @@ namespace UIFramework.Adapters
 		//public override void ModelSet() { base.ModelSet(); }
 
 		private protected DataEntryModelBase DataEntry => (DataEntryModelBase)EntryModel;
+		protected IUiExtension UiExtension => DataEntry.UiExtension;
 
 		/// <inheritdoc/>
 		public virtual bool ValidationCheck()
