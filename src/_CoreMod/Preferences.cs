@@ -50,7 +50,7 @@ namespace UIFramework
 		internal static MelonPreferences_Entry<int> DemoInt;
 		internal static MelonPreferences_Entry<string> DemoString;
 
-		internal static DefaultRefreshInhibitor InhibitRefresh = new DefaultRefreshInhibitor { InhibitRefreshOnValueChange = true };
+		internal static RefreshInhibitor InhibitRefresh = new RefreshInhibitor { InhibitRefreshOnValueChange = true };
 
 		internal static MelonPreferences_Category TestEmptyDisplayName;
 		internal static MelonPreferences_Entry<string> TestEmptyDisplayPref;

@@ -158,7 +158,7 @@ namespace UIFramework.UiExtensions
 		/// <summary>
 		/// 
 		/// </summary>
-		public GameObject WidgetPrefab { get; set; }
+		public GameObject EntryViewPrefab { get; set; }
 	}
 
 

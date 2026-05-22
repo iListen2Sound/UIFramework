@@ -1,32 +1,12 @@
 <sup> btw: The changelog doubles as a feature list </sup>
 
-### New in 0.9.1
-<details><summary>Bug Fix: Add Rock cam preview support </summary>
-Rock cam detached preview won't cover UI Framework anymore
+### New in 0.10.0
+<details><summary>New Feature: Advanced UI Customization for modders Notifier</summary>
+
+You can now use the ICustomViewProvider interface to be able to pass your own custom representations to the UI Framework.
+Default implementation: CustomViewProvider. More details in [CustomUI](./CustomUI.md)
 </details>
 
-<details> <summary>New Feature: Fadeout on inactivity </summary>
-UI Framework can now fade to lower opacity after a set amount of time. 
-</details>
-
-<details><summary>Feature change: Inactivity timer disables when set to 0</summary>
-The separate toggle setting for enabling inactivity time out is deprecated and removed. 
-Now disabled by setting the inactivity timer to 0
-</details>
-
-### New in 0.9.0 
-<details><summary> New Feature: Reactivity Update! </summary>
-UI Framework can now refresh without the user having to press save or manually reloading the tab
-</details>
-<details><summary> New Feature: Update UI with current values.</summary>
-UI now refreshes when an entry value for a preference changes
-</details>
-
-<details><summary>New Feature: IsHidden support for categories</summary>
-UI Framework will now appropriately not show categories with the IsHidden property set to true.
-</details>
-<details><summary> New Feature: Modders can now implement an UserEditNotifier validator class.</summary>
-This can notify you when the user has edited their entry even when it hasn't been applied to their saved value yet.
 
 Combined with the previous new feature, you can now adjust your UI according to your users' inputs
 

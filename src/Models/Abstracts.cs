@@ -256,8 +256,8 @@ namespace UIFramework.Models
 			//Make the custom UI provided by the validator the first priority if it exists.	
 			if (UiExtension is ICustomViewProvider uiProvider)
 			{
-				if (uiProvider?.WidgetPrefab is not null)
-					return GameObject.Instantiate(uiProvider.WidgetPrefab);
+				if (uiProvider?.EntryViewPrefab is not null)
+					return GameObject.Instantiate(uiProvider.EntryViewPrefab);
 			}
 
 			if (UiExtension is DynamicDropdownDescriptor)

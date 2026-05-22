@@ -130,7 +130,7 @@ namespace UIFramework.UiExtensions
 	/// These prevent the entry from <em>causing</em> the UI to refresh
 	/// This does not mean the entry prevents interruptions from refreshes
 	/// </remarks>
-	public class DefaultRefreshInhibitor : DefaultValidator, IRefreshInhibitor
+	public class RefreshInhibitor : DefaultValidator, IRefreshInhibitor
 	{
 		///<inheritdoc/>	
 		public bool InhibitRefreshOnEdit {get; set;} = false;
@@ -139,9 +139,9 @@ namespace UIFramework.UiExtensions
 	}
 
 	///<inheritdoc cref="ICustomViewProvider"/>
-	public class DefaultCustomViewProvider : DefaultValidator, ICustomViewProvider
+	public class CustomViewProvider : DefaultValidator, ICustomViewProvider
 	{
-		public GameObject WidgetPrefab { get; set; }
+		public GameObject EntryViewPrefab { get; set; }
 	}
 
 	internal class ButtonAsEntry : DefaultValidator, IButtonDescriptor

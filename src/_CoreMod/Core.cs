@@ -26,7 +26,7 @@ namespace UIFramework
 		/// <summary></summary>
 		public const string Author = "Reverb && Spice";
 		/// <summary></summary>
-		public const string Version = "0.9.1";
+		public const string Version = "0.10.0";	
 	}
 
 
