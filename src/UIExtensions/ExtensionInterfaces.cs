@@ -23,6 +23,7 @@ namespace UIFramework.UiExtensions
 		/// </summary>
 		public TMP_InputField.ContentType ContentType { get; set; }
 		public int CharacterLimit { get; set; }
+		public int DecimalPlaces { get; set; }
 		public bool IsReadOnly { get; set; }
 	}
 
@@ -92,7 +93,8 @@ namespace UIFramework.UiExtensions
 		/// <summary>
 		/// 0 = default (1 for ints, 0.1 for floats). 
 		/// </summary>
-		public float Increments { get; set; }
+		public float Steps { get; set; }
+		public int DecimalPlaces { get; set; }
 	}
 
 	/// <summary>

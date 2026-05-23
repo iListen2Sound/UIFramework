@@ -24,6 +24,7 @@ namespace UIFramework.UiExtensions
 		public TMP_InputField.ContentType ContentType { get; set; } = TMP_InputField.ContentType.Standard;
 		public int CharacterLimit { get; set; } = 0;
 		public bool IsReadOnly { get; set; } = false;
+		public int DecimalPlaces { get; set; } = 1;
 	}
 
 	/// <inheritdoc cref="ITextInputAppearanceDescriptor"/>
@@ -104,7 +105,10 @@ namespace UIFramework.UiExtensions
 	public class NumericUpDownDescriptor : DefaultValidator, INumericUpDownDescriptor
 	{
 		/// <inheritdoc/>
-		public float Increments { get; set; }
+		public float Steps { get; set; }
+		/// <inheritdoc/>
+		public int DecimalPlaces { get; set; } = 5;
+
 	}
 
 	/// <summary>

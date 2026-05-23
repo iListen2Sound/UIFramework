@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using Tomlet;
 using Tomlet.Models;
-using UIFramework.UiExtensions;
 using UIFramework.Models;
+using UIFramework.UiExtensions;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static UIFramework.Debug;
-using UnityEngine.EventSystems;
 namespace UIFramework.Adapters
 
 {
@@ -57,10 +57,15 @@ namespace UIFramework.Adapters
 			DisplayMetadata();
 			DisplayContents();
 		}
-		protected override void DisplayMetadata()
+		protected override sealed void DisplayMetadata()
 		{
-			DescriptionText = EntryModel.Description;
-			DisplayName = EntryModel.DisplayName;
+			DisplayEntryInfo(EntryModel.DisplayName, EntryModel.Description);
+		}
+
+		protected virtual void DisplayEntryInfo(string displayName, string description)
+		{
+			DescriptionText = description;
+			DisplayName = displayName;
 		}
 		protected virtual void DisplayContents()
 		{
@@ -106,6 +111,7 @@ namespace UIFramework.Adapters
 		//public override void ModelSet() { base.ModelSet(); }
 
 		private protected DataEntryModelBase DataEntry => (DataEntryModelBase)EntryModel;
+		protected object CurrentBoxedValue;
 		protected IUiExtension UiExtension => DataEntry.UiExtension;
 
 		/// <inheritdoc/>
@@ -118,10 +124,12 @@ namespace UIFramework.Adapters
 		/// <inheritdoc/>
 		public override void PreSaveAction()
 		{
+
 		}
 
 		protected sealed override void DisplayContents()
 		{
+			CurrentBoxedValue = DataEntry.ModelBoxedValue;
 			DisplayData(DataEntry.ModelBoxedValue);
 		}
 
@@ -229,14 +237,54 @@ namespace UIFramework.Adapters
 			textField.onDeselect.AddListener((System.Action<string>)EditEnd);
 		}
 	}
+	[RegisterTypeInIl2Cpp]
+	public class NumericEntryAdapter : TextEntryAdapter
+	{
+		protected float IncrementStep => (UiExtension as INumericUpDownDescriptor)?.Steps ?? (CurrentBoxedValue.GetType() == typeof(int) ? 1 : 0.1f);
+		
+		protected virtual INumericUpDownDescriptor NumericSettings => UiExtension as INumericUpDownDescriptor;
 
+		protected override void Start()
+		{
+			base.Start();
+			GameObject add = this.gameObject.transform.Find("Data/ButtonGroup/Add").gameObject;
+			GameObject sub = this.gameObject.transform.Find("Data/ButtonGroup/Sub").gameObject;
+
+			add.GetComponent<Button>().onClick.AddListener((UnityAction)Increment);
+			sub.GetComponent<Button>().onClick.AddListener((UnityAction)Decrement);
+			
+		}
+
+		protected override void DisplayData(object boxedValue)
+		{
+			//Call the original displaydata method
+			base.DisplayData(boxedValue);
+
+			//Take the string, convert it ot the correct type, then convert it back to a string with the correct number of decimal places
+			if (boxedValue.GetType() != typeof(int))
+			{
+				textField.text = Convert.ToSingle(boxedValue).ToString($"F{NumericSettings?.DecimalPlaces ?? 1}");
+			}
+
+			
+		}
+
+		protected virtual void Increment()
+		{
+			SubmitValue(CurrentBoxedValue == null ? IncrementStep : Convert.ChangeType(Convert.ToSingle(CurrentBoxedValue) + IncrementStep, CurrentBoxedValue.GetType()));
+		}
+		protected virtual void Decrement()
+		{
+			SubmitValue(CurrentBoxedValue == null ? -IncrementStep : Convert.ChangeType(Convert.ToSingle(CurrentBoxedValue) - IncrementStep, CurrentBoxedValue.GetType()));
+		}
+	}
 
 	[RegisterTypeInIl2Cpp]
 	public class NumSliderAdapter : TextEntryAdapter
 	{
 		protected Slider Slider => gameObject.transform.Find("Data/SliderControl").gameObject.GetComponent<UnityEngine.UI.Slider>();
 		protected TMP_InputField _textField => gameObject.transform.Find("Data/TextControl").gameObject.GetComponent<TMP_InputField>();
-		protected virtual ISliderDescriptor SliderSettings => DataEntry.UiExtension as ISliderDescriptor;
+		protected virtual ISliderDescriptor SliderSettings => UiExtension as ISliderDescriptor;
 
 		protected override void DisplayData(object boxedValue)
 		{
