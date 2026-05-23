@@ -202,32 +202,50 @@ MyNumBox = MyCategory.CreateEntry("MyNumBox", 0.5f, "My Number Box", "Float Numb
 ```
 
 -----
-#### Dynamically Editable Dropdown
+#### Dynamically Editable Dropdowns
 #### Interface: `IDynamicDropdownDescriptor`
 #### Default Implementation: `DynamicDropdownDescriptor`
 
-This lets you have a dropdown where you can edit the contents 
+This lets you describe a dropdown whose options you can change at runtime.
+This lets you guide your users to valid options instead of letting them manually type in a text input 
+which is prone to errors. 
 
-Create an items list
+- DropdownItem: This is a simple class used to describe a dropdown option. It has a DisplayName and a Value property.
+The DisplayName is what the user sees in the dropdown and <u>***the Value property is the actual value that gets stored***</u> when the user
+selects that option, not the DropdownItem.
+- Item list: The list of `DropdownItem` objects that get displayed in the dropdown. 
+
+***Creating a DropdownDescriptor***
+
+- Create an items list. You can leave it empty for now or you can pre-populate it with items.
 
 ```cs
 List<DropdownItem> itemList = new();
 ```
-Create an instance of the `DynamicDropdownDescriptor` class passing the item list as a parameter in the constructor
+- Create an instance of the `DynamicDropdownDescriptor` class passing the item list as a parameter in the constructor
 ```cs
-public static DynamicDropdownDescriptor DropdownDescriptor = new(itemList);
+public DynamicDropdownDescriptor DropdownDescriptor = new(itemList);
 ```
-Add items with 
+- You can add items with 
 ```cs
 DropdownDescriptor.AddDropdownItem(new DropdownItem("Display Name", value)); 
 ```
 or declare a list separately and set it with SetDropdownItems
 
 
+***Using your DynamicDropdownDescriptor***
 
-Pass it into the CreateEntry validator parameter
+- Declare your entry as usual. 
+  - Notes: 
+      - An entry is just a normal entry and can be any type like every other preference entry in your mod. 
+      - **DO NOT** declare your type as a DropdownItem. 
+      - DropdownItems are only used to describe what options appear on the dropdown. They are not the data that's actually stored. 
 ```cs
-DropdownTest = Category.CreateEntry("DropdownTest", -1, "Dropdown Test", "Dynamic dropdown test.", false, false, DropdownDescriptor);
+MelonPreference_Entry<string> DropdownTest;
+```
+- Pass it into the CreateEntry validator parameter
+```cs
+DropdownTest = Category.CreateEntry("DropdownTest", "Default Value", "Dropdown Test", null, false, false, DropdownDescriptor);
 ```
 
 -----
@@ -261,7 +279,7 @@ This method will handle the implementation for you and it will show the button i
 -----
 #### Custom Entry Presentations
 ##### Interface: `ICustomViewProvider`
-##### Default Implementation: CustomViewProvider
+##### Default Implementation: `CustomViewProvider`
 Lets you assign a custom prefab to represent your entry in the UI through its `EntryViewPrefab` property. 
 You can make and load new prefabs through assetbundles. 
 The prefab must have a component that inherits from `DataEntryAdapter` on its root game object.
