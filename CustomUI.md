@@ -52,7 +52,8 @@ the name and description
 - Timing: Mod-initiated.
 - Function: Submits a value to the model. 
 - Call this method and pass the new value parameter when the user has made an input. 
-- Note: Generally this calls the UI to refresh completely. So 
+- Note: Generally this calls the UI to refresh completely.
+
 `PreSaveAction()` 
 - Timing: Called after the user clicks the save button, before the model data actually saves the value to the file. 
 - Function: Gives you a chance to parse the user input and call SubmitValue to pass it as a parameter before the data is actually
