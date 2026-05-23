@@ -47,10 +47,12 @@ namespace UIFramework.UiExtensions
 
 	///	<summary>
 	/// Presents the entry as a dropdown and describes the options within it.
+	/// Important to note that your data shouldn't be stored as dropdown items. 
+	/// Dropdown items are just descriptions purely for UI Framework to know what to display to users in the dropdown.
 	/// </summary>
 	public interface IDynamicDropdownDescriptor : IUiExtension
 	{
-		//public List<DropdownItem> DropdownItems { get; set; }
+		
 		public List <DropdownItem> GetDropdownItems();
 		/// <summary>
 		/// Sets the items to be displayed in the dropdown. 
@@ -158,7 +160,7 @@ namespace UIFramework.UiExtensions
 	public interface ICustomViewProvider : IUiExtension
 	{
 		/// <summary>
-		/// 
+		/// Prefab that gets instantiated by UI Framework. Make sure to assign a custom component that inherits from DataEntryAdapter to the prefab's root gameobject so the UI Framework can communicate with it.
 		/// </summary>
 		public GameObject EntryViewPrefab { get; set; }
 	}
