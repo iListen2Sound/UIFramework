@@ -64,5 +64,8 @@ and those can pass the vaues to SubmitValue.
 ## ICustomViewProvider
 This is the UI extension that you pass as the entry's validator. UI Framework will look for its `EntryViewPrefab` 
 property and instantiate that whenever the entry needs to be displayed to the user. 
-### EntryViewPrefab. You assign your view prefab to this property assuming it already has the correct DataEntryAdapter component
-added
+
+### EntryViewPrefab. 
+You assign your view prefab to this property assuming it already has the correct DataEntryAdapter component added
+
+More details on how to use UI extensions here: [UI Extensions](API_OverView.md#custom-entry-presentations)
