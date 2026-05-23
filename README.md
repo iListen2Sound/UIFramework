@@ -10,68 +10,25 @@ You can now scale the window or adjust its height.
 
 </details>
 
-<details><summary>New Feature: Advanced UI Customization for modders Notifier</summary>
+<details><summary>New Feature: Increment and Decrement buttons in number fields </summary>
+You can now click on buttons to increment or decrement values in number fields.
+- Integral types like ints, bytes, longs, etc. will increment and decrement by 1 by default.
+- Floating point types like floats and doubles will increment and decrement by 0.1 by default.
+
+Note: This change has made floating point errors more obvious. I've opted to limit floating point types to display
+1 decimal place by default. This can be easily overridden with the `NumericUpDownDescriptor` UI Extension class.
+</details>
+
+<details><summary>New Feature: </summary>
+</details>
+
+<details><summary>New Feature: Advanced UI Customization for modders </summary>
 
 You can now use the ICustomViewProvider interface to be able to pass your own custom representations to the UI Framework.
 Default implementation: CustomViewProvider. More details in [CustomUI](./CustomUI.md)
 </details>
 
 
-Combined with the previous new feature, you can now adjust your UI according to your users' inputs
-
-The following example uses it to change the visibility of certain categories based on user input without them having to hit save
-
-```cs
-//Create a method you can pass as a delegate
-internal static void UpdateCategoryVis(object newValue)
-{
-    Experimental.IsHidden = !(bool)newValue;
-    TestBooleans.IsHidden = !(bool)newValue;
-    TestEmptyDisplayName.IsHidden = !(bool)newValue;
-}
-```
-Create a new instance of `UserEditNotifier` and set this as the action for OnUserEdit
-```cs
-EnableDebugMode = CatUIFramework.CreateEntry("EnableDebugMode", false, "Enable Debug Logs", "Enables or disables debug logs for UIFramework.", false, false, new UserEditNotifier { OnUserEdit = UpdateCategoryVis });
-```
-</details>
-
-
-<details><summary> New Feature: Modders can now request the window to refresh its UI. </summary>
-
-Just call `UI.RequestRefresh(modInstance)`
-</details>
-
-<details><summary>New Feature: Dynamic dropdown support</summary>
-UI Framework now supports custom dropdown contents, not just from enums. 
-
-Create an items list
-
-```cs
-// It takes a list of DropdownItems which take a string as a display name, and a value of type object 
-List<DropdownItem> itemList = new();
-```
-Create an instance of the `DynamicDropdownDescriptor` class passing the item list as a parameter in the constructor
-```cs
-public static DynamicDropdownDescriptor DropdownDescriptor = new(itemList);
-```
-Add items with 
-```cs
-DropdownDescriptor.AddDropdownItem(new DropdownItem("Display Name", value)); 
-```
-or declare a list separately and set it with SetDropdownItems
-
-Pass it into the CreateEntry validator parameter
-```cs
-DropdownTest = Category.CreateEntry("DropdownTest", -1, "Dropdown Test", "Dynamic dropdown test.", false, false, DropdownDescriptor);
-```
-</details>
-
-<details> <summary> Bug Fix: Added Flatland support </summary>
-UI Framework now works in Flatland
-</details>
-
------
 
 # For Users
 Drop the dll in your mods folder. 
