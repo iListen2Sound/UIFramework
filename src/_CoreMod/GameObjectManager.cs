@@ -164,6 +164,9 @@ namespace UIFramework
 			MainWindowScaleHandle.AddComponent<ScaleHandle>();
 			MainWindowScaleHandle.AddComponent<EventTrigger>();
 
+			MainWindowStretchHandle.AddComponent<StretchHandle>();
+			MainWindowStretchHandle.AddComponent<EventTrigger>();
+
 			MainWindowSource.SetActive(false);
 		}
 
@@ -205,6 +208,58 @@ namespace UIFramework
 
 
 	#region AI Generated
+	[RegisterTypeInIl2Cpp]
+	public class StretchHandle : MonoBehaviour
+	{
+		public RectTransform FindRootWindow()
+		{
+			RectTransform foundRoot = null; ;
+			Transform ancestor = this.gameObject.transform.parent;
+			while (ancestor != null)
+			{
+				if (ancestor.name.Contains("MainWindow"))
+				{
+					return ancestor.GetComponent<RectTransform>();
+				}
+				ancestor = ancestor.parent;
+			}
+
+			return foundRoot;
+		}
+		public RectTransform targetPanel;
+
+		public void OnDrag(BaseEventData data)
+		{
+			PointerEventData eventData = data.TryCast<PointerEventData>();
+			if (eventData == null || targetPanel == null) return;
+
+			Canvas canvas = targetPanel.GetComponentInParent<Canvas>();
+			float scale = (canvas != null) ? canvas.scaleFactor : 1.0f;
+
+			Rect pixelRect = canvas.pixelRect;
+			Vector2 screenSize = new Vector2(pixelRect.width, pixelRect.height) / scale;
+
+			float maxHeight = (screenSize.y + targetPanel.anchoredPosition.y) / targetPanel.localScale.y;
+			float newHeight = Mathf.Clamp(targetPanel.sizeDelta.y - eventData.delta.y / scale, 600f, maxHeight);
+			targetPanel.sizeDelta = new Vector2(targetPanel.sizeDelta.x, newHeight);
+		}
+		void Start()
+		{
+			targetPanel = FindRootWindow();
+
+			EventTrigger trigger = GetComponent<EventTrigger>();
+			if (trigger == null) trigger = gameObject.AddComponent<EventTrigger>();
+			trigger.triggers.Clear();
+
+			EventTrigger.Entry entry = new EventTrigger.Entry();
+			entry.eventID = EventTriggerType.Drag;
+			entry.callback.AddListener(DelegateSupport.ConvertDelegate<UnityEngine.Events.UnityAction<BaseEventData>>(
+				(System.Action<BaseEventData>)OnDrag));
+			trigger.triggers.Add(entry);
+		}
+	}
+
+
 	[RegisterTypeInIl2Cpp]
 	public class ScaleHandle : MonoBehaviour
 	{
