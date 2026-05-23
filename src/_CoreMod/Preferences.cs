@@ -24,7 +24,12 @@ namespace UIFramework
 
 		internal static MelonPreferences_Entry<ToggleOptions> ToggleSettings;
 		internal static MelonPreferences_Entry<int> InactivityTimeout;
+
+		internal static MelonPreferences_Category Footprint;
 		internal static MelonPreferences_Entry<Vector2> UiPosition;
+		internal static MelonPreferences_Entry<Vector3> UiScale;
+		internal static MelonPreferences_Entry<float> UiHeight;
+
 
 		internal static MelonPreferences_Category Experimental;
 		internal static MelonPreferences_Entry<Color> ExperimentalColor;
@@ -85,7 +90,13 @@ namespace UIFramework
 
 
 			EnableDebugMode = CatUIFramework.CreateEntry("EnableDebugMode", false, "Enable Debug Logs", "Enables or disables debug logs for UIFramework.", false, false, new UserEditNotifier { OnUserEdit = UpdateCategoryVis });
-			UiPosition = CatUIFramework.CreateEntry("UiPosition", new Vector2(970, -128f), "UI Position", "The position of the UI on the screen represented", true, true);
+			
+			Footprint = MelonPreferences.CreateCategory("UIF_Footprint", "Footprint Settings", true);
+			Footprint.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
+
+			UiPosition = Footprint.CreateEntry("UiPosition", new Vector2(970, -128f), "UI Position", null, true);
+			UiScale = Footprint.CreateEntry("UiScale", Vector3.one, "UI Scale", null, true);
+			UiHeight = Footprint.CreateEntry("UiHeight", 600f, "UI Height", null, true);
 
 			Experimental = MelonPreferences.CreateCategory("UIFrameworkExperimental", "Experimental Settings", true);
 			Experimental.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));

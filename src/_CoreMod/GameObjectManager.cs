@@ -242,6 +242,12 @@ namespace UIFramework
 			float maxHeight = (screenSize.y + targetPanel.anchoredPosition.y) / targetPanel.localScale.y;
 			float newHeight = Mathf.Clamp(targetPanel.sizeDelta.y - eventData.delta.y / scale, 600f, maxHeight);
 			targetPanel.sizeDelta = new Vector2(targetPanel.sizeDelta.x, newHeight);
+			Preferences.UiHeight.Value = targetPanel.sizeDelta.y;
+		}
+
+		public void OnEndDrag(BaseEventData data)
+		{
+			Preferences.Footprint.SaveToFile(Preferences.EnableDebugMode.Value);
 		}
 		void Start()
 		{
@@ -256,6 +262,15 @@ namespace UIFramework
 			entry.callback.AddListener(DelegateSupport.ConvertDelegate<UnityEngine.Events.UnityAction<BaseEventData>>(
 				(System.Action<BaseEventData>)OnDrag));
 			trigger.triggers.Add(entry);
+
+			EventTrigger.Entry endEntry = new EventTrigger.Entry();
+			endEntry.eventID = EventTriggerType.EndDrag;
+			endEntry.callback.AddListener(DelegateSupport.ConvertDelegate<UnityEngine.Events.UnityAction<BaseEventData>>(
+				(System.Action<BaseEventData>)OnEndDrag));
+			trigger.triggers.Add(endEntry);
+
+			targetPanel.sizeDelta = new Vector2(targetPanel.sizeDelta.x, Preferences.UiHeight.Value);
+
 		}
 	}
 
@@ -264,7 +279,6 @@ namespace UIFramework
 	public class ScaleHandle : MonoBehaviour
 	{
 		public RectTransform targetPanel;
-		const float minWidth = 800f;
 		const float maxScale = 2f;
 		const float minScale = 1f;
 
@@ -302,6 +316,16 @@ namespace UIFramework
 			float deltaScale = eventData.delta.x / canvasScale / targetPanel.sizeDelta.x;
 			float newScale = Mathf.Clamp(targetPanel.localScale.x + deltaScale, 1f, 2f);
 			targetPanel.localScale = new Vector3(newScale, newScale, 1f);
+
+
+			Preferences.UiScale.Value = targetPanel.localScale;
+			Debug.Log($"localScale: {targetPanel.localScale}, Preference: {Preferences.UiScale.Value}", true, 0);
+
+		}
+
+		public void OnEndDrag(BaseEventData data)
+		{
+			Preferences.Footprint.SaveToFile(Preferences.EnableDebugMode.Value);
 		}
 		void Start()
 		{
@@ -322,6 +346,21 @@ namespace UIFramework
 			beginEntry.callback.AddListener(DelegateSupport.ConvertDelegate<UnityEngine.Events.UnityAction<BaseEventData>>(
 				(System.Action<BaseEventData>)OnBeginDrag));
 			trigger.triggers.Add(beginEntry);
+
+			EventTrigger.Entry endEntry = new EventTrigger.Entry();
+			endEntry.eventID = EventTriggerType.EndDrag;
+			endEntry.callback.AddListener(DelegateSupport.ConvertDelegate<UnityEngine.Events.UnityAction<BaseEventData>>(
+				(System.Action<BaseEventData>)OnEndDrag));
+			trigger.triggers.Add(endEntry);
+
+			targetPanel.localScale = Preferences.UiScale.Value;
+			if(targetPanel.localScale.x < minScale || targetPanel.localScale.x > maxScale)
+			{
+				targetPanel.localScale = new Vector3(
+					Mathf.Clamp(targetPanel.localScale.x, minScale, maxScale),
+					Mathf.Clamp(targetPanel.localScale.y, minScale, maxScale),
+					1f);
+			}
 		}
 	}
 
@@ -363,6 +402,10 @@ namespace UIFramework
 			Preferences.UiPosition.Value = targetPanel.anchoredPosition;
 
 		}
+		public void OnEndDrag(BaseEventData data)
+		{
+			Preferences.Footprint.SaveToFile(Preferences.EnableDebugMode.Value);
+		}
 		public void ClampToBounds()
 		{
 			if (targetPanel == null) return;
@@ -402,8 +445,14 @@ namespace UIFramework
 
 			EventTrigger.Entry entry = new EventTrigger.Entry();
 			entry.eventID = EventTriggerType.Drag;
-			entry.callback.AddListener((UnityEngine.Events.UnityAction<BaseEventData>)OnDrag);
+			entry.callback.AddListener(DelegateSupport.ConvertDelegate<UnityEngine.Events.UnityAction<BaseEventData>>((System.Action<BaseEventData>)OnDrag));
 			trigger.triggers.Add(entry);
+
+			EventTrigger.Entry endEntry = new EventTrigger.Entry();
+			endEntry.eventID = EventTriggerType.EndDrag;
+			endEntry.callback.AddListener(DelegateSupport.ConvertDelegate<UnityEngine.Events.UnityAction<BaseEventData>>(
+				(System.Action<BaseEventData>)OnEndDrag));
+			trigger.triggers.Add(endEntry);
 
 			targetPanel.anchoredPosition = Preferences.UiPosition.Value;
 			ClampToBounds();
