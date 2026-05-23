@@ -182,7 +182,7 @@ MySlider = MyCategory.CreateEntry("MySlider", 0, "My Slider", "Example Slider", 
 ### Implemented Extensions
 #### Sliders
 ##### Interface: `ISliderDescriptor`
-##### Default extended validator: `SliderDescriptor`
+##### Default Implementation: `SliderDescriptor`
 The UI will represent your entry with a slider if you add a validator that implements `ISliderDescriptor`.
 
 
@@ -193,7 +193,7 @@ MySlider = MyCategory.CreateEntry("MySlider", 0.5f, "My Slider", "Float Slider",
 -----
 #### Dynamically Editable Dropdown
 #### Interface: `IDynamicDropdownDescriptor`
-#### Default extended validator: `DynamicDropdownDescriptor`
+#### Default Implementation: `DynamicDropdownDescriptor`
 
 This lets you have a dropdown where you can edit the contents 
 
@@ -222,7 +222,7 @@ DropdownTest = Category.CreateEntry("DropdownTest", -1, "Dropdown Test", "Dynami
 -----
 #### User Edit Notifiers
 ##### Interface: `IUserEditedNotifier`
-##### Default extended validator: `UserEditDefaultNotifier`
+##### Default Implementation: `UserEditDefaultNotifier`
 This doesn't change the UIs presentation but it does notify you when the user inputs a new value into the UI e.g. when they're done editing a text input, clicked a toggle or finished moving a slider. It also provides you with the new value
 
 ```cs
@@ -240,9 +240,24 @@ MyToggle = MyCategory.CreateEntry("MyToggle", true, "My Toggle", "Example Toggle
 -----
 #### Buttons
 ##### Interface: `IButtonDescriptor`
-##### Default extended validator: `ButtonAsEntry` (internal)
+##### Default Implementation: `ButtonAsEntry` (internal)
 This is a special case. You don't need to implement this yourself. Instead, you call 
 ```cs
 UI.CreateButtonEntry(MelonPreferences_Category category, string buttonText, string displayName, string description, Action handler)
 ```
 This method will handle the implementation for you and it will show the button in the entries list.
+
+-----
+#### Custom Entry Presentations
+##### Interface: `ICustomViewProvider`
+##### Default Implementation: CustomViewProvider
+Lets you assign a custom prefab to represent your entry in the UI through its `EntryViewPrefab` property. 
+You can make and load new prefabs through assetbundles. 
+The prefab must have a component that inherits from `DataEntryAdapter` on its root game object.
+More details in the [Custom UI](CustomUI.md) documentation.
+Pass it into the CreateEntry method's validator parameter
+```cs 
+TestEntryCustom = TestCategory2.CreateEntry("TestEntryCustom", "hello; world", "Test Custom Entry", "This is a test custom entry ", false, false, new CustomViewProvider { EntryViewPrefab = customWidget });
+```
+
+I've included a unity package with UI Framework's main window structure and some example custom widgets in [TestFit.unitypackage](_Misc/TestFit.unitypackage) so you can build your custom views in there and see how it would fit into UI Framework
