@@ -1,88 +1,34 @@
 <sup> btw: The changelog doubles as a feature list </sup>
 
-### New in 0.9.1
-<details><summary>Bug Fix: Add Rock cam preview support </summary>
-Rock cam detached preview won't cover UI Framework anymore
+### New in 0.10.0
+
+<details><summary>New Feature: Window is now resizable</summary>
+You can now scale the window or adjust its height. 
+
+- Scale: Click and drag the right edge to make the window scale uniformly.
+- Height: Click and drag the bottom edge to adjust the height of the window. 
+
 </details>
 
-<details> <summary>New Feature: Fadeout on inactivity </summary>
-UI Framework can now fade to lower opacity after a set amount of time. 
+<details><summary>New Feature: Increment and Decrement buttons in number fields </summary>
+You can now click on buttons to increment or decrement values in number fields.
+- Integral types like ints, bytes, longs, etc. will increment and decrement by 1 by default.
+- Floating point types like floats and doubles will increment and decrement by 0.1 by default.
+
+Note: This change has made floating point errors more obvious. I've opted to limit floating point types to display
+1 decimal place by default. This can be easily overridden with the `NumericUpDownDescriptor` UI Extension class.
 </details>
 
-<details><summary>Feature change: Inactivity timer disables when set to 0</summary>
-The separate toggle setting for enabling inactivity time out is deprecated and removed. 
-Now disabled by setting the inactivity timer to 0
+<details><summary>New Feature: </summary>
 </details>
 
-### New in 0.9.0 
-<details><summary> New Feature: Reactivity Update! </summary>
-UI Framework can now refresh without the user having to press save or manually reloading the tab
-</details>
-<details><summary> New Feature: Update UI with current values.</summary>
-UI now refreshes when an entry value for a preference changes
-</details>
+<details><summary>New Feature: Advanced UI Customization for modders </summary>
 
-<details><summary>New Feature: IsHidden support for categories</summary>
-UI Framework will now appropriately not show categories with the IsHidden property set to true.
-</details>
-<details><summary> New Feature: Modders can now implement an UserEditNotifier validator class.</summary>
-This can notify you when the user has edited their entry even when it hasn't been applied to their saved value yet.
-
-Combined with the previous new feature, you can now adjust your UI according to your users' inputs
-
-The following example uses it to change the visibility of certain categories based on user input without them having to hit save
-
-```cs
-//Create a method you can pass as a delegate
-internal static void UpdateCategoryVis(object newValue)
-{
-    Experimental.IsHidden = !(bool)newValue;
-    TestBooleans.IsHidden = !(bool)newValue;
-    TestEmptyDisplayName.IsHidden = !(bool)newValue;
-}
-```
-Create a new instance of `UserEditNotifier` and set this as the action for OnUserEdit
-```cs
-EnableDebugMode = CatUIFramework.CreateEntry("EnableDebugMode", false, "Enable Debug Logs", "Enables or disables debug logs for UIFramework.", false, false, new UserEditNotifier { OnUserEdit = UpdateCategoryVis });
-```
+You can now use the ICustomViewProvider interface to be able to pass your own custom representations to the UI Framework.
+Default implementation: CustomViewProvider. More details in [CustomUI](./CustomUI.md)
 </details>
 
 
-<details><summary> New Feature: Modders can now request the window to refresh its UI. </summary>
-
-Just call `UI.RequestRefresh(modInstance)`
-</details>
-
-<details><summary>New Feature: Dynamic dropdown support</summary>
-UI Framework now supports custom dropdown contents, not just from enums. 
-
-Create an items list
-
-```cs
-// It takes a list of DropdownItems which take a string as a display name, and a value of type object 
-List<DropdownItem> itemList = new();
-```
-Create an instance of the `DynamicDropdownDescriptor` class passing the item list as a parameter in the constructor
-```cs
-public static DynamicDropdownDescriptor DropdownDescriptor = new(itemList);
-```
-Add items with 
-```cs
-DropdownDescriptor.AddDropdownItem(new DropdownItem("Display Name", value)); 
-```
-or declare a list separately and set it with SetDropdownItems
-
-Pass it into the CreateEntry validator parameter
-```cs
-DropdownTest = Category.CreateEntry("DropdownTest", -1, "Dropdown Test", "Dynamic dropdown test.", false, false, DropdownDescriptor);
-```
-</details>
-
-<details> <summary> Bug Fix: Added Flatland support </summary>
-UI Framework now works in Flatland
-</details>
-
------
 
 # For Users
 Drop the dll in your mods folder. 

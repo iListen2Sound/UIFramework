@@ -1,9 +1,10 @@
-﻿using Il2CppInterop.Runtime.InteropTypes.Arrays;
+﻿using Il2CppInterop.Runtime;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using MelonLoader;
+using UIFramework.Adapters;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using UIFramework.Adapters;
 
 namespace UIFramework
 {
@@ -28,6 +29,8 @@ namespace UIFramework
 
 		public static GameObject MainWindowSource;
 		public static GameObject MainWindowDragHandle;
+		public static GameObject MainWindowScaleHandle;
+		public static GameObject MainWindowStretchHandle;
 		internal static GameObject ModDisplayList;
 		internal static GameObject CatDisplayList;
 		internal static GameObject PrefDisplayList;
@@ -64,6 +67,8 @@ namespace UIFramework
 			Canvas = AssetBundleLoaded.transform.GetComponentsInChildren<Transform>(true).FirstOrDefault(t => t.name == "UICanvas")?.gameObject;
 			MainWindowSource = AssetBundleLoaded.transform.GetComponentsInChildren<Transform>(true).FirstOrDefault(t => t.name == "Root")?.gameObject;
 			MainWindowDragHandle = AssetBundleLoaded.transform.GetComponentsInChildren<Transform>(true).FirstOrDefault(t => t.name == "DragHandle")?.gameObject;
+			MainWindowScaleHandle = AssetBundleLoaded.transform.GetComponentsInChildren<Transform>(true).FirstOrDefault(t => t.name == "ScaleHandle")?.gameObject;
+			MainWindowStretchHandle = AssetBundleLoaded.transform.GetComponentsInChildren<Transform>(true).FirstOrDefault(t => t.name == "StretchHandle")?.gameObject;
 
 
 			ModDisplayList = AssetBundleLoaded.transform.GetComponentsInChildren<Transform>(true).FirstOrDefault(t => t.name == "ModRegCont")?.gameObject;
@@ -132,8 +137,8 @@ namespace UIFramework
 			TextPrefab.AddComponent<TextEntryAdapter>();
 			BoolPrefab.AddComponent<BoolToggleAdapter>();
 
-			IntPrefab.AddComponent<TextEntryAdapter>();
-			FloatPrefab.AddComponent<TextEntryAdapter>();
+			IntPrefab.AddComponent<NumericEntryAdapter>();
+			FloatPrefab.AddComponent<NumericEntryAdapter>();
 			//DoublePrefab.AddComponent<   TextEntryAdapter>();
 
 			//DropDownPrefab.AddComponent<EnumDropdownAdapter>();
@@ -156,6 +161,11 @@ namespace UIFramework
 			DragHandle dragScript = MainWindowDragHandle.AddComponent<DragHandle>();
 			EventTrigger trigger = MainWindowDragHandle.AddComponent<EventTrigger>();
 
+			MainWindowScaleHandle.AddComponent<ScaleHandle>();
+			MainWindowScaleHandle.AddComponent<EventTrigger>();
+
+			MainWindowStretchHandle.AddComponent<StretchHandle>();
+			MainWindowStretchHandle.AddComponent<EventTrigger>();
 
 			MainWindowSource.SetActive(false);
 		}
@@ -199,6 +209,163 @@ namespace UIFramework
 
 	#region AI Generated
 	[RegisterTypeInIl2Cpp]
+	public class StretchHandle : MonoBehaviour
+	{
+		public RectTransform FindRootWindow()
+		{
+			RectTransform foundRoot = null; ;
+			Transform ancestor = this.gameObject.transform.parent;
+			while (ancestor != null)
+			{
+				if (ancestor.name.Contains("MainWindow"))
+				{
+					return ancestor.GetComponent<RectTransform>();
+				}
+				ancestor = ancestor.parent;
+			}
+
+			return foundRoot;
+		}
+		public RectTransform targetPanel;
+
+		public void OnDrag(BaseEventData data)
+		{
+			PointerEventData eventData = data.TryCast<PointerEventData>();
+			if (eventData == null || targetPanel == null) return;
+
+			Canvas canvas = targetPanel.GetComponentInParent<Canvas>();
+			float scale = (canvas != null) ? canvas.scaleFactor : 1.0f;
+
+			Rect pixelRect = canvas.pixelRect;
+			Vector2 screenSize = new Vector2(pixelRect.width, pixelRect.height) / scale;
+
+			float maxHeight = (screenSize.y + targetPanel.anchoredPosition.y) / targetPanel.localScale.y;
+			float newHeight = Mathf.Clamp(targetPanel.sizeDelta.y - eventData.delta.y / scale, 600f, maxHeight);
+			targetPanel.sizeDelta = new Vector2(targetPanel.sizeDelta.x, newHeight);
+			Preferences.UiHeight.Value = targetPanel.sizeDelta.y;
+		}
+
+		public void OnEndDrag(BaseEventData data)
+		{
+			Preferences.Footprint.SaveToFile(Preferences.EnableDebugMode.Value);
+		}
+		void Start()
+		{
+			targetPanel = FindRootWindow();
+
+			EventTrigger trigger = GetComponent<EventTrigger>();
+			if (trigger == null) trigger = gameObject.AddComponent<EventTrigger>();
+			trigger.triggers.Clear();
+
+			EventTrigger.Entry entry = new EventTrigger.Entry();
+			entry.eventID = EventTriggerType.Drag;
+			entry.callback.AddListener(DelegateSupport.ConvertDelegate<UnityEngine.Events.UnityAction<BaseEventData>>(
+				(System.Action<BaseEventData>)OnDrag));
+			trigger.triggers.Add(entry);
+
+			EventTrigger.Entry endEntry = new EventTrigger.Entry();
+			endEntry.eventID = EventTriggerType.EndDrag;
+			endEntry.callback.AddListener(DelegateSupport.ConvertDelegate<UnityEngine.Events.UnityAction<BaseEventData>>(
+				(System.Action<BaseEventData>)OnEndDrag));
+			trigger.triggers.Add(endEntry);
+
+			targetPanel.sizeDelta = new Vector2(targetPanel.sizeDelta.x, Preferences.UiHeight.Value);
+
+		}
+	}
+
+
+	[RegisterTypeInIl2Cpp]
+	public class ScaleHandle : MonoBehaviour
+	{
+		public RectTransform targetPanel;
+		const float maxScale = 2f;
+		const float minScale = 1f;
+
+		private float _initialWidth;
+		private Vector3 _initialScale;
+		private float _scaleAtDragStart;
+
+		public RectTransform FindRootWindow()
+		{
+			RectTransform foundRoot = null;
+			Transform ancestor = this.gameObject.transform.parent;
+			while (ancestor != null)
+			{
+				if (ancestor.name.Contains("MainWindow"))
+				{
+					return ancestor.GetComponent<RectTransform>();
+				}
+				ancestor = ancestor.parent;
+			}
+
+			return foundRoot;
+		}
+
+		public void OnBeginDrag(BaseEventData data)
+		{
+		}
+		public void OnDrag(BaseEventData data)
+		{
+			PointerEventData eventData = data.TryCast<PointerEventData>();
+			if (eventData == null || targetPanel == null) return;
+
+			Canvas canvas = targetPanel.GetComponentInParent<Canvas>();
+			float canvasScale = (canvas != null) ? canvas.scaleFactor : 1.0f;
+
+			float deltaScale = eventData.delta.x / canvasScale / targetPanel.sizeDelta.x;
+			float newScale = Mathf.Clamp(targetPanel.localScale.x + deltaScale, 1f, 2f);
+			targetPanel.localScale = new Vector3(newScale, newScale, 1f);
+
+
+			Preferences.UiScale.Value = targetPanel.localScale;
+			Debug.Log($"localScale: {targetPanel.localScale}, Preference: {Preferences.UiScale.Value}", true, 0);
+
+		}
+
+		public void OnEndDrag(BaseEventData data)
+		{
+			Preferences.Footprint.SaveToFile(Preferences.EnableDebugMode.Value);
+		}
+		void Start()
+		{
+			targetPanel = FindRootWindow();
+
+			EventTrigger trigger = GetComponent<EventTrigger>();
+			if (trigger == null) trigger = gameObject.AddComponent<EventTrigger>();
+			trigger.triggers.Clear();
+
+			EventTrigger.Entry dragEntry = new EventTrigger.Entry();
+			dragEntry.eventID = EventTriggerType.Drag;
+			dragEntry.callback.AddListener(DelegateSupport.ConvertDelegate<UnityEngine.Events.UnityAction<BaseEventData>>(
+				(System.Action<BaseEventData>)OnDrag));
+			trigger.triggers.Add(dragEntry);
+
+			EventTrigger.Entry beginEntry = new EventTrigger.Entry();
+			beginEntry.eventID = EventTriggerType.BeginDrag;
+			beginEntry.callback.AddListener(DelegateSupport.ConvertDelegate<UnityEngine.Events.UnityAction<BaseEventData>>(
+				(System.Action<BaseEventData>)OnBeginDrag));
+			trigger.triggers.Add(beginEntry);
+
+			EventTrigger.Entry endEntry = new EventTrigger.Entry();
+			endEntry.eventID = EventTriggerType.EndDrag;
+			endEntry.callback.AddListener(DelegateSupport.ConvertDelegate<UnityEngine.Events.UnityAction<BaseEventData>>(
+				(System.Action<BaseEventData>)OnEndDrag));
+			trigger.triggers.Add(endEntry);
+
+			targetPanel.localScale = Preferences.UiScale.Value;
+			if(targetPanel.localScale.x < minScale || targetPanel.localScale.x > maxScale)
+			{
+				targetPanel.localScale = new Vector3(
+					Mathf.Clamp(targetPanel.localScale.x, minScale, maxScale),
+					Mathf.Clamp(targetPanel.localScale.y, minScale, maxScale),
+					1f);
+			}
+		}
+	}
+
+
+	[RegisterTypeInIl2Cpp]
 	public class DragHandle : MonoBehaviour
 	{
 		public RectTransform FindRootWindow()
@@ -235,6 +402,10 @@ namespace UIFramework
 			Preferences.UiPosition.Value = targetPanel.anchoredPosition;
 
 		}
+		public void OnEndDrag(BaseEventData data)
+		{
+			Preferences.Footprint.SaveToFile(Preferences.EnableDebugMode.Value);
+		}
 		public void ClampToBounds()
 		{
 			if (targetPanel == null) return;
@@ -248,7 +419,7 @@ namespace UIFramework
 
 			const float keepRight = 30f;
 			const float keepBottom = 30f;
-			const float keepLeft = 50f;
+			const float keepLeft = 80f;
 
 			float minX = -(size.x - keepLeft);
 			float maxX = screenSize.x - keepRight;
@@ -274,8 +445,14 @@ namespace UIFramework
 
 			EventTrigger.Entry entry = new EventTrigger.Entry();
 			entry.eventID = EventTriggerType.Drag;
-			entry.callback.AddListener((UnityEngine.Events.UnityAction<BaseEventData>)OnDrag);
+			entry.callback.AddListener(DelegateSupport.ConvertDelegate<UnityEngine.Events.UnityAction<BaseEventData>>((System.Action<BaseEventData>)OnDrag));
 			trigger.triggers.Add(entry);
+
+			EventTrigger.Entry endEntry = new EventTrigger.Entry();
+			endEntry.eventID = EventTriggerType.EndDrag;
+			endEntry.callback.AddListener(DelegateSupport.ConvertDelegate<UnityEngine.Events.UnityAction<BaseEventData>>(
+				(System.Action<BaseEventData>)OnEndDrag));
+			trigger.triggers.Add(endEntry);
 
 			targetPanel.anchoredPosition = Preferences.UiPosition.Value;
 			ClampToBounds();
