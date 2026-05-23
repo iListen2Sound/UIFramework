@@ -71,3 +71,105 @@ property and instantiate that whenever the entry needs to be displayed to the us
 You assign your view prefab to this property assuming it already has the correct DataEntryAdapter component added
 
 More details on how to use UI extensions here: [UI Extensions](API_OverView.md#ui-presentation-control-validator-extensions)
+
+
+## Example code
+This is an example of a custom adapter for a view that has two text inputs and the data is stored as a string with a semicolon as a delimiter.
+
+### Example custom View
+![Example prefab](_Misc/Images/Custom.png)
+
+This is the hierarchy of the view prefab for this example. 
+```
+PrefEntryDoubleTexts
+├── Data
+│   ├── Label
+│   └── Panel
+│       ├── txtLeft
+│       └── txtRight
+├── Indicator
+└── Description
+```
+
+<details> <summary>Details on the name and description labels</summary>
+Note that the "Data/Label" and "Description" already exist in the prefab. These are the default paths for the 
+name and description labels. 
+
+You can override the `DisplayName` and the `DescriptionText` properties in your custom adapter if that's not the case for your view's prefab
+```cs
+string DescriptionPath = "MyCustomDescriptionPath";
+string DisplayNamePath = "MyCustomDisplayNamePath";
+protected override string DescriptionText
+{
+	get { return this.gameObject.transform.Find(DescriptionPath).gameObject.GetComponent<TextMeshProUGUI>().text; }
+	set { this.gameObject.transform.Find(DescriptionPath).gameObject.GetComponent<TextMeshProUGUI>().text = value; }
+}
+/// <summary>
+/// Sets the identifier text
+/// </summary>
+protected override string DisplayName
+{
+	get { return this.gameObject.gameObject.transform.Find(DisplayNamePath).gameObject.GetComponent<TextMeshProUGUI>().text; }
+	set { this.gameObject.gameObject.transform.Find(DisplayNamePath).gameObject.GetComponent<TextMeshProUGUI>().text = value; }
+}
+```
+</details>
+
+### Custom Adapter
+
+```cs
+[RegisterTypeInIl2Cpp]
+public class CustomAdapter : DataEntryAdapter
+{
+	protected TMP_InputField txtLeft => this.gameObject.transform.Find("Data/Panel/txtLeft").GetComponent<TMP_InputField>();
+	protected TMP_InputField txtRight => this.gameObject.transform.Find("Data/Panel/txtRight").GetComponent<TMP_InputField>();
+
+	protected override void DisplayData(object boxedValue)
+	{
+		string value = boxedValue as string;
+
+		txtLeft.text = value.Split(';')[0];
+		txtRight.text = value.Split(';')[1];
+
+
+	}
+
+	protected void EditEnd(string s)
+	{
+		ParseThenSubmit();
+	}
+	protected void ParseThenSubmit()
+	{
+		string left = txtLeft.text;
+		string right = txtRight.text;
+
+		string submission = left + ";" + right;
+		SubmitValue(submission);
+	}
+
+	void Start()
+	{
+		txtLeft.onEndEdit.AddListener((System.Action<string>)EditEnd);
+		txtRight.onEndEdit.AddListener((System.Action<string>)EditEnd);
+
+	}
+}
+```
+
+### Loading the View GameObject from the asset bundle
+```cs
+//This asset bundle function uses RMAPI
+customWidget = GameObject.Instantiate(AssetBundles.LoadAssetFromStream<GameObject>(this, "UIFTester2.Assets.testuis", "PrefEntryDoubleTexts"));
+//Add the loaded asset to DontDestroyOnLoad
+GameObject.DontDestroyOnLoad(customWidget);
+```
+
+### Adding the Custom Adapter GameObject component
+```cs
+customWidget.AddComponent<CustomAdapter>();
+```
+
+### Adding the entry with the CustomViewProvider
+```cs
+TestEntryCustom = TestCategory2.CreateEntry("TestEntryCustom", "hello; world", "Test Custom Entry", "", false, false, new CustomViewProvider { EntryViewPrefab = customWidget });
+```
