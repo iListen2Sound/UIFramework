@@ -1,4 +1,5 @@
 ﻿# Advanced UI Customization
+
 ## View Presentation Structure
 
 ### Entry View
@@ -35,6 +36,7 @@ Inherit the `DataEntryAdapter` class to create your own custom component that yo
 These are the game objects that should display the name and the description of the entry.
 By default the `DescriptionText` and `DisplayName` properties reference a GameObjct called `"Description"` and `"Data/Label"` 
 respectivey in your view prefab's hierarchy. But both properties can be overridden.
+
 ### Data Hooks
 These are the methods for moving data between the model and the view.
 `DisplayEntryInfo(string displayName, string description)` 
@@ -68,4 +70,4 @@ property and instantiate that whenever the entry needs to be displayed to the us
 ### EntryViewPrefab. 
 You assign your view prefab to this property assuming it already has the correct DataEntryAdapter component added
 
-More details on how to use UI extensions here: [UI Extensions](API_OverView.md#custom-entry-presentations)
+More details on how to use UI extensions here: [UI Extensions](API_OverView.md#ui-presentation-control-validator-extensions)
