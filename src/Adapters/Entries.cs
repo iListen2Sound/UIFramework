@@ -1,26 +1,27 @@
-﻿using Il2CppTMPro;
+﻿using Il2CppRUMBLE.Combat.ShiftStones;
+using Il2CppTMPro;
 using MelonLoader;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using Tomlet;
 using Tomlet.Models;
-using UIFramework.UiExtensions;
 using UIFramework.Models;
+using UIFramework.UiExtensions;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static UIFramework.Debug;
-using UnityEngine.EventSystems;
 namespace UIFramework.Adapters
 
 {
 	[RegisterTypeInIl2Cpp]
-	public abstract class PrefEntryAdapter : SubModelAdapter, IChildable
+	public abstract class PrefEntryAdapterBase : SubModelAdapter
 	{
 		/// <summary>
 		/// Sets the description text
 		/// </summary>
-		public virtual string DescriptionText
+		protected virtual string DescriptionText
 		{
 			get { return this.gameObject.transform.Find("Description").gameObject.GetComponent<TextMeshProUGUI>().text; }
 			set { this.gameObject.transform.Find("Description").gameObject.GetComponent<TextMeshProUGUI>().text = value; }
@@ -28,37 +29,46 @@ namespace UIFramework.Adapters
 		/// <summary>
 		/// Sets the identifier text
 		/// </summary>
-		public virtual string DisplayName
+		protected virtual string DisplayName
 		{
 			get { return this.gameObject.gameObject.transform.Find("Data/Label").gameObject.GetComponent<TextMeshProUGUI>().text; }
 			set { this.gameObject.gameObject.transform.Find("Data/Label").gameObject.GetComponent<TextMeshProUGUI>().text = value; }
 		}
 
-		public virtual EntryState EntryStatus { get; set; }
+		protected virtual EntryState EntryStatus { get; set; }
 
 		/// <summary>
 		/// Runs when the model property has been set. 
 		/// </summary>
 
 
-		public IEntry EntryModel => (IEntry)_internalModel;
+		protected private EntryModelBase EntryModel => (EntryModelBase)_internalModel;
 		/// <summary>
 		/// This is called when the Save button is pressed. Override to create custom behaviour.
 		/// </summary>
 		/// <remarks>Generally MelonPreferences are saved from the category, not the indivial entries.</remarks>
-		public virtual void SaveAction()
+		public virtual void PreSaveAction()
 		{
 		}
 		/// <summary>
 		/// 
 		/// </summary>
-		public override void ModelSet()
+		protected sealed override void ModelSet()
 		{
-			SetData();
-			DescriptionText = EntryModel.Description;
-			DisplayName = EntryModel.DisplayName;
+			DisplayMetadata();
+			DisplayContents();
 		}
-		public virtual void SetData()
+		protected override sealed void DisplayMetadata()
+		{
+			DisplayEntryInfo(EntryModel.DisplayName, EntryModel.Description);
+		}
+
+		protected virtual void DisplayEntryInfo(string displayName, string description)
+		{
+			DescriptionText = description;
+			DisplayName = displayName;
+		}
+		protected virtual void DisplayContents()
 		{
 
 		}
@@ -94,14 +104,16 @@ namespace UIFramework.Adapters
 	/// TODO: Refactor this to suggest non-melon related settings storage
 	/// </summary>
 	[RegisterTypeInIl2Cpp]
-	public abstract class DataEntryAdapter : PrefEntryAdapter
+	public abstract class DataEntryAdapter : PrefEntryAdapterBase
 	{
 
 
 		/// <inheritdoc/>
 		//public override void ModelSet() { base.ModelSet(); }
 
-		virtual protected DataEntryModelBase _prefModel => (DataEntryModelBase)EntryModel;
+		private protected DataEntryModelBase DataEntry => (DataEntryModelBase)EntryModel;
+		protected object CurrentBoxedValue;
+		protected IUiExtension UiExtension => DataEntry.UiExtension;
 
 		/// <inheritdoc/>
 		public virtual bool ValidationCheck()
@@ -110,14 +122,31 @@ namespace UIFramework.Adapters
 		}
 
 		public virtual void EditCheck() { }
-
-		public override void SaveAction()
+		/// <inheritdoc/>
+		public override void PreSaveAction()
 		{
-			ApplyValueToPref();
-			base.SaveAction();
+
 		}
 
-		public virtual void ApplyValueToPref() { }
+		protected sealed override void DisplayContents()
+		{
+			CurrentBoxedValue = DataEntry.ModelBoxedValue;
+			DisplayData(DataEntry.ModelBoxedValue);
+		}
+
+		protected virtual void DisplayData(object boxedValue)
+		{
+
+		}
+		/// <summary>
+		/// Submits the value to the model
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		protected bool SubmitValue(object value)
+		{
+			return DataEntry.TryApply(value);
+		}
 	}
 
 
@@ -130,26 +159,30 @@ namespace UIFramework.Adapters
 		/// <summary>
 		/// Returns the textfield
 		/// </summary>
-		public TMP_InputField textField => this.gameObject.transform.Find("Data/TextControl").gameObject.GetComponent<TMP_InputField>();
+		protected TMP_InputField textField => this.gameObject.transform.Find("Data/TextControl").gameObject.GetComponent<TMP_InputField>();
 		/// <summary>
 		/// Sets the placeholder text in the textField
 		/// </summary>
-		public string PlaceHolderText { set { this.gameObject.transform.Find("Data/TextControl/Text Area/Placeholder").gameObject.GetComponent<TextMeshProUGUI>().text = value; } }
-		/// <inheritdoc/>
-		public override void SetData()
+		protected string PlaceHolderText { set { this.gameObject.transform.Find("Data/TextControl/Text Area/Placeholder").gameObject.GetComponent<TextMeshProUGUI>().text = value; } }
+
+		Type boxedValueType = null;
+
+		/// <inheritdoc/>/// 
+		protected override void DisplayData(object boxedValue)
 		{
-			//textField.text = _prefModel.ModelBoxedValue.ToString();
-			//TomletMain.TomlStringFrom(_prefModel.ModelBoxedValue).Trim();
-			if (_prefModel.ModelBoxedValue.GetType() == typeof(string))
+			//textField.text = DataEntry.ModelBoxedValue.ToString();
+			//TomletMain.TomlStringFrom(DataEntry.ModelBoxedValue).Trim();
+			boxedValueType = boxedValue.GetType();
+			if (boxedValueType == typeof(string))
 			{
-				textField.text = (string)_prefModel.ModelBoxedValue;
+				textField.text = (string)boxedValue;
 			}
 			else
 			{
 				try
 				{
-					textField.text = ToTomlString(_prefModel.ModelBoxedValue);
-					//Debug.Log(ToTomlString(_prefModel.ModelBoxedValue), true);
+					textField.text = ToTomlString(boxedValue);
+					//Debug.Log(ToTomlString(DataEntry.ModelBoxedValue), true);
 				}
 				catch (Exception ex)
 				{
@@ -157,11 +190,11 @@ namespace UIFramework.Adapters
 				}
 			}
 		}
-		public override void ApplyValueToPref()
+		protected void ParseThenSubmit()
 		{
-			if (_prefModel.ModelBoxedValue.GetType() == typeof(string))
+			if (boxedValueType == typeof(string))
 			{
-				_prefModel.TryApply(textField.text);
+				SubmitValue(textField.text);
 			}
 			else
 			{
@@ -169,8 +202,7 @@ namespace UIFramework.Adapters
 				{
 					if (textField.text.Trim() != "")
 					{
-						_prefModel.TryApply(FromTomlString(textField.text, _prefModel.ModelBoxedValue.GetType()));
-						//Debug.Log($"Toml data parsed {FromTomlString(textField.text, _prefModel.ModelBoxedValue.GetType())}");
+						SubmitValue(FromTomlString(textField.text, DataEntry.ModelBoxedValue.GetType()));
 					}
 				}
 				catch (Exception ex)
@@ -182,7 +214,7 @@ namespace UIFramework.Adapters
 
 		public override void EditCheck()
 		{
-			/*if(textField.text != _prefModel.PrefEntry.ModelBoxedValue.ToString())
+			/*if(textField.text != DataEntry.PrefEntry.ModelBoxedValue.ToString())
 			{
 				EntryStatus = EntryState.Edited;
 			}*/
@@ -190,14 +222,14 @@ namespace UIFramework.Adapters
 
 
 
-		public virtual void EditStart(string s)
+		protected virtual void EditStart(string s)
 		{
 			textField.textComponent.fontStyle = FontStyles.Normal;
 		}
-		public virtual void EditEnd(string s)
+		protected virtual void EditEnd(string s)
 		{
 			textField.textComponent.fontStyle = FontStyles.Italic;
-			ApplyValueToPref();
+			ParseThenSubmit();
 		}
 
 		protected virtual void Start()
@@ -206,26 +238,85 @@ namespace UIFramework.Adapters
 			textField.onDeselect.AddListener((System.Action<string>)EditEnd);
 		}
 	}
+	[RegisterTypeInIl2Cpp]
+	public class NumericEntryAdapter : TextEntryAdapter
+	{
 
+		protected float IncrementStep
+		{
+			get
+			{
+				float step = (UiExtension as INumberBoxDescriptor)?.Steps ?? 0;
+
+				if (step == 0)
+
+				{
+					step = CurrentBoxedValue switch
+					{
+						byte or sbyte or short or ushort or int or uint or long or ulong => 1f,
+						_ => 0.1f
+					};
+				}
+
+				return step;
+			}
+		}
+
+		protected virtual INumberBoxDescriptor NumericSettings => UiExtension as INumberBoxDescriptor;
+
+		protected override void Start()
+		{
+			base.Start();
+			GameObject add = this.gameObject.transform.Find("Data/ButtonGroup/Add").gameObject;
+			GameObject sub = this.gameObject.transform.Find("Data/ButtonGroup/Sub").gameObject;
+
+			add.GetComponent<Button>().onClick.AddListener((UnityAction)Increment);
+			sub.GetComponent<Button>().onClick.AddListener((UnityAction)Decrement);
+
+		}
+
+		protected override void DisplayData(object boxedValue)
+		{
+			//Call the original displaydata method
+			base.DisplayData(boxedValue);
+
+			//Take the string, convert it ot the correct type, then convert it back to a string with the correct number of decimal places
+			if (boxedValue.GetType() != typeof(int))
+			{
+				textField.text = Convert.ToSingle(boxedValue).ToString($"F{NumericSettings?.DecimalPlaces ?? 1}");
+			}
+
+
+		}
+
+		protected virtual void Increment()
+		{
+			SubmitValue(CurrentBoxedValue == null ? IncrementStep : Convert.ChangeType(Convert.ToSingle(CurrentBoxedValue) + IncrementStep, CurrentBoxedValue.GetType()));
+		}
+		protected virtual void Decrement()
+		{
+			SubmitValue(CurrentBoxedValue == null ? -IncrementStep : Convert.ChangeType(Convert.ToSingle(CurrentBoxedValue) - IncrementStep, CurrentBoxedValue.GetType()));
+		}
+	}
 
 	[RegisterTypeInIl2Cpp]
 	public class NumSliderAdapter : TextEntryAdapter
 	{
 		protected Slider Slider => gameObject.transform.Find("Data/SliderControl").gameObject.GetComponent<UnityEngine.UI.Slider>();
 		protected TMP_InputField _textField => gameObject.transform.Find("Data/TextControl").gameObject.GetComponent<TMP_InputField>();
-		protected virtual ISliderDescriptor SliderSettings => _prefModel.UiExtension as ISliderDescriptor;
+		protected virtual ISliderDescriptor SliderSettings => UiExtension as ISliderDescriptor;
 
-		public override void SetData()
+		protected override void DisplayData(object boxedValue)
 		{
 			_textField.onEndEdit.AddListener((UnityAction<string>)EditEnd);
 			_textField.onSelect.AddListener((UnityAction<string>)EditStart);
 
 			Slider.minValue = SliderSettings?.Min ?? 0;
 			Slider.maxValue = SliderSettings?.Max ?? 100;
-			Slider.value = Convert.ToSingle(_prefModel.ModelBoxedValue);
+			Slider.value = Convert.ToSingle(boxedValue);
 			Slider.onValueChanged.AddListener((UnityAction<float>)OnValueChanged);
 			AddPointerUp();
-			if (_prefModel.ModelBoxedValue is int or byte or short or long or sbyte or ushort or uint or ulong)
+			if (boxedValue is int or byte or short or long or sbyte or ushort or uint or ulong)
 			{
 				Slider.wholeNumbers = true;
 				_textField.contentType = TMP_InputField.ContentType.IntegerNumber;
@@ -239,22 +330,22 @@ namespace UIFramework.Adapters
 			}
 		}
 
-		public void OnValueChanged(float newValue)
+		protected void OnValueChanged(float newValue)
 		{
 			_textField.text = newValue.ToString(_textField.contentType == TMP_InputField.ContentType.IntegerNumber ? "F0" : "F" + SliderSettings?.DecimalPlaces);
 			//ApplyValueToPref();
 			//Debug.Log($"Slider value changed to {newValue}", true);
 		}
 
-		public override void ApplyValueToPref()
+		public void SubmitSliderValue()
 		{
-			_prefModel.TryApply(Convert.ChangeType(Slider.value, _prefModel.ModelBoxedValue.GetType()));
+			SubmitValue(Convert.ChangeType(Slider.value, DataEntry.ModelBoxedValue.GetType()));
 		}
-		public virtual void EditStart(string s)
+		protected override void EditStart(string s)
 		{
 			_textField.textComponent.fontStyle = FontStyles.Normal;
 		}
-		public virtual void EditEnd(string s)
+		protected override void EditEnd(string s)
 		{
 			_textField.textComponent.fontStyle = FontStyles.Italic;
 
@@ -265,7 +356,7 @@ namespace UIFramework.Adapters
 					result = Mathf.Clamp(result, SliderSettings.Min, SliderSettings.Max);
 				}
 				Slider.value = result;
-				ApplyValueToPref();
+				SubmitSliderValue();
 			}
 			else
 			{
@@ -291,7 +382,7 @@ namespace UIFramework.Adapters
 
 		protected void PointerUP(BaseEventData eventData)
 		{
-			ApplyValueToPref();
+			SubmitSliderValue();
 		}
 	}
 
@@ -302,62 +393,60 @@ namespace UIFramework.Adapters
 	public class BoolToggleAdapter : DataEntryAdapter
 	{
 		protected Toggle toggle => this.gameObject.transform.Find("Data/ToggleControl").gameObject.GetComponent<Toggle>();
-		//protected override DataEntryModelBase _prefModel => (DataEntryModelBase)EntryModel;
+		//protected override DataEntryModelBase DataEntry => (DataEntryModelBase)EntryModel;
 		public bool EnteredValue => this.gameObject.transform.Find("Data/ToggleControl").gameObject.GetComponent<Toggle>().isOn;
 		/// <inheritdoc/>
-		public override void SetData()
+		protected override void DisplayData(object boxedValue)
 		{
-			toggle.isOn = (bool)_prefModel.ModelBoxedValue;
+			toggle.isOn = (bool)boxedValue;
 			toggle.onValueChanged.AddListener((UnityAction<bool>)OnValueChanged);
-
-		}
-		/// <inheritdoc/>
-		public override void EditCheck()
-		{
 
 		}
 
 		public void OnValueChanged(bool newValue)
 		{
-			ApplyValueToPref();
-		}
-		/// <inheritdoc/>
-		public override void ApplyValueToPref()
-		{
-			try
-			{
-				_prefModel.TryApply(EnteredValue);
-			}
-			catch (Exception ex)
-			{
-				Log(ex.Message, false, 2);
-			}
+			SubmitValue(newValue);
 		}
 	}
 
 	[RegisterTypeInIl2Cpp]
 	public abstract class DropDownAdapterBase : DataEntryAdapter
 	{
-		protected DataEntryModelBase _prefModel => (DataEntryModelBase)EntryModel;
-		public System.Collections.Generic.List<int> _indexToValueMap = new();
-		public TMP_Dropdown dropdown;
+		//protected DataEntryModelBase _prefModel => (DataEntryModelBase)EntryModel;
+		protected System.Collections.Generic.List<int> _indexToValueMap = new();
+		protected TMP_Dropdown dropdown;
 
-		public override void SetData()
+
+		protected object EntryValue { get; set; }
+		protected override void DisplayData(object boxedValue)
 		{
+
 			dropdown = this.gameObject.transform.Find("Data/DropdownControl").GetComponent<TMP_Dropdown>();
-
+			EntryValue = boxedValue;
 			GetDropdownData();
+			SelectDropDownItem(boxedValue);
 
-			
 
 			dropdown.onValueChanged.AddListener((UnityAction<int>)OnValueChanged);
 		}
 		public void OnValueChanged(int index)
 		{
-			ApplyValueToPref();
+			SubmitDropdownValue();
 		}
 
-		public virtual void GetDropdownData()
+		public virtual void SubmitDropdownValue()
+		{
+
+		}
+		protected virtual void GetDropdownData()
+		{
+			Debug.Log("GetDropdownData not implemented for " + this.GetType().Name, false, 2);
+		}
+		protected virtual void SelectDropDownItem(object boxedValue)
+		{
+			Debug.Log("SelectDropDownItem not implemented for " + this.GetType().Name, false, 2);
+		}
+		void Start()
 		{
 
 		}
@@ -371,11 +460,11 @@ namespace UIFramework.Adapters
 	{
 
 
-		public Type prefEnum;
+		protected Type prefEnum;
 
-		public override void GetDropdownData()
+		protected override void GetDropdownData()
 		{
-			prefEnum = _prefModel.ModelBoxedValue.GetType();
+			prefEnum = EntryValue.GetType();
 
 			//Get a list of display name attributes or the enum name if not available
 			Il2CppSystem.Collections.Generic.List<string> enumNames = new();
@@ -390,7 +479,12 @@ namespace UIFramework.Adapters
 
 			dropdown.ClearOptions();
 			dropdown.AddOptions(enumNames);
-			dropdown.value = _indexToValueMap.IndexOf((int)_prefModel.ModelBoxedValue);
+
+		}
+
+		protected override void SelectDropDownItem(object boxedValue)
+		{
+			dropdown.value = _indexToValueMap.IndexOf((int)boxedValue);
 		}
 		/// <inheritdoc/>
 
@@ -402,18 +496,19 @@ namespace UIFramework.Adapters
 
 
 		/// <inheritdoc/>
-		public override void ApplyValueToPref()
+		public override void SubmitDropdownValue()
 		{
-			_prefModel.TryApply(Enum.ToObject(prefEnum, _indexToValueMap[dropdown.value]));
+			SubmitValue(Enum.ToObject(prefEnum, _indexToValueMap[dropdown.value]));
 		}
 	}
 	[RegisterTypeInIl2Cpp]
 	public class DynamicDopdownAdapter : DropDownAdapterBase
 	{
-		public IDynamicDropdownDescriptor DropdownContents => _prefModel.UiExtension as IDynamicDropdownDescriptor;
+		public IDynamicDropdownDescriptor DropdownContents => DataEntry.UiExtension as IDynamicDropdownDescriptor;
 
-		public override void GetDropdownData()
+		protected override void GetDropdownData()
 		{
+			DropdownContents.OnDropdownItemsUpdated = GetDropdownData;
 			try
 			{
 				Il2CppSystem.Collections.Generic.List<string> dropdownItems = new();
@@ -423,23 +518,22 @@ namespace UIFramework.Adapters
 				}
 				dropdown.ClearOptions();
 				dropdown.AddOptions(dropdownItems);
-				int itemToLoad = DropdownContents.GetDropdownItems().FindIndex(x => object.Equals(x.Value, _prefModel.ModelBoxedValue));
-				dropdown.value = itemToLoad;
-
 			}
+
 			catch (Exception ex) { Debug.Log($"{ex}"); }
+			SelectDropDownItem(EntryValue);
 
 		}
 
-		public override void SetData()
+		protected override void SelectDropDownItem(object boxedValue)
 		{
-			base.SetData();
-			DropdownContents.OnDropdownItemsUpdated = GetDropdownData;
-
+			int itemToLoad = DropdownContents.GetDropdownItems().FindIndex(x => object.Equals(x.Value, boxedValue));
+			dropdown.value = itemToLoad;
 		}
-		public override void ApplyValueToPref()
+
+		public override void SubmitDropdownValue()
 		{
-			_prefModel.TryApply((DropdownContents.GetDropdownItems()[dropdown.value]).Value);
+			SubmitValue((DropdownContents.GetDropdownItems()[dropdown.value]).Value);
 		}
 
 		void OnDestroy()
@@ -452,8 +546,8 @@ namespace UIFramework.Adapters
 	{
 		GameObject _buttonGo;
 		Button _buttonComponent;
-		IButtonDescriptor _buttonDescrictor => _prefModel?.UiExtension as IButtonDescriptor;
-		public override void SetData()
+		IButtonDescriptor _buttonDescrictor => DataEntry?.UiExtension as IButtonDescriptor;
+		protected override void DisplayData(object boxedValue)
 		{
 			_buttonGo = this.gameObject.transform.Find("Data/ButtonControl").gameObject;
 
@@ -466,16 +560,16 @@ namespace UIFramework.Adapters
 	}
 
 	[RegisterTypeInIl2Cpp]
-	public class ButtonModelAdapter : PrefEntryAdapter
+	public class ButtonModelAdapter : PrefEntryAdapterBase
 	{
 		ButtonEntry ButtonModel => (ButtonEntry)EntryModel;
 		public GameObject ButtonGo;
 		/// <inheritdoc/>
-		public override void SetData()
+		protected override void DisplayContents()
 		{
 			ButtonGo = this.gameObject.transform.Find("Data/ButtonControl").gameObject;
 			ButtonGo.GetComponent<Button>().onClick.AddListener((UnityAction)OnClickRelay);
-			base.SetData();
+			base.DisplayContents();
 		}
 
 		public void OnClickRelay()

@@ -24,23 +24,10 @@ using Il2CppSystem.Threading.Tasks;
 namespace UIFramework.Adapters
 {
 
-	/// <summary>
-	/// Controllers for models that can be submodels of other models. 
-	/// Preference Entries
-	/// ModButtonView Buttons
-	/// CategoryTabView Buttons
-	/// </summary>
-	public interface IChildable
-	{
-		/// <summary>
-		/// Reference to the model the controller works from.  
-		/// </summary>
-		public IModelable Model { get; set; }
-	}
 	public abstract class SubModelAdapter : MonoBehaviour
 	{
 		protected IModelable _internalModel;
-		public virtual IModelable Model
+		public IModelable Model
 		{
 			get
 			{
@@ -78,7 +65,8 @@ namespace UIFramework.Adapters
 		{
 			_rootWindow = FindRootWindow();
 		}
-		public virtual void ModelSet() { }
+		protected virtual void ModelSet() { }
+		protected virtual void DisplayMetadata() { }
 	}
 
 	/// <summary>
@@ -110,13 +98,13 @@ namespace UIFramework.Adapters
 		protected TextMeshProUGUI TitleButtonText;
 		internal DragHandle DragHandle;
 
-		public ModModelBase SelectedMod => _selectedMod;
+		internal ModModelBase SelectedMod => _selectedMod;
 		private ModModelBase _selectedMod = null;
 
-		public CategoryModelBase SelectedCategory => _selectedCategory;
+		internal CategoryModelBase SelectedCategory => _selectedCategory;
 		private CategoryModelBase _selectedCategory = null;
 
-		public Dictionary<ModModelBase, CategoryModelBase> LastCategorySelected = new();
+		internal Dictionary<ModModelBase, CategoryModelBase> LastCategorySelected = new();
 
 
 		internal void SetSelectedMod(ModModelBase mod)
@@ -124,30 +112,30 @@ namespace UIFramework.Adapters
 			_selectedMod = mod;
 			TitleButtonText.text = $"{mod.DisplayName}\n{mod.Instance.Info.Version}";
 
-			CatRegistryPanel.SetModel(mod);
+			CatRegistryPanel.SetContainerModel(mod);
 
 			CategoryModelBase lastSelected = null;
 			if (LastCategorySelected.ContainsKey(mod as ModModelBase))
 				lastSelected = LastCategorySelected[mod as ModModelBase];
 
 
-			PrefRegistryPanel.SetModel(lastSelected ?? (CategoryModelBase)mod.SubModels[0]);
+			PrefRegistryPanel.SetContainerModel(lastSelected ?? (CategoryModelBase)mod.SubModels[0]);
 			RequestRefresh();
 
 		}
-		public void SetSelectedCategory(CategoryModelBase cat)
+		internal void SetSelectedCategory(CategoryModelBase cat)
 		{
 			_selectedCategory = cat;
-			PrefRegistryPanel.SetModel(cat);
+			PrefRegistryPanel.SetContainerModel(cat);
 			LastCategorySelected[_selectedMod] = cat;
 			RequestRefresh();
 		}
 
-		public void SelectInSideBar(IHoldSubmodels model)
+		internal void SelectInSideBar(IHoldSubmodels model)
 		{
 			ModRegistryPanel.SelectTab(model as IHoldSubmodels);
 		}
-		public void SelectInTopBar(IHoldSubmodels model)
+		internal void SelectInTopBar(IHoldSubmodels model)
 		{
 			CatRegistryPanel.SelectTab(model as IHoldSubmodels);
 		}
@@ -220,7 +208,7 @@ namespace UIFramework.Adapters
 			CatRegistryPanel.GetComponent<CategoryListAdapter>().ContainerReset();
 			PrefRegistryPanel.GetComponent<PrefListAdapter>().ContainerReset();
 
-			ModRegistryPanel.SetModel(_model);
+			ModRegistryPanel.SetContainerModel(_model);
 
 			RequestRefresh();
 		}
@@ -229,7 +217,7 @@ namespace UIFramework.Adapters
 		/// </summary>
 		/// <remarks>
 		/// Generally Melonpreferences are saved by category. 
-		/// But this iterates through the child controllers and call their SaveAction() method.
+		/// But this iterates through the child controllers and call their PreSaveAction() method.
 		/// This allows for custom behavior before the actual category gets saved
 		/// </remarks>
 		protected virtual void SaveButtonClick()

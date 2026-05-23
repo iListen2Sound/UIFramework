@@ -28,6 +28,7 @@
 
 	<ItemGroup>
 	  <Folder Include="src\_CustomDataSources\" />
+	  <Folder Include="_Misc\Images\" />
 	  <Folder Include="_Misc\ThunderstorePackage\Template\Mods\" />
 	</ItemGroup>
 

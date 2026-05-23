@@ -24,7 +24,12 @@ namespace UIFramework
 
 		internal static MelonPreferences_Entry<ToggleOptions> ToggleSettings;
 		internal static MelonPreferences_Entry<int> InactivityTimeout;
+
+		internal static MelonPreferences_Category Footprint;
 		internal static MelonPreferences_Entry<Vector2> UiPosition;
+		internal static MelonPreferences_Entry<Vector3> UiScale;
+		internal static MelonPreferences_Entry<float> UiHeight;
+
 
 		internal static MelonPreferences_Category Experimental;
 		internal static MelonPreferences_Entry<Color> ExperimentalColor;
@@ -50,7 +55,7 @@ namespace UIFramework
 		internal static MelonPreferences_Entry<int> DemoInt;
 		internal static MelonPreferences_Entry<string> DemoString;
 
-		internal static DefaultRefreshInhibitor InhibitRefresh = new DefaultRefreshInhibitor { InhibitRefreshOnValueChange = true };
+		internal static RefreshInhibitor InhibitRefresh = new RefreshInhibitor { InhibitRefreshOnValueChange = true };
 
 		internal static MelonPreferences_Category TestEmptyDisplayName;
 		internal static MelonPreferences_Entry<string> TestEmptyDisplayPref;
@@ -85,7 +90,13 @@ namespace UIFramework
 
 
 			EnableDebugMode = CatUIFramework.CreateEntry("EnableDebugMode", false, "Enable Debug Logs", "Enables or disables debug logs for UIFramework.", false, false, new UserEditNotifier { OnUserEdit = UpdateCategoryVis });
-			UiPosition = CatUIFramework.CreateEntry("UiPosition", new Vector2(970, -128f), "UI Position", "The position of the UI on the screen represented", true, true);
+			
+			Footprint = MelonPreferences.CreateCategory("UIF_Footprint", "Footprint Settings", true);
+			Footprint.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
+
+			UiPosition = Footprint.CreateEntry("UiPosition", new Vector2(970, -128f), "UI Position", null, true);
+			UiScale = Footprint.CreateEntry("UiScale", Vector3.one, "UI Scale", null, true);
+			UiHeight = Footprint.CreateEntry("UiHeight", 600f, "UI Height", null, true);
 
 			Experimental = MelonPreferences.CreateCategory("UIFrameworkExperimental", "Experimental Settings", true);
 			Experimental.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
@@ -101,7 +112,7 @@ namespace UIFramework
 			TestString = Experimental.CreateEntry("TestString", "Hello, World!", "Test String", "This is a test string.");
 			TestInt = Experimental.CreateEntry("TestInt", 42, "Test Int", "This is a test int.");
 			TestFloat = Experimental.CreateEntry("TestFloat", 3.14f, "Test Float", "This is a test float.");
-			TestDouble = Experimental.CreateEntry("TestDouble", 3.14159, "Test Double", "This is a test double.");
+			TestDouble = Experimental.CreateEntry("TestDouble", 3.14159, "Test Double", "This is a test double.", false, false, new NumberBoxDescriptor { DecimalPlaces = 5 });
 			TestEnum = Experimental.CreateEntry("TestEnum", InputType.TextField, "Test Enum", "This is a test enum.");
 			NonZeroEnum = Experimental.CreateEntry("Non-Zero", NonZeroBased.a, "Non-zero-based enum test", "This tests enums that don't start from zero");
 			NonContiguousEnum = Experimental.CreateEntry("Non-Cont", NonContiguous.z, "Non-Contiguous enum test", "This tests enums that have gaps in between the explicitlyi named values");

@@ -24,6 +24,7 @@ namespace UIFramework.UiExtensions
 		public TMP_InputField.ContentType ContentType { get; set; } = TMP_InputField.ContentType.Standard;
 		public int CharacterLimit { get; set; } = 0;
 		public bool IsReadOnly { get; set; } = false;
+		public int DecimalPlaces { get; set; } = 1;
 	}
 
 	/// <inheritdoc cref="ITextInputAppearanceDescriptor"/>
@@ -94,17 +95,20 @@ namespace UIFramework.UiExtensions
 		/// <summary>
 		/// Decimal Places. Defaults 5
 		/// </summary>
-		public int DecimalPlaces { get; set; } = 5;
+		public int DecimalPlaces { get; set; } = 1;
 
 		///<inheritdoc/>
 		public Action<object> OnUserEdit { get; set;  }
 	}
 
-	///<inheritdoc cref="INumericUpDownDescriptor"/>
-	public class NumericUpDownDescriptor : DefaultValidator, INumericUpDownDescriptor
+	///<inheritdoc cref="INumberBoxDescriptor"/>
+	public class NumberBoxDescriptor : DefaultValidator, INumberBoxDescriptor
 	{
 		/// <inheritdoc/>
-		public float Increments { get; set; }
+		public float Steps { get; set; } = 0;
+		/// <inheritdoc/>
+		public int DecimalPlaces { get; set; } = 5;
+
 	}
 
 	/// <summary>
@@ -130,7 +134,7 @@ namespace UIFramework.UiExtensions
 	/// These prevent the entry from <em>causing</em> the UI to refresh
 	/// This does not mean the entry prevents interruptions from refreshes
 	/// </remarks>
-	public class DefaultRefreshInhibitor : DefaultValidator, IRefreshInhibitor
+	public class RefreshInhibitor : DefaultValidator, IRefreshInhibitor
 	{
 		///<inheritdoc/>	
 		public bool InhibitRefreshOnEdit {get; set;} = false;
@@ -138,6 +142,11 @@ namespace UIFramework.UiExtensions
 		public bool InhibitRefreshOnValueChange {get; set;} = false;
 	}
 
+	///<inheritdoc cref="ICustomViewProvider"/>
+	public class CustomViewProvider : DefaultValidator, ICustomViewProvider
+	{
+		public GameObject EntryViewPrefab { get; set; }
+	}
 
 	internal class ButtonAsEntry : DefaultValidator, IButtonDescriptor
 	{

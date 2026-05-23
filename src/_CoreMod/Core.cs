@@ -26,7 +26,7 @@ namespace UIFramework
 		/// <summary></summary>
 		public const string Author = "Reverb && Spice";
 		/// <summary></summary>
-		public const string Version = "0.9.1";
+		public const string Version = "0.10.0";	
 	}
 
 
@@ -324,8 +324,6 @@ namespace UIFramework
 
 			MyModel = UI.Register(this, Preferences.CatUIFramework, Preferences.Demo, Preferences.Experimental, Preferences.TestBooleans, Preferences.TestEmptyDisplayName);
 			MelonCategoryModel tester = (MelonCategoryModel)MyModel.GetSubmodel(Preferences.TestBooleans.Identifier);
-			ButtonEntry testButton = new ButtonEntry(CustomClick, "CustomButton", "just a test", "Custom Button");
-			tester.AddSubmodel(testButton);
 
 
 			Prefabs.LoadAssetBundle();
@@ -349,10 +347,6 @@ namespace UIFramework
 
 		}
 
-		public void CustomClick(ButtonModelAdapter button)
-		{
-			Debug.Log($"Clicked: {button.DisplayName} ", false);
-		}
 		private void SinglesaveClick()
 		{
 			Debug.Log("Clicked Single Save Button");
