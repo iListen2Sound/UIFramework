@@ -1,4 +1,5 @@
-﻿using Il2CppTMPro;
+﻿using Il2CppRUMBLE.Combat.ShiftStones;
+using Il2CppTMPro;
 using MelonLoader;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
@@ -165,7 +166,7 @@ namespace UIFramework.Adapters
 		protected string PlaceHolderText { set { this.gameObject.transform.Find("Data/TextControl/Text Area/Placeholder").gameObject.GetComponent<TextMeshProUGUI>().text = value; } }
 
 		Type boxedValueType = null;
-		
+
 		/// <inheritdoc/>/// 
 		protected override void DisplayData(object boxedValue)
 		{
@@ -240,9 +241,28 @@ namespace UIFramework.Adapters
 	[RegisterTypeInIl2Cpp]
 	public class NumericEntryAdapter : TextEntryAdapter
 	{
-		protected float IncrementStep => (UiExtension as INumericUpDownDescriptor)?.Steps ?? (CurrentBoxedValue.GetType() == typeof(int) ? 1 : 0.1f);
-		
-		protected virtual INumericUpDownDescriptor NumericSettings => UiExtension as INumericUpDownDescriptor;
+
+		protected float IncrementStep
+		{
+			get
+			{
+				float step = (UiExtension as INumberBoxDescriptor)?.Steps ?? 0;
+
+				if (step == 0)
+
+				{
+					step = CurrentBoxedValue switch
+					{
+						byte or sbyte or short or ushort or int or uint or long or ulong => 1f,
+						_ => 0.1f
+					};
+				}
+
+				return step;
+			}
+		}
+
+		protected virtual INumberBoxDescriptor NumericSettings => UiExtension as INumberBoxDescriptor;
 
 		protected override void Start()
 		{
@@ -252,7 +272,7 @@ namespace UIFramework.Adapters
 
 			add.GetComponent<Button>().onClick.AddListener((UnityAction)Increment);
 			sub.GetComponent<Button>().onClick.AddListener((UnityAction)Decrement);
-			
+
 		}
 
 		protected override void DisplayData(object boxedValue)
@@ -266,7 +286,7 @@ namespace UIFramework.Adapters
 				textField.text = Convert.ToSingle(boxedValue).ToString($"F{NumericSettings?.DecimalPlaces ?? 1}");
 			}
 
-			
+
 		}
 
 		protected virtual void Increment()

@@ -92,6 +92,7 @@ The UI will automatically present your entries according to their data types. Bo
 ### Optional: Custom display names
 Add `[assembly: UIInfo("My Mod's Better\nDisplay Name")]` to your assembly attributes to change how the mod's name is displayed
 in the UI. Line breaks are supported.
+
 ### Enum Display Names
 Enum dropdowns support the Display(Name) attribute. If unavailable, it will fall back to the default enum value name. 
 ```cs
@@ -188,6 +189,16 @@ The UI will represent your entry with a slider if you add a validator that imple
 
 ```cs
 MySlider = MyCategory.CreateEntry("MySlider", 0.5f, "My Slider", "Float Slider",false, false, new SliderDescriptor { Min = 0, Max = 1, DecimalPlaces = 3 });
+```
+
+-----
+### NumberBox
+##### Interface: `INumberBoxDescriptor`
+##### Default Implementation: `NumberBoxDescriptor`
+
+Lets you customize interactions with numeric text inputs. 
+```cs
+MyNumBox = MyCategory.CreateEntry("MyNumBox", 0.5f, "My Number Box", "Float Number Box",false, false, new NumberBoxDescriptor { Steps = 0.5f, DecimalPlaces = 3 });
 ```
 
 -----

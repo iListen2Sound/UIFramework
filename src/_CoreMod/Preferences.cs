@@ -112,7 +112,7 @@ namespace UIFramework
 			TestString = Experimental.CreateEntry("TestString", "Hello, World!", "Test String", "This is a test string.");
 			TestInt = Experimental.CreateEntry("TestInt", 42, "Test Int", "This is a test int.");
 			TestFloat = Experimental.CreateEntry("TestFloat", 3.14f, "Test Float", "This is a test float.");
-			TestDouble = Experimental.CreateEntry("TestDouble", 3.14159, "Test Double", "This is a test double.");
+			TestDouble = Experimental.CreateEntry("TestDouble", 3.14159, "Test Double", "This is a test double.", false, false, new NumberBoxDescriptor { DecimalPlaces = 5 });
 			TestEnum = Experimental.CreateEntry("TestEnum", InputType.TextField, "Test Enum", "This is a test enum.");
 			NonZeroEnum = Experimental.CreateEntry("Non-Zero", NonZeroBased.a, "Non-zero-based enum test", "This tests enums that don't start from zero");
 			NonContiguousEnum = Experimental.CreateEntry("Non-Cont", NonContiguous.z, "Non-Contiguous enum test", "This tests enums that have gaps in between the explicitlyi named values");

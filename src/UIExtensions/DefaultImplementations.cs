@@ -95,17 +95,17 @@ namespace UIFramework.UiExtensions
 		/// <summary>
 		/// Decimal Places. Defaults 5
 		/// </summary>
-		public int DecimalPlaces { get; set; } = 5;
+		public int DecimalPlaces { get; set; } = 1;
 
 		///<inheritdoc/>
 		public Action<object> OnUserEdit { get; set;  }
 	}
 
-	///<inheritdoc cref="INumericUpDownDescriptor"/>
-	public class NumericUpDownDescriptor : DefaultValidator, INumericUpDownDescriptor
+	///<inheritdoc cref="INumberBoxDescriptor"/>
+	public class NumberBoxDescriptor : DefaultValidator, INumberBoxDescriptor
 	{
 		/// <inheritdoc/>
-		public float Steps { get; set; }
+		public float Steps { get; set; } = 0;
 		/// <inheritdoc/>
 		public int DecimalPlaces { get; set; } = 5;
 

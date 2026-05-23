@@ -88,7 +88,7 @@ namespace UIFramework.UiExtensions
 	/// <summary>
 	/// Describes numeric up down controls
 	/// </summary>
-	public interface INumericUpDownDescriptor : IUiExtension
+	public interface INumberBoxDescriptor : IUiExtension
 	{
 		/// <summary>
 		/// 0 = default (1 for ints, 0.1 for floats). 
