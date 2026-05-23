@@ -1,6 +1,15 @@
 <sup> btw: The changelog doubles as a feature list </sup>
 
 ### New in 0.10.0
+
+<details><summary>New Feature: Window is now resizable</summary>
+You can now scale the window or adjust its height. 
+
+- Scale: Click and drag the right edge to make the window scale uniformly.
+- Height: Click and drag the bottom edge to adjust the height of the window. 
+
+</details>
+
 <details><summary>New Feature: Advanced UI Customization for modders Notifier</summary>
 
 You can now use the ICustomViewProvider interface to be able to pass your own custom representations to the UI Framework.

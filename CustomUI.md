@@ -28,11 +28,14 @@ This is a custom component added to the `Entry View` root panel.
 There's a unity package in [_Misc/TestFit.unitypackage](_Misc/TestFit.unitypackage) that contains the prefab for the 
 UI Framework window. You can add it to a unity project and build your views in 
 
-#### Name and Description Labels
+## Making custom EntryAdapters
+Inherit the `DataEntryAdapter` class to create your own custom component that you will add to your view prefab's root panel. 
+
+### Name and Description Labels
 These are the game objects that should display the name and the description of the entry.
 By default the `DescriptionText` and `DisplayName` properties reference a GameObjct called `"Description"` and `"Data/Label"` 
 respectivey in your view prefab's hierarchy. But both properties can be overridden.
-#### Data Hooks
+### Data Hooks
 These are the methods for moving data between the model and the view.
 `DisplayEntryInfo(string displayName, string description)` 
 - Timing: Called when the view is being built. 
@@ -40,11 +43,25 @@ These are the methods for moving data between the model and the view.
 - Override this method if you want custom behavior or have different game objects in your view prefab that you want to use for
 the name and description
 
-`DisplayData(object boxedValue)` - This method is called after `DisplayMetadata` and passes the value from the model to the Adapter. 
-Override this method to interpret the boxed value and display it in the control the user interacts with for this entry of your mod
+`DisplayData(object boxedValue)` 
+- Timing: Called right after `DisplayEntryInfo`
+- Function: Takes the value from the model and passes the value as a parameter so that it can be displayed in the correct control element;
+- Override this method to display the value appropriately in your custom view. 
 
-`SubmitValue(object value)` - Call this method when you want the user input to be passed to the model. Unlike the other methods, this can't be overridden.
+`SubmitValue(object value)` 
+- Timing: Mod-initiated.
+- Function: Submits a value to the model. 
+- Call this method and pass the new value parameter when the user has made an input. 
+- Note: Generally this calls the UI to refresh completely. So 
+`PreSaveAction()` 
+- Timing: Called after the user clicks the save button, before the model data actually saves the value to the file. 
+- Function: Gives you a chance to parse the user input and call SubmitValue to pass it as a parameter before the data is actually
+saved to a file. 
+- Note: This shouldn't be needed in most cases. You should add the appropriate listeners to your control elements
+and those can pass the vaues to SubmitValue. 
 
-`PreSaveAction()` - Called right after the user clicks the save button before any saving actually happens. Gives you a last chance to call `SubmitValue` to make sure the user's entry has been submitted
-to the model by the time its value gets saved. 
-
+## ICustomViewProvider
+This is the UI extension that you pass as the entry's validator. UI Framework will look for its `EntryViewPrefab` 
+property and instantiate that whenever the entry needs to be displayed to the user. 
+### EntryViewPrefab. You assign your view prefab to this property assuming it already has the correct DataEntryAdapter component
+added
