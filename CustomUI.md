@@ -10,7 +10,7 @@ This could be a TextInput, a Toggle, etc. whichever might be appropriate for the
 UI Framework has some built in ones that cover the most common data types and will default to TextInput for things it 
 doesn't know how to handle and hope that the entry can be serialized and deserialized using TOML.
 
-![Basic text input view](_Misc/Images/EntryEXample.png)
+![Basic text input view](_Misc/Images/EntryExample.png)
 
 ### Entry Model
 Won't go into too much detail here because I haven't finalized the design for this class yet.
