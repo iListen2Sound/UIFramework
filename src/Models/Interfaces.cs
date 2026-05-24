@@ -48,7 +48,7 @@ namespace UIFramework.Models
 		/// Adds a new submodel to the SubModels list
 		/// </summary>
 		/// <param name="model"></param>
-		public void AddSubmodel(params IModelable[] model);
+		//public void AddSubmodel(params IModelable[] model);
 	}
 	/// <summary>
 	/// Goes on the main panel. Contains controls for manipulating preferences or just general UI controls
@@ -72,12 +72,6 @@ namespace UIFramework.Models
 		public void DiscardAction();
 		public string DisplayName { get; }
 		//public object ModelBoxedValue { get; set; }
-
-		/// <summary>
-		/// Called when the PrefEntryAdapter has been created.
-		/// Useful when you wanna change specific elements after creation
-		/// </summary>
-		public Action<PrefEntryAdapter> OnUICreated { get; set; }
 
 
 	}

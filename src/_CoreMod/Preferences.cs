@@ -18,12 +18,18 @@ namespace UIFramework
 		internal static MelonPreferences_Entry<bool> EnableDebugMode;
 		internal static MelonPreferences_Entry<bool> AutoHideOnSceneLoad;
 		internal static MelonPreferences_Entry<bool> AutoHideOnInactivity;
+		internal static MelonPreferences_Entry<int> FadeTimer;
 		internal static MelonPreferences_Entry<bool> VrInputToggle;
 		internal static MelonPreferences_Entry<bool> HijackModUI;
 
 		internal static MelonPreferences_Entry<ToggleOptions> ToggleSettings;
 		internal static MelonPreferences_Entry<int> InactivityTimeout;
+
+		internal static MelonPreferences_Category Footprint;
 		internal static MelonPreferences_Entry<Vector2> UiPosition;
+		internal static MelonPreferences_Entry<Vector3> UiScale;
+		internal static MelonPreferences_Entry<float> UiHeight;
+
 
 		internal static MelonPreferences_Category Experimental;
 		internal static MelonPreferences_Entry<Color> ExperimentalColor;
@@ -34,7 +40,7 @@ namespace UIFramework
 		internal static MelonPreferences_Entry<int> TestInt;
 		internal static MelonPreferences_Entry<float> TestFloat;
 		internal static MelonPreferences_Entry<double> TestDouble;
-		internal static MelonPreferences_Entry<InputType> TestEnum;
+		internal static MelonPreferences_Entry<PrefabType> TestEnum;
 		internal static MelonPreferences_Entry<List<int>> TestList;
 		internal static MelonPreferences_Entry<List<string>> TestListString;
 		internal static MelonPreferences_Entry<NonZeroBased> NonZeroEnum;
@@ -49,7 +55,7 @@ namespace UIFramework
 		internal static MelonPreferences_Entry<int> DemoInt;
 		internal static MelonPreferences_Entry<string> DemoString;
 
-		internal static DefaultRefreshInhibitor InhibitRefresh = new DefaultRefreshInhibitor { InhibitRefreshOnValueChange = true };
+		internal static RefreshInhibitor InhibitRefresh = new RefreshInhibitor { InhibitRefreshOnValueChange = true };
 
 		internal static MelonPreferences_Category TestEmptyDisplayName;
 		internal static MelonPreferences_Entry<string> TestEmptyDisplayPref;
@@ -67,8 +73,11 @@ namespace UIFramework
 			CatUIFramework = MelonPreferences.CreateCategory("UI", "UI Settings");
 			CatUIFramework.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
 			AutoHideOnSceneLoad = CatUIFramework.CreateEntry("AutoHideOnSceneLoad", true, "Auto Hide On Scene Load", "Hides the UI Automatically in between scenes.");
-			AutoHideOnInactivity = CatUIFramework.CreateEntry("AutohideOnInactivity", true, "Auto Hide on Inactivity", "Hide the UI if mouse and keyboard are inactive");
-			InactivityTimeout = CatUIFramework.CreateEntry("InactivityTimeout", 30, "Inactivity Time Out (Seconds)", "Number of seconds of inactivity for UI to hide automatically");
+			AutoHideOnInactivity = CatUIFramework.CreateEntry("AutohideOnInactivity", true, "(Deprecated)Auto Hide on Inactivity", "Hide the UI if mouse and keyboard are inactive", true);
+			FadeTimer = CatUIFramework.CreateEntry("FadeTimer", 10, "Fade Out Time", "Fade UI after this many seconds.\nSet 0 to disable", false, false);
+			InactivityTimeout = CatUIFramework.CreateEntry("InactivityTimeout", 30, "Inactivity Time Out", "Hide UI After this many seconds.\nSet 0 to disable", false, false);
+			
+			
 			VrInputToggle = CatUIFramework.CreateEntry("VrInputToggle", false, "Toggle with VR buttons", "Toggle UI window by pressing both trigger and primary (A/X) on both hands", true);
 
 			ToggleSettings = CatUIFramework.CreateEntry("ToggleSettings", ToggleOptions.Keyboard, "Toggle Options", "Select the input method for toggling the UI.\n" +
@@ -81,7 +90,13 @@ namespace UIFramework
 
 
 			EnableDebugMode = CatUIFramework.CreateEntry("EnableDebugMode", false, "Enable Debug Logs", "Enables or disables debug logs for UIFramework.", false, false, new UserEditNotifier { OnUserEdit = UpdateCategoryVis });
-			UiPosition = CatUIFramework.CreateEntry("UiPosition", new Vector2(970, -128f), "UI Position", "The position of the UI on the screen represented", true, true);
+			
+			Footprint = MelonPreferences.CreateCategory("UIF_Footprint", "Footprint Settings", true);
+			Footprint.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
+
+			UiPosition = Footprint.CreateEntry("UiPosition", new Vector2(970, -128f), "UI Position", null, true);
+			UiScale = Footprint.CreateEntry("UiScale", Vector3.one, "UI Scale", null, true);
+			UiHeight = Footprint.CreateEntry("UiHeight", 600f, "UI Height", null, true);
 
 			Experimental = MelonPreferences.CreateCategory("UIFrameworkExperimental", "Experimental Settings", true);
 			Experimental.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
@@ -97,8 +112,8 @@ namespace UIFramework
 			TestString = Experimental.CreateEntry("TestString", "Hello, World!", "Test String", "This is a test string.");
 			TestInt = Experimental.CreateEntry("TestInt", 42, "Test Int", "This is a test int.");
 			TestFloat = Experimental.CreateEntry("TestFloat", 3.14f, "Test Float", "This is a test float.");
-			TestDouble = Experimental.CreateEntry("TestDouble", 3.14159, "Test Double", "This is a test double.");
-			TestEnum = Experimental.CreateEntry("TestEnum", InputType.TextField, "Test Enum", "This is a test enum.");
+			TestDouble = Experimental.CreateEntry("TestDouble", 3.14159, "Test Double", "This is a test double.", false, false, new NumberBoxDescriptor { DecimalPlaces = 5 });
+			TestEnum = Experimental.CreateEntry("TestEnum", PrefabType.TextField, "Test Enum", "This is a test enum.");
 			NonZeroEnum = Experimental.CreateEntry("Non-Zero", NonZeroBased.a, "Non-zero-based enum test", "This tests enums that don't start from zero");
 			NonContiguousEnum = Experimental.CreateEntry("Non-Cont", NonContiguous.z, "Non-Contiguous enum test", "This tests enums that have gaps in between the explicitlyi named values");
 			TestList = Experimental.CreateEntry("TestList", new List<int> { 1, 2, 3 }, "Test List", "This is a test list of integers.", true);
@@ -128,10 +143,8 @@ namespace UIFramework
 			DropdownSelection = Demo.CreateEntry("SelectedDropdownItem", DropdownTest.Value, "Selected Item", "The item selected in the dropdown demo");
 			ShowReactivity = Demo.CreateEntry("Entry_Reactivity", false, "Show hidden Entry", "This is a demo preference to hide the reactivity demo button in the demo category.", false, false, new UserEditNotifier { OnUserEdit = HideReaction });
 			DemoCounting = Demo.CreateEntry("EnableCount", false, "Enable counting demo", "This is a demo for how the UI can update by a change of values in the background", false, false, new UserEditNotifier { OnUserEdit = (newVal) => { DemoCounting.EditedValue = (bool)newVal; UI.RequestRefresh(Core.Instance); } });
-
-
-			InhibitRefreshForCount = Demo.CreateEntry("InhibitDemoCount", true, "Inhibit Count Refresh", "Inhibit refreshing the UI when the demo int counts up", false, false, new UserEditNotifier { OnUserEdit = UpdateInhibitDemo });
 			DemoInt = Demo.CreateEntry("DemoInt", 0, "Demo Int", "This is a demo int Preference", false, false, InhibitRefresh);
+			InhibitRefreshForCount = Demo.CreateEntry("InhibitDemoCount", true, "Inhibit Count Refresh", "Inhibit refreshing the UI when the demo int counts up", false, false, new UserEditNotifier { OnUserEdit = UpdateInhibitDemo });
 			DemoString = Demo.CreateEntry("DemoString", "Hello, World!", "Demo String", "This is a demo string preference. This should show the name of the current scene", true);
 
 			DemoInt.Value = 0;
@@ -141,6 +154,15 @@ namespace UIFramework
 			InhibitRefreshForCount.Value = true;
 			DemoCounting.Value = false;
 			MelonCoroutines.Start(DemoCount());
+
+			if (!AutoHideOnInactivity.Value)
+			{
+				Debug.Log("AutoHideOnInactivity is deprecated. Applying setting to InactivityTimeout and deleting", false, 1);
+				InactivityTimeout.Value = 0;
+			}
+
+
+			CatUIFramework.DeleteEntry("AutohideOnInactivity");
 
 			DropdownTest.OnEntryValueChanged.Subscribe(ItemSelectionChanged);
 		}
@@ -170,7 +192,7 @@ namespace UIFramework
 		}
 		internal static void HideReaction(object newValue)
 		{
-			Debug.Log($"HideReact: {newValue}");
+			Debug.Log($"HideReact: {newValue}", false);
 			DemoInt.IsHidden = !(bool)newValue;
 			ShowReactivity.Value = (bool)newValue;
 		}

@@ -101,7 +101,7 @@ namespace UIFramework.Models
 			AddSubmodel(categoryModel.Cast<IModelable>().ToArray());
 		}
 		/// <summary>
-		/// Calls individual category models' SaveAction method.
+		/// Calls individual category models' PreSaveAction method.
 		/// </summary>
 		public override void SaveAction()
 		{
@@ -172,11 +172,6 @@ namespace UIFramework.Models
 		/// <inheritdoc/>
 		public abstract string Description { get; }
 		public override bool IsHidden { get; set; }
-
-		/// <summary>
-		/// Called when the corresponding UI element is created
-		/// </summary>
-		public virtual Action<PrefEntryAdapter> OnUICreated { get; set; }
 
 		/// <summary>
 		/// 
@@ -259,24 +254,28 @@ namespace UIFramework.Models
 		public override GameObject GetNewUIInstance()
 		{
 			//Make the custom UI provided by the validator the first priority if it exists.	
-			if (UiExtension is ICustomUIProvider uiProvider)
+			if (UiExtension is ICustomViewProvider uiProvider)
 			{
-				if (uiProvider?.WidgetPrefab is not null)
-					return GameObject.Instantiate(uiProvider.WidgetPrefab);
+				if (uiProvider?.EntryViewPrefab is not null)
+					return GameObject.Instantiate(uiProvider.EntryViewPrefab);
 			}
 
 			if (UiExtension is DynamicDropdownDescriptor)
 			{
-				GameObject dropdown = UI.GetPrefab(InputType.Dropdown);
+				GameObject dropdown = UI.GetPrefabInstance(PrefabType.Dropdown);
 				dropdown.AddComponent<DynamicDopdownAdapter>();
 				return dropdown;
 			}
 
 			if (UiExtension is ISliderDescriptor)
-				return UI.GetPrefab(InputType.Slider);
+			{ 
+				GameObject slider = UI.GetPrefabInstance(PrefabType.Slider);
+				slider.AddComponent<NumSliderAdapter>();
+				return slider;
+			}
 			if (UiExtension is IButtonDescriptor)
 			{
-				GameObject button = UI.GetPrefab(InputType.Button);
+				GameObject button = UI.GetPrefabInstance(PrefabType.Button);
 				button.AddComponent<ButtonEntryAdapter>();
 				return button;
 			}
@@ -287,11 +286,15 @@ namespace UIFramework.Models
 			switch (ModelBoxedValue)
 			{
 				case bool:
-					return UI.GetPrefab(InputType.Toggle);
+					GameObject toggle = UI.GetPrefabInstance(PrefabType.Toggle);
+					toggle.AddComponent<BoolToggleAdapter>();
+					return toggle;
 				case string:
-					return UI.GetPrefab(InputType.TextField);
+					GameObject textField = UI.GetPrefabInstance(PrefabType.TextField);
+					textField.AddComponent<TextEntryAdapter>();
+					return textField;
 				case Enum:
-					GameObject dropdown = UI.GetPrefab(InputType.Dropdown);
+					GameObject dropdown = UI.GetPrefabInstance(PrefabType.Dropdown);
 					dropdown.AddComponent<EnumDropdownAdapter>();
 					return dropdown;
 
@@ -305,15 +308,21 @@ namespace UIFramework.Models
 				case uint:
 				case long:
 				case ulong:
-					return UI.GetPrefab(InputType.NumericInt);
+					GameObject intInput = UI.GetPrefabInstance(PrefabType.NumericInt);
+					intInput.AddComponent<NumericEntryAdapter>();
+					return intInput;
 				//floating point types
 				case float:
 				case double:
 				case decimal:
-					return UI.GetPrefab(InputType.NumericFloat);
+					GameObject floatInput = UI.GetPrefabInstance(PrefabType.NumericFloat);
+					floatInput.AddComponent<NumericEntryAdapter>();
+					return floatInput;
 				default:
 					//Debug.Log("Unsupported type detected with no custom widget prefab provided. Defaulting to text input. Creating custom component recommended", true, 1);
-					return UI.GetPrefab(InputType.TextField);
+					GameObject defaultInput = UI.GetPrefabInstance(PrefabType.TextField);
+					defaultInput.AddComponent<TextEntryAdapter>();
+					return defaultInput;
 			}
 
 		}

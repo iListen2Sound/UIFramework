@@ -1,3 +1,45 @@
+# New in 0.10.0
+<details><summary>New Feature: Window is now resizable</summary>
+You can now scale the window or adjust its height. 
+
+- Scale: Click and drag the right edge to make the window scale uniformly.
+- Height: Click and drag the bottom edge to adjust the height of the window. 
+
+</details>
+
+<details><summary>New Feature: Increment and Decrement buttons in number fields </summary>
+You can now click on buttons to increment or decrement values in number fields.
+
+- Integral types like ints, bytes, longs, etc. will increment and decrement by 1 by default.
+- Floating point types like floats and doubles will increment and decrement by 0.1 by default.
+
+<sup>Note: This change has made floating point errors more obvious. I've opted to limit floating point types to display
+1 decimal place by default. This can be easily overridden with the `INumberBoxDescriptor` UI Extension class.</sup>
+</details>
+
+
+<details><summary>New Feature: Advanced UI Customization for modders </summary>
+
+You can now use the `ICustomViewProvider` interface to be able to pass your own custom representations to the UI Framework.
+Default implementation: `CustomViewProvider`. More details in [CustomUI](./CustomUI.md)
+</details>
+
+
+# New in 0.9.1
+<details><summary>Bug Fix: Add Rock cam preview support </summary>
+Rock cam detached preview won't cover UI Framework anymore
+</details>
+
+<details> <summary>New Feature: Fadeout on inactivity </summary>
+UI Framework can now fade to lower opacity after a set amount of time. 
+</details>
+
+<details><summary>Feature change: Inactivity timer disables when set to 0</summary>
+The separate toggle setting for enabling inactivity time out is deprecated and removed. 
+Now disabled by setting the inactivity timer to 0
+</details>
+
+
 # New in 0.9.0 
 <details><summary> New Feature: Reactivity Update! </summary>
 UI Framework can now refresh without the user having to press save or manually reloading the tab

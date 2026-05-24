@@ -26,7 +26,7 @@ namespace UIFramework
 		/// <summary></summary>
 		public const string Author = "Reverb && Spice";
 		/// <summary></summary>
-		public const string Version = "0.9.0";
+		public const string Version = "0.10.0";	
 	}
 
 
@@ -55,9 +55,10 @@ namespace UIFramework
 			rightPrimary.AddBinding("<XRController>{RightHand}/primaryButton");
 			leftGrip.AddBinding("<XRController>{LeftHand}/Trigger");
 			leftPrimary.AddBinding("<XRController>{LeftHand}/primaryButton");
-			map.Enable();
+			map.Enable();	
 			Instance = this;
 			MelonPreferences.OnPreferencesSaved.Subscribe(MelPrefsSaved);
+			Prefabs.LoadAssetBundle();
 			LoggerInstance.Msg("Initialized.");
 
 		}
@@ -73,9 +74,7 @@ namespace UIFramework
 			if (isFirstLoad)
 				return;
 			//Debug.DiffLog($"UI is Visible {UI.IsVisible}",true);
-			AutoHideCheck();
-
-
+			ActivityCheck();
 		}
 		/// <summary>
 		/// Run OnUpdate. Check if the inputs for toggling the UI have been pressed.
@@ -197,25 +196,19 @@ namespace UIFramework
 
 		}
 
-		#endregion
-		private void AutoHideCheck()
+		private void ActivityCheck()
 		{
-			//Don't proceed if Autohide preference is set to false or null
-			//Don't proceed if UI is inactive. Reset stopwatch if running
-			if (!UI.MainWindow.activeSelf || Preferences.AutoHideOnInactivity?.Value != true)
-			{
-				if (displayTime.IsRunning)
-					displayTime.Reset();
-				return;
-			}
-
 			//Stop and reset stopwatch if user has interacted with mouse or keyboard
 			if (UserInteracted())
 			{
 				if (displayTime.IsRunning)
+				{
+					UI.Unfade();
 					displayTime.Reset();
-			}
+				}
 
+
+			}
 			//Start stopwatch if user stopped interacting
 			else
 			{
@@ -223,6 +216,25 @@ namespace UIFramework
 					displayTime.Start();
 			}
 
+
+			AutoHideCheck();
+			FadeCheck();
+
+		}
+
+		#endregion
+		private void AutoHideCheck()
+		{
+			//Don't proceed if Autohide preference is set to false or null
+			//Don't proceed if UI is inactive. Reset stopwatch if running
+			if (!UI.MainWindow.activeSelf || Preferences.InactivityTimeout.Value <= 0)
+			{
+				return;
+			}
+
+			
+
+			
 			//Once user hasn't interacted with mouse or keyboard abev the inactive time limit, hide the UI window
 			if (displayTime.ElapsedMilliseconds >= inactiveTimeLimit)
 			{
@@ -234,6 +246,13 @@ namespace UIFramework
 			}
 		}
 
+		private void FadeCheck()
+		{
+			if (displayTime.ElapsedMilliseconds > Preferences.FadeTimer.Value * 1000)
+			{
+				UI.Fade();
+			}
+		}
 		private bool UserInteracted()
 		{
 			if (Mouse.current != null)
@@ -297,17 +316,15 @@ namespace UIFramework
 		internal void BuildUI()
 		{
 			Preferences.InitializePrefs();
-			UIFModel.ModelMod MyModel;
+			MelonModel MyModel;
 
 			//Show extra categories if debug mode is enabled
 
-			MyModel = UI.Register(this, Preferences.CatUIFramework, Preferences.Demo, Preferences.Experimental, Preferences.TestBooleans, Preferences.TestEmptyDisplayName);
+			MyModel = UI.RegisterMelon(this, Preferences.CatUIFramework, Preferences.Demo, Preferences.Experimental, Preferences.TestBooleans, Preferences.TestEmptyDisplayName);
 			MelonCategoryModel tester = (MelonCategoryModel)MyModel.GetSubmodel(Preferences.TestBooleans.Identifier);
-			ButtonEntry testButton = new ButtonEntry(CustomClick, "CustomButton", "just a test", "Custom Button");
-			tester.AddSubmodel(testButton);
 
 
-			Prefabs.LoadAssetBundle();
+			
 
 			UI.InitializeUIObjects();
 			UI.MainWindow.SetActive(false);
@@ -328,10 +345,6 @@ namespace UIFramework
 
 		}
 
-		public void CustomClick(ButtonModelAdapter button)
-		{
-			Debug.Log($"Clicked: {button.DisplayName} ", false);
-		}
 		private void SinglesaveClick()
 		{
 			Debug.Log("Clicked Single Save Button");

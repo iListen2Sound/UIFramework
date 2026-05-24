@@ -34,10 +34,15 @@ namespace UIFramework.Models
 			_name = name;
 		}
 
-		public void AddSubmodel(params IModelable[] mod)
+		public void AddSubmodel(IModelable mod)
 		{
-			SubModels.AddRange(mod);
+			int index = SubModels.FindIndex(m => m.Identifier == mod.Identifier);
+			if(index == -1)
+				SubModels.Add(mod);
+			else
+				SubModels[index] = mod;
 		}
+
 
 		public IModelable GetSubmodel(string name)
 		{
@@ -133,7 +138,7 @@ namespace UIFramework.Models
 	/// <summary>
 	/// 
 	/// </summary>
-	public class MelonEntryModel : DataEntryModelBase, IModelable
+	public class MelonEntryModel : DataEntryModelBase
 	{
 
 		/// <summary>

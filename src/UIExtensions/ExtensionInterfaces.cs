@@ -23,6 +23,7 @@ namespace UIFramework.UiExtensions
 		/// </summary>
 		public TMP_InputField.ContentType ContentType { get; set; }
 		public int CharacterLimit { get; set; }
+		public int DecimalPlaces { get; set; }
 		public bool IsReadOnly { get; set; }
 	}
 
@@ -46,10 +47,12 @@ namespace UIFramework.UiExtensions
 
 	///	<summary>
 	/// Presents the entry as a dropdown and describes the options within it.
+	/// Important to note that your data shouldn't be stored as dropdown items. 
+	/// Dropdown items are just descriptions purely for UI Framework to know what to display to users in the dropdown.
 	/// </summary>
 	public interface IDynamicDropdownDescriptor : IUiExtension
 	{
-		//public List<DropdownItem> DropdownItems { get; set; }
+		
 		public List <DropdownItem> GetDropdownItems();
 		/// <summary>
 		/// Sets the items to be displayed in the dropdown. 
@@ -87,12 +90,13 @@ namespace UIFramework.UiExtensions
 	/// <summary>
 	/// Describes numeric up down controls
 	/// </summary>
-	public interface INumericUpDownDescriptor : IUiExtension
+	public interface INumberBoxDescriptor : IUiExtension
 	{
 		/// <summary>
 		/// 0 = default (1 for ints, 0.1 for floats). 
 		/// </summary>
-		public float Increments { get; set; }
+		public float Steps { get; set; }
+		public int DecimalPlaces { get; set; }
 	}
 
 	/// <summary>
@@ -149,9 +153,16 @@ namespace UIFramework.UiExtensions
 		public bool InhibitRefreshOnValueChange { get; set; }
 	}
 
-	public interface ICustomUIProvider : IUiExtension
+	/// <summary>
+	/// Provide your own custom entry presentation.
+	/// You need to add a custom component that inherits from DataEntryAdapter
+	/// </summary>
+	public interface ICustomViewProvider : IUiExtension
 	{
-		public GameObject WidgetPrefab { get; set; }
+		/// <summary>
+		/// Prefab that gets instantiated by UI Framework. Make sure to assign a custom component that inherits from DataEntryAdapter to the prefab's root gameobject so the UI Framework can communicate with it.
+		/// </summary>
+		public GameObject EntryViewPrefab { get; set; }
 	}
 
 

@@ -42,7 +42,7 @@ namespace UIFramework.Adapters
 		/// operations may depend on the newly set model.
 		/// </remarks>
 		/// <param name="model">The model to associate with this instance. Cannot be null.</param>
-		public virtual void SetModel(IHoldSubmodels model)
+		public virtual void SetContainerModel(IHoldSubmodels model)
 		{
 			if (model == null)
 				return;
@@ -73,7 +73,7 @@ namespace UIFramework.Adapters
 				uiElement.transform.localPosition = Vector3.zero;
 
 
-				IChildable ViewController;
+				SubModelAdapter ViewController;
 
 				//Retrieve the appropriate game object controller component depending on the model type. 
 				//Switch statement could be unnecessary if interface was replaced with an abstract class
@@ -82,7 +82,7 @@ namespace UIFramework.Adapters
 				{
 					case IEntry entryModel:
 
-						ViewController = uiElement.GetComponent<PrefEntryAdapter>();
+						ViewController = uiElement.GetComponent<PrefEntryAdapterBase>();
 						_rootWindow.SelectInTopBar(Model as IHoldSubmodels);
 						break;
 					case SelectableModelBase tabModel:

@@ -92,6 +92,7 @@ The UI will automatically present your entries according to their data types. Bo
 ### Optional: Custom display names
 Add `[assembly: UIInfo("My Mod's Better\nDisplay Name")]` to your assembly attributes to change how the mod's name is displayed
 in the UI. Line breaks are supported.
+
 ### Enum Display Names
 Enum dropdowns support the Display(Name) attribute. If unavailable, it will fall back to the default enum value name. 
 ```cs
@@ -133,7 +134,7 @@ public class CustomValidator : ValueValidator
     }
 }
 ```
-But UI Framework already has its own default implementation that validates everything in the `UIFramework.ValidatorExtensions` namespace as `DevaultValidator`.
+But UI Framework already has its own default implementation that validates everything in the `UIFramework.UiExtensions` namespace as `DevaultValidator`.
 </details>
 
 -----
@@ -182,7 +183,7 @@ MySlider = MyCategory.CreateEntry("MySlider", 0, "My Slider", "Example Slider", 
 ### Implemented Extensions
 #### Sliders
 ##### Interface: `ISliderDescriptor`
-##### Default extended validator: `SliderDescriptor`
+##### Default Implementation: `SliderDescriptor`
 The UI will represent your entry with a slider if you add a validator that implements `ISliderDescriptor`.
 
 
@@ -191,38 +192,66 @@ MySlider = MyCategory.CreateEntry("MySlider", 0.5f, "My Slider", "Float Slider",
 ```
 
 -----
-#### Dynamically Editable Dropdown
+### NumberBox
+##### Interface: `INumberBoxDescriptor`
+##### Default Implementation: `NumberBoxDescriptor`
+
+Lets you customize interactions with numeric text inputs. 
+```cs
+MyNumBox = MyCategory.CreateEntry("MyNumBox", 0.5f, "My Number Box", "Float Number Box",false, false, new NumberBoxDescriptor { Steps = 0.5f, DecimalPlaces = 3 });
+```
+
+-----
+#### Dynamically Editable Dropdowns
 #### Interface: `IDynamicDropdownDescriptor`
-#### Default extended validator: `DynamicDropdownDescriptor`
+#### Default Implementation: `DynamicDropdownDescriptor`
 
-This lets you have a dropdown where you can edit the contents 
+This lets you describe a dropdown whose options you can change at runtime.
+This lets you guide your users to valid options instead of letting them manually type in a text input 
+which is prone to errors. 
 
-Create an items list
+- DropdownItem: This is a simple class used to describe a dropdown option. It has a DisplayName and a Value property.
+The DisplayName is what the user sees in the dropdown and <u>***the Value property is the actual value that gets stored***</u> when the user
+selects that option, not the DropdownItem.
+- Item list: The list of `DropdownItem` objects that get displayed in the dropdown. 
+
+***Creating a DropdownDescriptor***
+
+- Create an items list. You can leave it empty for now or you can pre-populate it with items.
 
 ```cs
 List<DropdownItem> itemList = new();
 ```
-Create an instance of the `DynamicDropdownDescriptor` class passing the item list as a parameter in the constructor
+- Create an instance of the `DynamicDropdownDescriptor` class passing the item list as a parameter in the constructor
 ```cs
-public static DynamicDropdownDescriptor DropdownDescriptor = new(itemList);
+public DynamicDropdownDescriptor DropdownDescriptor = new(itemList);
 ```
-Add items with 
+- You can add items with 
 ```cs
 DropdownDescriptor.AddDropdownItem(new DropdownItem("Display Name", value)); 
 ```
 or declare a list separately and set it with SetDropdownItems
 
 
+***Using your DynamicDropdownDescriptor***
 
-Pass it into the CreateEntry validator parameter
+- Declare your entry as usual. 
+  - Notes: 
+      - An entry is just a normal entry and can be any type like every other preference entry in your mod. 
+      - **DO NOT** declare your type as a DropdownItem. 
+      - DropdownItems are only used to describe what options appear on the dropdown. They are not the data that's actually stored. 
 ```cs
-DropdownTest = Category.CreateEntry("DropdownTest", -1, "Dropdown Test", "Dynamic dropdown test.", false, false, DropdownDescriptor);
+MelonPreference_Entry<string> DropdownTest;
+```
+- Pass it into the CreateEntry validator parameter
+```cs
+DropdownTest = Category.CreateEntry("DropdownTest", "Default Value", "Dropdown Test", null, false, false, DropdownDescriptor);
 ```
 
 -----
 #### User Edit Notifiers
 ##### Interface: `IUserEditedNotifier`
-##### Default extended validator: `UserEditDefaultNotifier`
+##### Default Implementation: `UserEditDefaultNotifier`
 This doesn't change the UIs presentation but it does notify you when the user inputs a new value into the UI e.g. when they're done editing a text input, clicked a toggle or finished moving a slider. It also provides you with the new value
 
 ```cs
@@ -240,9 +269,24 @@ MyToggle = MyCategory.CreateEntry("MyToggle", true, "My Toggle", "Example Toggle
 -----
 #### Buttons
 ##### Interface: `IButtonDescriptor`
-##### Default extended validator: `ButtonAsEntry` (internal)
+##### Default Implementation: `ButtonAsEntry` (internal)
 This is a special case. You don't need to implement this yourself. Instead, you call 
 ```cs
 UI.CreateButtonEntry(MelonPreferences_Category category, string buttonText, string displayName, string description, Action handler)
 ```
 This method will handle the implementation for you and it will show the button in the entries list.
+
+-----
+#### Custom Entry Presentations
+##### Interface: `ICustomViewProvider`
+##### Default Implementation: `CustomViewProvider`
+Lets you assign a custom prefab to represent your entry in the UI through its `EntryViewPrefab` property. 
+You can make and load new prefabs through assetbundles. 
+The prefab must have a component that inherits from `DataEntryAdapter` on its root game object.
+More details in the [Custom UI](CustomUI.md) documentation.
+Pass it into the CreateEntry method's validator parameter
+```cs 
+TestEntryCustom = TestCategory2.CreateEntry("TestEntryCustom", "hello; world", "Test Custom Entry", "This is a test custom entry ", false, false, new CustomViewProvider { EntryViewPrefab = customWidget });
+```
+
+I've included a unity package with UI Framework's main window structure and some example custom widgets in [TestFit.unitypackage](_Misc/TestFit.unitypackage) so you can build your custom views in there and see how it would fit into UI Framework
