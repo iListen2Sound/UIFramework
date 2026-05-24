@@ -26,7 +26,7 @@ namespace UIFramework
 		/// <summary></summary>
 		public const string Author = "Reverb && Spice";
 		/// <summary></summary>
-		public const string Version = "0.10.1";	
+		public const string Version = "0.10.2";	
 	}
 
 
@@ -59,6 +59,7 @@ namespace UIFramework
 			Instance = this;
 			MelonPreferences.OnPreferencesSaved.Subscribe(MelPrefsSaved);
 			Prefabs.LoadAssetBundle();
+			BuildUI();
 			LoggerInstance.Msg("Initialized.");
 
 		}
@@ -112,8 +113,8 @@ namespace UIFramework
 			Prefabs.UIFGameObjects.SetActive(true);
 			if (CurrentScene == "loader")
 			{
-				Debug.Warning("UIFramework does not work in the loader. Please finish calibrating.");
-				yield break;
+				//Debug.Warning("UIFramework does not work in the loader. Please finish calibrating.");
+				//yield break;
 			}
 			if (ModUIWindow is not null && matchModUI)
 			{
@@ -295,14 +296,14 @@ namespace UIFramework
 		}
 #pragma warning restore CS1591
 
-
+		
 
 		/// <summary>
 		/// Called on first gymload to build the UI and find the modUI window.
 		/// </summary>
 		internal void FirstGymLoad()
 		{
-			BuildUI();
+			
 			MelonCoroutines.Start(FindModUI());
 
 

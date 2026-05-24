@@ -1,5 +1,5 @@
 <sup><sup> btw: The changelog doubles as a feature list </sup></sup>
-### New in 0.10.1
+### New in 0.10.1/2
 <details><summary>New feature: Made resize handles visible</summary>
 
 - Right handle for scale
@@ -13,6 +13,18 @@ Wasn't really motivated to be rigorous because everybody had ModUI😅
 
 <details><summary>Bug fix: Continuous refresh error</summary>
 Fixed the refresh method to not keep trying every frame when a part of the UI fails to build
+</details>
+
+<details><summary>New feature: Made UI Framework available in the loader</summary>
+UI Framework can now be used in the loader.
+</details>
+
+<details><summary>New feature: Enabled Re-registration</summary>
+Mods can now register themselves any time the game is running and re-register to change what categories they have and what order.
+</details>
+
+<details><summary>Bug fix: Null check for requestrefresh</summary>
+In case anyone assigns a value before the UI is built
 </details>
 
 ### New in 0.10.0
@@ -66,7 +78,7 @@ Add `[assembly: MelonAdditionalDependencies("UIFramework")]` to your AssemblyInf
 
 [Define](#If-you-havent-used-melonpreferences-before) your MelonPreferences in `OnInitializeMelon` and then register them to the UI.
 ```cs
-UI.Register(this, TestCategory1, TestCategory2...);
+UI.RegisterMelon(this, TestCategory1, TestCategory2...);
 ```
 ~~Right now, support is limited to common types like `string`, `int`, `bool`, `double`, `float`, and `enums` without the flags attribute. Working on expanding this.~~
 
@@ -90,7 +102,7 @@ private void MyModSaved()
 }
 ```
 ```cs
-UI.Register((MelonBase)this, OBSAutoRecorderSettings, TestCategory1, TestCategory2...).OnModSaved += MyModSaved;
+UI.RegisterMelon(this, OBSAutoRecorderSettings, TestCategory1, TestCategory2...).OnModSaved += MyModSaved;
 ```
 <sup>Casting to melonbase isn't necessary but it forces your compiler to use the newer MelonBase registration instead of the obsolete MelonMod registration
 In the future, all mods will be registered as MelonBase by default and the cast won't be needed. 

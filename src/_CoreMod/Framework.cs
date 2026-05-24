@@ -106,12 +106,14 @@ namespace UIFramework
 		internal static void RequestRefresh(ModModelBase modModel)
 		{
 			Debug.Log("RefreshRequested in Framework.cs RequestRefresh(ModModelBase modModel)", true, 1);
-			WindowInstance.RequestRefresh(modModel); }
+			WindowInstance?.RequestRefresh(modModel);
+
+		}
 		public static void RequestRefresh(MelonBase melonInstance)
 		{
 			Debug.Log("Refresh requested in Framework.cs RequestRefresh(MelonBase melonInstance)", true, 1);
 			ModModelBase model = ModelInstance.GetModModel(melonInstance.Info.Name);
-			WindowInstance.RequestRefresh(model);
+			WindowInstance?.RequestRefresh(model);
 		}
 		
 		internal static void Fade()

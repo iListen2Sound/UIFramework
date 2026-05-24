@@ -1,3 +1,17 @@
+# New in 0.10.2
+
+<details><summary>New feature: Made UI Framework available in the loader</summary>
+UI Framework can now be used in the loader.
+</details>
+
+<details><summary>New feature: Enabled Re-registration</summary>
+Mods can now register themselves any time the game is running and re-register to change what categories they have and what order.
+</details>
+
+<details><summary>Bug fix: Null check for requestrefresh</summary>
+In case anyone assigns a value before the UI is built
+</details>
+
 # New in 0.10.1
 <details><summary>New feature: Made resize handles visible</summary>
 
