@@ -1,4 +1,19 @@
-<sup> btw: The changelog doubles as a feature list </sup>
+﻿<sup><sup> btw: The changelog doubles as a feature list </sup></sup>
+### New in 0.10.1
+<details><summary>New feature: Made resize handles visible</summary>
+
+- Right handle for scale
+- Bottom handle to stretch downwards
+
+</details>
+
+<details><summary>Bug fix: Nullref error when the player doesn't have ModUI</summary>
+Wasn't really motivated to be rigorous because everybody had ModUI😅
+</details>
+
+<details><summary>Bug fix: Continuous refresh error</summary>
+Fixed the refresh method to not keep trying every frame when a part of the UI fails to build
+</details>
 
 ### New in 0.10.0
 
@@ -24,7 +39,7 @@ You can now click on buttons to increment or decrement values in number fields.
 <details><summary>New Feature: Advanced UI Customization for modders </summary>
 
 You can now use the `ICustomViewProvider` interface to be able to pass your own custom representations to the UI Framework.
-Default implementation: `CustomViewProvider`. More details in [CustomUI](./CustomUI.md)
+Default implementation: `CustomViewProvider`. More details in [CustomUI](https://github.com/iListen2Sound/UIFramework/blob/main/CustomUI.md)
 </details>
 
 

@@ -1,3 +1,20 @@
+# New in 0.10.1
+<details><summary>New feature: Made resize handles visible</summary>
+
+- Right handle for scale
+- Bottom handle to stretch downwards
+
+</details>
+
+<details><summary>Bug fix: Nullref error when the player doesn't have ModUI</summary>
+Wasn't really motivated to be rigorous because everybody had ModUI😅
+</details>
+
+<details><summary>Bug fix: Continuous refresh error</summary>
+Fixed the refresh method to not keep trying every frame when a part of the UI fails to build
+</details>
+
+
 # New in 0.10.0
 <details><summary>New Feature: Window is now resizable</summary>
 You can now scale the window or adjust its height. 

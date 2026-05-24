@@ -249,12 +249,12 @@ namespace UIFramework.Adapters
 		{
 			if (!_refreshPending)
 				return;
+			_refreshPending = false;
 			
 
 			ModRegistryPanel.BuildFromModelList();
 			CatRegistryPanel.BuildFromModelList();
 			PrefRegistryPanel.BuildFromModelList();
-			_refreshPending = false;
 
 
 		}
