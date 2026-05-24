@@ -26,14 +26,14 @@ namespace UIFramework
 		/// <summary></summary>
 		public const string Author = "Reverb && Spice";
 		/// <summary></summary>
-		public const string Version = "0.10.0";	
+		public const string Version = "0.10.1";	
 	}
 
 
 	/// <summary>
 	/// 
 	/// </summary>
-	public partial class Core : MelonMod
+	public class Core : MelonMod
 	{
 		internal static Core Instance;
 
@@ -216,10 +216,8 @@ namespace UIFramework
 					displayTime.Start();
 			}
 
-
 			AutoHideCheck();
 			FadeCheck();
-
 		}
 
 		#endregion
@@ -232,9 +230,7 @@ namespace UIFramework
 				return;
 			}
 
-			
 
-			
 			//Once user hasn't interacted with mouse or keyboard abev the inactive time limit, hide the UI window
 			if (displayTime.ElapsedMilliseconds >= inactiveTimeLimit)
 			{
@@ -336,8 +332,8 @@ namespace UIFramework
 		{
 			yield return null;
 			GameObject uiObject = GameObject.Find("Game Instance/UI");
-			GameObject modUiWindow = uiObject.transform.Find("Mod_Setting_UI").gameObject;
-			ModUIWindow = modUiWindow;
+			GameObject modUiWindow = uiObject?.transform?.Find("Mod_Setting_UI")?.gameObject;
+			ModUIWindow = modUiWindow ?? null;
 		}
 
 		public void MelPrefsSaved(string s)
