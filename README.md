@@ -1,4 +1,4 @@
-﻿<sup><sup> btw: The changelog doubles as a feature list </sup></sup>
+<sup><sup> btw: The changelog doubles as a feature list </sup></sup>
 ### New in 0.10.1
 <details><summary>New feature: Made resize handles visible</summary>
 
