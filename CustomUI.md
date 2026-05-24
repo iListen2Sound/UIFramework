@@ -173,3 +173,97 @@ customWidget.AddComponent<CustomAdapter>();
 ```cs
 TestEntryCustom = TestCategory2.CreateEntry("TestEntryCustom", "hello; world", "Test Custom Entry", "", false, false, new CustomViewProvider { EntryViewPrefab = customWidget });
 ```
+
+## Customizing UI Framework's built-in Views
+If you wanna use UI Framework's built in views but want them to have custom behavior, 
+you can also make custom adapters for those views. 
+
+UI Framework will give you an instance of a prefab by using the `UI.GetPrefabInstance(PrefabType)` method.
+
+Prefab Type is an enum with the possible values:
+```cs
+TextField,
+Toggle,
+NumericInt,
+NumericFloat,
+Button,
+Dropdown,
+Slider,
+```
+
+After getting an instance of it, then you can assign your custom adapter to it. 
+
+### Built-in View GameObject Hierarchies
+ ```
+PrefEntryButton
+├── Data
+│   ├── ButtonControl
+│   └── Label
+├── Indicator
+└── Description
+ ```
+ ```
+PrefEntryText
+├── Data
+│   ├── TextControl
+│   └── Label
+├── Indicator
+└── Description
+ ```
+ ```
+PrefEntryInt
+├── Data
+│   ├── TextControl
+│   ├── ButtonGroup
+│   │   ├── Sub
+│   │   └── Add
+│   └── Label
+├── Indicator
+└── Description
+ ```
+ ```
+PrefEntryFloat
+├── Data
+│   ├── TextControl
+│   ├── ButtonGroup
+│   │   ├── Sub
+│   │   └── Add
+│   └── Label
+├── Indicator
+└── Description
+ ```
+ ```
+PrefEntryDropdown
+├── Data
+│   ├── DropdownControl
+│   └── Label
+├── Indicator
+└── Description
+ ```
+ ```
+PrefEntryBool
+├── Data
+│   ├── ToggleControl
+│   └── Label
+├── Indicator
+└── Description
+ ```
+ ```
+PrefEntrySlider
+├── Data
+│   ├── SliderControl
+│   ├── TextControl
+│   └── Label
+├── Indicator
+└── Description
+ ```
+ ```
+PrefEntryDoubleTexts
+├── Data
+│   ├── Label
+│   └── Panel
+│   │   ├── txtLeft
+│   │   └── txtRight
+├── Indicator
+└── Description
+ ```

@@ -123,29 +123,7 @@ namespace UIFramework
 			ButtonPrefab.transform.SetParent(HiddenStorage.transform, false);
 
 
-
-
-
-			//MainActionButton.onClick.AddListener(MainButtonClick);
-
-			//ModEntry.TestComponent test = ModDisplayList.AddComponent<ModEntry.TestComponent>();
-
-			//Add the appropriate components to each prefab for later use
 			MainWindowSource.AddComponent<WindowCoordinator>();
-
-
-			TextPrefab.AddComponent<TextEntryAdapter>();
-			BoolPrefab.AddComponent<BoolToggleAdapter>();
-
-			IntPrefab.AddComponent<NumericEntryAdapter>();
-			FloatPrefab.AddComponent<NumericEntryAdapter>();
-			//DoublePrefab.AddComponent<   TextEntryAdapter>();
-
-			//DropDownPrefab.AddComponent<EnumDropdownAdapter>();
-			SliderPrefab.AddComponent<NumSliderAdapter>();
-
-			//ButtonPrefab.AddComponent<   ButtonModelAdapter>();
-
 
 
 			ModTab.AddComponent<ModButtonView>();
@@ -319,7 +297,6 @@ namespace UIFramework
 
 
 			Preferences.UiScale.Value = targetPanel.localScale;
-			Debug.Log($"localScale: {targetPanel.localScale}, Preference: {Preferences.UiScale.Value}", true, 0);
 
 		}
 

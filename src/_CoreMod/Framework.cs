@@ -12,73 +12,35 @@ namespace UIFramework
 	/// </summary>
 	public static class UI
 	{
-
+		const string ObsoleteRegisterMessage = "Don't Panic! I'm just moving .Register() and all its overloads to .RegisterMelon(). Just use that function instead. UI Framework is still backwards compatible.";
 		internal static RootModel ModelInstance = new();
 		internal static GameObject MainWindow;
 		public static bool IsVisible { get => MainWindow.activeSelf; internal set => MainWindow.SetActive(value); }
 		internal static WindowCoordinator WindowInstance;
 
 		private static CanvasGroup CanvasGroup => MainWindow.GetComponent<CanvasGroup>();
-		/// <summary>
-		/// Registers a mod and its categories to the UI instance. 
-		/// </summary>
-		/// <param name="modInstance">Instance of your MelonMod class</param>
-		/// <param name="categories">The range of MelonPreferences_Category objects used by your mod.</param>
-		/// <remarks>
-		/// Unless the dependency was explicitly declared, Don't use before OnLateInitializeMelon.
-		/// Currently, registration after the first gym load means your mod won't show up on the mod list
-		/// 
-		/// Deprecated: this version of the Register function will be removed in a future version in favor of taking in the MelonBase type instead
-		/// Please explicitly cast your mod instance as MelonBase to prevent future incompatibility
-		/// So UI.Register((MelonBase)this, Category1, Category2,...);
-		/// </remarks>
-		/// <returns>A reference to the created ModButtonView Model for further customization</returns>
-		[Obsolete(".Register() will be a different function in the future to support plugins.\n " +
-			"When that happens, no code changes are needed but you will need to rebuild your project so the compiler can find the correct method\n" +
-			"To future-proof your mod, Explicitly cast your mod instance to MelonBase when registering")]
+		
+		[Obsolete(ObsoleteRegisterMessage, true)]
 		public static UIFModel.ModelMod Register(MelonMod modInstance, params MelonPreferences_Category[] categories)
 		{
 			return Register((MelonBase)modInstance, categories);
 		}
-		
-		/// <summary>
-		/// Registers a mod or a plugin to UIFramework along with its categories.
-		/// </summary>
-		/// <param name="modInstance"></param>
-		/// <param name="categories"></param>
-		/// <remarks>
-		/// Unless the dependency was explicitly declared, Don't use before OnLateInitializeMelon.
-		/// Currently, registration after the first gym load means your mod won't show up on the mod list
-		/// </remarks>
-		/// <returns></returns>
+
+		[Obsolete(ObsoleteRegisterMessage, true)]
 		public static UIFModel.ModelMod Register(MelonBase modInstance, params MelonPreferences_Category[] categories)
 		{
 			UIFModel.ModelMod NewModModel = new(modInstance, categories.ToList());
 			ModelInstance.AddSubmodel(NewModModel);
 			return NewModModel;
 		}
-
-		/// <summary>
-		/// Registers a mod with no categories to the framework. Categories need to be manually added
-		/// </summary>
-		/// <remarks>
-		/// Deprecated: this version of the Register function will be removed in a future version in favor of taking in the MelonBase type instead
-		/// Please explicitly cast your mod instance as MelonBase to prevent future incompatibility
-		/// So UI.Register((MelonBase)this);
-		/// </remarks>
-		/// <param name="modInstance">Instance of your MelonMod class</param>
-		[Obsolete(".Register() will be a different function in the future to support plugins.\n " +
-			"When that happens, no code changes are needed but you will need to rebuild your project so the compiler can find the correct method\n" +
-			"To future-proof your mod, Explicitly cast your mod instance to MelonBase when registering")]
+		
+		[Obsolete(ObsoleteRegisterMessage, true)]
 		public static UIFModel.ModelMod Register(MelonMod modInstance)
 		{
 			return Register(modInstance);
 		}
 
-		/// <summary>
-		/// Registers a mod or plugin with no categories to the framework. Categories need to be manually added
-		/// </summary>
-		/// <param name="modInstance">Instance of your MelonMod class</param>
+		[Obsolete(ObsoleteRegisterMessage, true)]
 		public static UIFModel.ModelMod Register(MelonBase modInstance)
 		{
 			UIFModel.ModelMod NewModModel = new(modInstance);
@@ -88,7 +50,7 @@ namespace UIFramework
 
 
 		/// <summary>
-		/// 
+		/// Registers a mod or plugin to UI Framework with its categories. 
 		/// </summary>
 		/// <param name="melonInstance"></param>
 		/// <param name="categories"></param>
@@ -99,7 +61,17 @@ namespace UIFramework
 			ModelInstance.AddSubmodel(NewModModel);
 			return NewModModel;
 		}
-
+		/// <summary>
+		/// Registers a mod or a plugin to UI Framework with no categories. Categories need to be manually added.
+		/// </summary>
+		/// <param name="melonInstance"></param>
+		/// <returns></returns>
+		public static MelonModel RegisterMelon(MelonBase melonInstance)
+		{
+			MelonModel NewModModel = new(melonInstance);
+			ModelInstance.AddSubmodel(NewModModel);
+			return NewModModel;
+		}
 
 		
 
@@ -150,30 +122,30 @@ namespace UIFramework
 		{
 			CanvasGroup.alpha = 1f;
 		}
-		public static GameObject GetPrefab(InputType input)
+		public static GameObject GetPrefabInstance(PrefabType input)
 		{
 			GameObject selectedPrefab;
 			switch (input)
 			{
-				case InputType.TextField:
+				case PrefabType.TextField:
 					selectedPrefab = GameObject.Instantiate(Prefabs.TextPrefab);
 					break;
-				case InputType.Toggle:
+				case PrefabType.Toggle:
 					selectedPrefab = GameObject.Instantiate(Prefabs.BoolPrefab);
 					break;
-				case InputType.NumericInt:
+				case PrefabType.NumericInt:
 					selectedPrefab = GameObject.Instantiate(Prefabs.IntPrefab);
 					break;
-				case InputType.NumericFloat:
+				case PrefabType.NumericFloat:
 					selectedPrefab = GameObject.Instantiate(Prefabs.FloatPrefab);
 					break;
-				case InputType.Button:
+				case PrefabType.Button:
 					selectedPrefab = GameObject.Instantiate(Prefabs.ButtonPrefab);
 					break;
-				case InputType.Dropdown:
+				case PrefabType.Dropdown:
 					selectedPrefab = GameObject.Instantiate(Prefabs.DropDownPrefab);
 					break;
-				case InputType.Slider:
+				case PrefabType.Slider:
 					selectedPrefab = GameObject.Instantiate(Prefabs.SliderPrefab);
 					break;
 				default:
@@ -185,7 +157,7 @@ namespace UIFramework
 			return selectedPrefab;
 		}
 	}
-	public enum InputType
+	public enum PrefabType
 	{
 		[Display(Name = "Default", Description = "Defaults to basic string input")]
 		Default,

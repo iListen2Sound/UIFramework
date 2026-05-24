@@ -107,7 +107,7 @@ namespace UIFramework.UiExtensions
 		/// <inheritdoc/>
 		public float Steps { get; set; } = 0;
 		/// <inheritdoc/>
-		public int DecimalPlaces { get; set; } = 5;
+		public int DecimalPlaces { get; set; } = 1;
 
 	}
 

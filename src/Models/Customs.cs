@@ -66,7 +66,7 @@ namespace UIFramework.Models
 		/// <inheritdoc/>
 		public override GameObject GetNewUIInstance()
 		{
-			GameObject button = GameObject.Instantiate(UI.GetPrefab(InputType.Button));
+			GameObject button = GameObject.Instantiate(UI.GetPrefabInstance(PrefabType.Button));
 			ButtonModelAdapter buttonEntry = button.GetComponent<ButtonModelAdapter>();
 			return button;
 		}

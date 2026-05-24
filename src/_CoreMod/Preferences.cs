@@ -40,7 +40,7 @@ namespace UIFramework
 		internal static MelonPreferences_Entry<int> TestInt;
 		internal static MelonPreferences_Entry<float> TestFloat;
 		internal static MelonPreferences_Entry<double> TestDouble;
-		internal static MelonPreferences_Entry<InputType> TestEnum;
+		internal static MelonPreferences_Entry<PrefabType> TestEnum;
 		internal static MelonPreferences_Entry<List<int>> TestList;
 		internal static MelonPreferences_Entry<List<string>> TestListString;
 		internal static MelonPreferences_Entry<NonZeroBased> NonZeroEnum;
@@ -113,7 +113,7 @@ namespace UIFramework
 			TestInt = Experimental.CreateEntry("TestInt", 42, "Test Int", "This is a test int.");
 			TestFloat = Experimental.CreateEntry("TestFloat", 3.14f, "Test Float", "This is a test float.");
 			TestDouble = Experimental.CreateEntry("TestDouble", 3.14159, "Test Double", "This is a test double.", false, false, new NumberBoxDescriptor { DecimalPlaces = 5 });
-			TestEnum = Experimental.CreateEntry("TestEnum", InputType.TextField, "Test Enum", "This is a test enum.");
+			TestEnum = Experimental.CreateEntry("TestEnum", PrefabType.TextField, "Test Enum", "This is a test enum.");
 			NonZeroEnum = Experimental.CreateEntry("Non-Zero", NonZeroBased.a, "Non-zero-based enum test", "This tests enums that don't start from zero");
 			NonContiguousEnum = Experimental.CreateEntry("Non-Cont", NonContiguous.z, "Non-Contiguous enum test", "This tests enums that have gaps in between the explicitlyi named values");
 			TestList = Experimental.CreateEntry("TestList", new List<int> { 1, 2, 3 }, "Test List", "This is a test list of integers.", true);
@@ -143,10 +143,8 @@ namespace UIFramework
 			DropdownSelection = Demo.CreateEntry("SelectedDropdownItem", DropdownTest.Value, "Selected Item", "The item selected in the dropdown demo");
 			ShowReactivity = Demo.CreateEntry("Entry_Reactivity", false, "Show hidden Entry", "This is a demo preference to hide the reactivity demo button in the demo category.", false, false, new UserEditNotifier { OnUserEdit = HideReaction });
 			DemoCounting = Demo.CreateEntry("EnableCount", false, "Enable counting demo", "This is a demo for how the UI can update by a change of values in the background", false, false, new UserEditNotifier { OnUserEdit = (newVal) => { DemoCounting.EditedValue = (bool)newVal; UI.RequestRefresh(Core.Instance); } });
-
-
-			InhibitRefreshForCount = Demo.CreateEntry("InhibitDemoCount", true, "Inhibit Count Refresh", "Inhibit refreshing the UI when the demo int counts up", false, false, new UserEditNotifier { OnUserEdit = UpdateInhibitDemo });
 			DemoInt = Demo.CreateEntry("DemoInt", 0, "Demo Int", "This is a demo int Preference", false, false, InhibitRefresh);
+			InhibitRefreshForCount = Demo.CreateEntry("InhibitDemoCount", true, "Inhibit Count Refresh", "Inhibit refreshing the UI when the demo int counts up", false, false, new UserEditNotifier { OnUserEdit = UpdateInhibitDemo });
 			DemoString = Demo.CreateEntry("DemoString", "Hello, World!", "Demo String", "This is a demo string preference. This should show the name of the current scene", true);
 
 			DemoInt.Value = 0;
@@ -194,7 +192,7 @@ namespace UIFramework
 		}
 		internal static void HideReaction(object newValue)
 		{
-			Debug.Log($"HideReact: {newValue}");
+			Debug.Log($"HideReact: {newValue}", false);
 			DemoInt.IsHidden = !(bool)newValue;
 			ShowReactivity.Value = (bool)newValue;
 		}

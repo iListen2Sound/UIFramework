@@ -58,6 +58,7 @@ namespace UIFramework
 			map.Enable();	
 			Instance = this;
 			MelonPreferences.OnPreferencesSaved.Subscribe(MelPrefsSaved);
+			Prefabs.LoadAssetBundle();
 			LoggerInstance.Msg("Initialized.");
 
 		}
@@ -74,9 +75,6 @@ namespace UIFramework
 				return;
 			//Debug.DiffLog($"UI is Visible {UI.IsVisible}",true);
 			ActivityCheck();
-			
-
-
 		}
 		/// <summary>
 		/// Run OnUpdate. Check if the inputs for toggling the UI have been pressed.
@@ -318,15 +316,15 @@ namespace UIFramework
 		internal void BuildUI()
 		{
 			Preferences.InitializePrefs();
-			UIFModel.ModelMod MyModel;
+			MelonModel MyModel;
 
 			//Show extra categories if debug mode is enabled
 
-			MyModel = UI.Register(this, Preferences.CatUIFramework, Preferences.Demo, Preferences.Experimental, Preferences.TestBooleans, Preferences.TestEmptyDisplayName);
+			MyModel = UI.RegisterMelon(this, Preferences.CatUIFramework, Preferences.Demo, Preferences.Experimental, Preferences.TestBooleans, Preferences.TestEmptyDisplayName);
 			MelonCategoryModel tester = (MelonCategoryModel)MyModel.GetSubmodel(Preferences.TestBooleans.Identifier);
 
 
-			Prefabs.LoadAssetBundle();
+			
 
 			UI.InitializeUIObjects();
 			UI.MainWindow.SetActive(false);
