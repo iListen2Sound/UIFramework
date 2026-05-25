@@ -172,27 +172,40 @@ namespace UIFramework.Adapters
 		/// <summary>
 		/// Returns the textfield
 		/// </summary>
-		protected TMP_InputField textField => this.gameObject.transform.Find("Data/TextControl").gameObject.GetComponent<TMP_InputField>();
+		protected TMP_InputField TextField => this.gameObject.transform.Find("Data/TextControl").gameObject.GetComponent<TMP_InputField>();
 		/// <summary>
-		/// Sets the placeholder text in the textField
+		/// Sets the placeholder text in the TextField
 		/// </summary>
 		protected string PlaceHolderText { set { this.gameObject.transform.Find("Data/TextControl/Text Area/Placeholder").gameObject.GetComponent<TextMeshProUGUI>().text = value; } }
+
+		protected ITextInputBehaviorDescriptor BehaviorDescriptor => UiExtension as ITextInputBehaviorDescriptor;
+		protected ITextInputAppearanceDescriptor AppearanceDescriptor => UiExtension as ITextInputAppearanceDescriptor;
+
 
 		Type boxedValueType = null;
 
 		/// <inheritdoc/>/// 
 		protected override void DisplayData(object boxedValue)
 		{
+			if (BehaviorDescriptor is not null)
+			{
+				TextField.contentType = BehaviorDescriptor.ContentType;
+				TextField.characterLimit = BehaviorDescriptor.CharacterLimit;
+				TextField.readOnly = BehaviorDescriptor.IsReadOnly;
+				TextField.asteriskChar = BehaviorDescriptor.PaswordChar;
+			}
+
+
 			boxedValueType = boxedValue.GetType();
 			if (boxedValueType == typeof(string))
 			{
-				textField.text = (string)boxedValue;
+				TextField.text = (string)boxedValue;
 			}
 			else
 			{
 				try
 				{
-					textField.text = ToTomlString(boxedValue);
+					TextField.text = ToTomlString(boxedValue);
 					
 				}
 				catch (Exception ex)
@@ -208,15 +221,15 @@ namespace UIFramework.Adapters
 		{
 			if (boxedValueType == typeof(string))
 			{
-				SubmitValue(textField.text);
+				SubmitValue(TextField.text);
 			}
 			else
 			{
 				try
 				{
-					if (textField.text.Trim() != "")
+					if (TextField.text.Trim() != "")
 					{
-						SubmitValue(FromTomlString(textField.text, DataEntry.ModelBoxedValue.GetType()));
+						SubmitValue(FromTomlString(TextField.text, DataEntry.ModelBoxedValue.GetType()));
 					}
 				}
 				catch (Exception ex)
@@ -228,7 +241,7 @@ namespace UIFramework.Adapters
 
 		public override void EditCheck()
 		{
-			/*if(textField.text != DataEntry.PrefEntry.ModelBoxedValue.ToString())
+			/*if(TextField.text != DataEntry.PrefEntry.ModelBoxedValue.ToString())
 			{
 				EntryStatus = EntryState.Edited;
 			}*/
@@ -238,23 +251,31 @@ namespace UIFramework.Adapters
 
 		protected virtual void EditStart(string s)
 		{
-			textField.textComponent.fontStyle = FontStyles.Normal;
+			if (BehaviorDescriptor?.IsReadOnly == true) return;
+				TextField.textComponent.fontStyle = FontStyles.Normal;
 		}
 		protected virtual void EditEnd(string s)
 		{
-			textField.textComponent.fontStyle = FontStyles.Italic;
+			if (BehaviorDescriptor?.IsReadOnly == true) return;
+			TextField.textComponent.fontStyle = FontStyles.Italic;
 			ParseThenSubmit();
 		}
 
 		protected virtual void Start()
 		{
-			textField.onSelect.AddListener((System.Action<string>)EditStart);
-			textField.onDeselect.AddListener((System.Action<string>)EditEnd);
+
+			TextField.onSelect.AddListener((System.Action<string>)EditStart);
+			TextField.onDeselect.AddListener((System.Action<string>)EditEnd);
 		}
 	}
 	[RegisterTypeInIl2Cpp]
 	public class NumericEntryAdapter : TextEntryAdapter
 	{
+		protected Button _addButton =>
+			gameObject.transform.Find("Data/ButtonGroup/Add").gameObject.GetComponent<Button>();
+		protected Button _subtractButton =>
+			gameObject.transform.Find("Data/ButtonGroup/Sub").gameObject.GetComponent<Button>();
+
 
 		protected float IncrementStep
 		{
@@ -276,16 +297,16 @@ namespace UIFramework.Adapters
 			}
 		}
 
+		
+
 		protected virtual INumberBoxDescriptor NumericSettings => UiExtension as INumberBoxDescriptor;
 
 		protected override void Start()
 		{
 			base.Start();
-			GameObject add = this.gameObject.transform.Find("Data/ButtonGroup/Add").gameObject;
-			GameObject sub = this.gameObject.transform.Find("Data/ButtonGroup/Sub").gameObject;
 
-			add.GetComponent<Button>().onClick.AddListener((UnityAction)Increment);
-			sub.GetComponent<Button>().onClick.AddListener((UnityAction)Decrement);
+			_addButton.onClick.AddListener((UnityAction)Increment);
+			_subtractButton.onClick.AddListener((UnityAction)Decrement);
 
 		}
 
@@ -297,18 +318,25 @@ namespace UIFramework.Adapters
 			//Take the string, convert it ot the correct type, then convert it back to a string with the correct number of decimal places
 			if (boxedValue.GetType() != typeof(int))
 			{
-				textField.text = Convert.ToSingle(boxedValue).ToString($"F{NumericSettings?.DecimalPlaces ?? 1}");
+				TextField.text = Convert.ToSingle(boxedValue).ToString($"F{NumericSettings?.DecimalPlaces ?? 1}");
 			}
 
+			if (BehaviorDescriptor?.IsReadOnly == true)
+			{
+				_addButton.interactable = false;
+				_subtractButton.interactable = false;
+			}
 
 		}
 
 		protected virtual void Increment()
 		{
+			if (BehaviorDescriptor?.IsReadOnly == true) return;
 			SubmitValue(CurrentBoxedValue == null ? IncrementStep : Convert.ChangeType(Convert.ToSingle(CurrentBoxedValue) + IncrementStep, CurrentBoxedValue.GetType()));
 		}
 		protected virtual void Decrement()
 		{
+			if (BehaviorDescriptor?.IsReadOnly == true) return;
 			SubmitValue(CurrentBoxedValue == null ? -IncrementStep : Convert.ChangeType(Convert.ToSingle(CurrentBoxedValue) - IncrementStep, CurrentBoxedValue.GetType()));
 		}
 	}
@@ -322,6 +350,12 @@ namespace UIFramework.Adapters
 
 		protected override void DisplayData(object boxedValue)
 		{
+			base.DisplayData(boxedValue);
+			if (BehaviorDescriptor?.IsReadOnly == true)
+			{
+				Slider.interactable = false;
+			}
+				
 			_textField.onEndEdit.AddListener((UnityAction<string>)EditEnd);
 			_textField.onSelect.AddListener((UnityAction<string>)EditStart);
 

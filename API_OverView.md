@@ -181,6 +181,31 @@ MySlider = MyCategory.CreateEntry("MySlider", 0, "My Slider", "Example Slider", 
 
 -----
 ### Implemented Extensions
+
+### TextInputs
+#### Interface: `ITextInputBehaviorDescriptor`
+#### Default Implementation: `TextInputBehaviorDescriptor`
+This lets you control the behavior of TextInputs. Giving you control of these properties:
+- `ContentType` - Lets define the ContentType for the text input. 
+    - Standard - Accepts strings and hides the characters behind the char set with the `PasswordChar` 
+    - Password - Accepts strings and hides 
+    - Email Address - Unity Email Address Text Inputs
+     
+     <sup>The other unity content types also work. I just haven't tried them. </sup>
+
+- `CharacterLimit`
+- `IsReadOnly`
+
+```cs
+DemoTextBehavior = Demo.CreateEntry("TextBehaviorDemo", "VerySecurePassword", "Custom Behavior Demo",
+				"This tests the BehaviorDescriptor Interface", false, false,
+				new TextInputBehaviorDescriptor
+					{ ContentType = TMP_InputField.ContentType.Password, 
+                    CharacterLimit = 20, 
+                    IsReadOnly = true });
+```
+
+-----
 #### Sliders
 ##### Interface: `ISliderDescriptor`
 ##### Default Implementation: `SliderDescriptor`

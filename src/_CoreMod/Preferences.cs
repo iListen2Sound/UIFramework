@@ -3,6 +3,7 @@ using UnityEngine;
 using System.ComponentModel.DataAnnotations;
 using UIFramework.UiExtensions;
 using System.Collections;
+using Il2CppTMPro;
 using UIFramework.Adapters;
 namespace UIFramework
 {
@@ -47,6 +48,9 @@ namespace UIFramework
 		internal static MelonPreferences_Entry<NonContiguous> NonContiguousEnum;
 
 		internal static MelonPreferences_Category Demo;
+		internal static MelonPreferences_Entry<int> DemoTextBehavior;
+		internal static MelonPreferences_Entry<string> PasswordDemo;
+
 		internal static MelonPreferences_Entry<int> DropdownTest;
 		internal static MelonPreferences_Entry<int> DropdownSelection;
 		internal static MelonPreferences_Entry<bool> ShowReactivity;
@@ -137,12 +141,24 @@ namespace UIFramework
 			Demo = MelonPreferences.CreateCategory("UIF_Demo", "Demos");
 			Demo.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
 
+			DemoTextBehavior = Demo.CreateEntry("TextBehaviorDemo",5, "Custom Behavior Demo",
+				"This tests the BehaviorDescriptor Interface", false, false,
+				new TextInputBehaviorDescriptor
+					{ ContentType = TMP_InputField.ContentType.IntegerNumber, CharacterLimit = 20, IsReadOnly = true });
+
+			PasswordDemo = Demo.CreateEntry("PasswordDemo", "password", "Password Demo", "This is a demo for the password field behavior descriptor", false, false, new TextInputBehaviorDescriptor { ContentType = TMP_InputField.ContentType.Password });
+
 			UI.CreateButtonEntry(Demo, "Add Entry", "Dropdown Test", "this should add another entry to the dropdown demo", AddDropdownDemo);
 
-			DropdownTest = Demo.CreateEntry("DropdownDemo", -1, "Dropdown Demo", "Dynamic dropdown test. Add items by clicking the button", false, false, demoDropdownDescriptor.WithDropdownItemList(demoItems));
+			DropdownTest = Demo.CreateEntry("DropdownDemo", -1, "Dropdown Demo", "Dynamic dropdown test. Add items by clicking the button", false, false, 
+				demoDropdownDescriptor.WithDropdownItemList(demoItems));
 			DropdownSelection = Demo.CreateEntry("SelectedDropdownItem", DropdownTest.Value, "Selected Item", "The item selected in the dropdown demo");
-			ShowReactivity = Demo.CreateEntry("Entry_Reactivity", false, "Show hidden Entry", "This is a demo preference to hide the reactivity demo button in the demo category.", false, false, new UserEditNotifier { OnUserEdit = HideReaction });
-			DemoCounting = Demo.CreateEntry("EnableCount", false, "Enable counting demo", "This is a demo for how the UI can update by a change of values in the background", false, false, new UserEditNotifier { OnUserEdit = (newVal) => { DemoCounting.EditedValue = (bool)newVal; UI.RequestRefresh(Core.Instance); } });
+			ShowReactivity = Demo.CreateEntry("Entry_Reactivity", false, "Show hidden Entry", "This is a demo preference to hide the reactivity demo button in the demo category.", false, false, 
+				new UserEditNotifier 
+					{ OnUserEdit = HideReaction });
+			DemoCounting = Demo.CreateEntry("EnableCount", false, "Enable counting demo", "This is a demo for how the UI can update by a change of values in the background", false, false, 
+				new UserEditNotifier 
+					{ OnUserEdit = (newVal) => { DemoCounting.EditedValue = (bool)newVal; UI.RequestRefresh(Core.Instance); } });
 			DemoInt = Demo.CreateEntry("DemoInt", 0, "Demo Int", "This is a demo int Preference", false, false, InhibitRefresh);
 			InhibitRefreshForCount = Demo.CreateEntry("InhibitDemoCount", true, "Inhibit Count Refresh", "Inhibit refreshing the UI when the demo int counts up", false, false, new UserEditNotifier { OnUserEdit = UpdateInhibitDemo });
 			DemoString = Demo.CreateEntry("DemoString", "Hello, World!", "Demo String", "This is a demo string preference. This should show the name of the current scene", true);

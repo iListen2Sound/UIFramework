@@ -22,8 +22,8 @@ namespace UIFramework.UiExtensions
 		/// What type of content is going into the textinput
 		/// </summary>
 		public TMP_InputField.ContentType ContentType { get; set; }
+		public char PaswordChar { get; set; }
 		public int CharacterLimit { get; set; }
-		public int DecimalPlaces { get; set; }
 		public bool IsReadOnly { get; set; }
 	}
 

@@ -1,4 +1,10 @@
 <sup><sup> btw: The changelog doubles as a feature list </sup></sup>
+### New in 0.10.3
+<details><summary>New feature: Added Text Input Behaviour Descriptors</summary>
+
+This lets you set `ContentType`, `CharacterLimits`, and `IsReadOnly` properties 
+</details>
+
 ### New in 0.10.1/2
 <details><summary>New feature: Made resize handles visible</summary>
 
