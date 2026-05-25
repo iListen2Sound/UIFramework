@@ -51,23 +51,33 @@ namespace UIFramework.Adapters
 		{
 		}
 		/// <summary>
-		/// 
+		/// Called when the model has been set. Calls DisplayMetadata and DisplayContents in that order
 		/// </summary>
 		protected sealed override void ModelSet()
 		{
 			DisplayMetadata();
 			DisplayContents();
 		}
-		protected override sealed void DisplayMetadata()
+		/// <summary>
+		/// Displays the entry model's display name and description by invoking DisplayEntryInfo.
+		/// </summary>
+		protected sealed override void DisplayMetadata()
 		{
 			DisplayEntryInfo(EntryModel.DisplayName, EntryModel.Description);
 		}
-
+		/// <summary>
+		/// Displays the name and description on to the View object
+		/// </summary>
+		/// <param name="displayName"></param>
+		/// <param name="description"></param>
 		protected virtual void DisplayEntryInfo(string displayName, string description)
 		{
 			DescriptionText = description;
 			DisplayName = displayName;
 		}
+		/// <summary>
+		/// Displays actual data content
+		/// </summary>
 		protected virtual void DisplayContents()
 		{
 
@@ -101,14 +111,14 @@ namespace UIFramework.Adapters
 
 	/// <summary>
 	/// Inherit this class to create your own custom entry controllers for your own input controls.
-	/// TODO: Refactor this to suggest non-melon related settings storage
 	/// </summary>
+	/// <remarks>Released</remarks>
 	[RegisterTypeInIl2Cpp]
 	public abstract class DataEntryAdapter : PrefEntryAdapterBase
 	{
 
 
-		/// <inheritdoc/>
+		
 		//public override void ModelSet() { base.ModelSet(); }
 
 		private protected DataEntryModelBase DataEntry => (DataEntryModelBase)EntryModel;
@@ -127,13 +137,16 @@ namespace UIFramework.Adapters
 		{
 
 		}
-
+		/// <inheritdoc/>
 		protected sealed override void DisplayContents()
 		{
 			CurrentBoxedValue = DataEntry.ModelBoxedValue;
 			DisplayData(DataEntry.ModelBoxedValue);
 		}
-
+		/// <summary>
+		/// Passes the data from the model for adapting into a format displayed to the user
+		/// </summary>
+		/// <param name="boxedValue"></param>
 		protected virtual void DisplayData(object boxedValue)
 		{
 
@@ -170,8 +183,6 @@ namespace UIFramework.Adapters
 		/// <inheritdoc/>/// 
 		protected override void DisplayData(object boxedValue)
 		{
-			//textField.text = DataEntry.ModelBoxedValue.ToString();
-			//TomletMain.TomlStringFrom(DataEntry.ModelBoxedValue).Trim();
 			boxedValueType = boxedValue.GetType();
 			if (boxedValueType == typeof(string))
 			{
@@ -182,7 +193,7 @@ namespace UIFramework.Adapters
 				try
 				{
 					textField.text = ToTomlString(boxedValue);
-					//Debug.Log(ToTomlString(DataEntry.ModelBoxedValue), true);
+					
 				}
 				catch (Exception ex)
 				{
@@ -190,6 +201,9 @@ namespace UIFramework.Adapters
 				}
 			}
 		}
+		/// <summary>
+		/// Parse the contents in the text field through toml then submit it.
+		/// </summary>
 		protected void ParseThenSubmit()
 		{
 			if (boxedValueType == typeof(string))
@@ -415,7 +429,6 @@ namespace UIFramework.Adapters
 		//protected DataEntryModelBase _prefModel => (DataEntryModelBase)EntryModel;
 		protected System.Collections.Generic.List<int> _indexToValueMap = new();
 		protected TMP_Dropdown dropdown;
-
 
 		protected object EntryValue { get; set; }
 		protected override void DisplayData(object boxedValue)

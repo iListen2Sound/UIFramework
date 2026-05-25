@@ -50,6 +50,7 @@ namespace UIFramework.UiExtensions
 	/// Important to note that your data shouldn't be stored as dropdown items. 
 	/// Dropdown items are just descriptions purely for UI Framework to know what to display to users in the dropdown.
 	/// </summary>
+	/// <remarks>Released</remarks>
 	public interface IDynamicDropdownDescriptor : IUiExtension
 	{
 		
@@ -67,11 +68,20 @@ namespace UIFramework.UiExtensions
 	}
 
 	/// <summary>
-	/// 
+	/// Describes an option displayed in the dropdown. Each one has a name and a Value.
+	/// Note that this isn't the value type for your entry.
+	/// This is only used to describe what options show up in the dropdown
 	/// </summary>
+	/// <remarks>Released</remarks>
 	public class DropdownItem
 	{
+		/// <summary>
+		/// How the item shows in the dropdown
+		/// </summary>
 		public string DisplayName { get; set; }
+		/// <summary>
+		/// The actual value that gets stored in your entry
+		/// </summary>
 		public object Value { get; set; }
 		public DropdownItem(string displayName, object value)
 		{
@@ -90,22 +100,36 @@ namespace UIFramework.UiExtensions
 	/// <summary>
 	/// Describes numeric up down controls
 	/// </summary>
+	/// <remarks>Released</remarks>
 	public interface INumberBoxDescriptor : IUiExtension
 	{
 		/// <summary>
 		/// 0 = default (1 for ints, 0.1 for floats). 
 		/// </summary>
 		public float Steps { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
 		public int DecimalPlaces { get; set; }
 	}
 
 	/// <summary>
 	/// Implementing this will present the entry as a slider in the UI
 	/// </summary>
+	/// <remarks>Released</remarks>
 	public interface ISliderDescriptor : IUiExtension
 	{
+		/// <summary>
+		/// 
+		/// </summary>
 		public float Min { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
 		public float Max { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
 		public int DecimalPlaces { get; set; }
 	}
 
@@ -113,6 +137,7 @@ namespace UIFramework.UiExtensions
 	/// <summary>
 	/// Use this if you wanna be informed of edits made by the user that aren't applied to the Value property yet
 	/// </summary>
+	/// <remarks>Released</remarks>
 	public interface IUserEditedNotifier : IUiExtension
 	{
 		/// <summary>
