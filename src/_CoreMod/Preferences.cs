@@ -8,7 +8,7 @@ using UIFramework.Adapters;
 namespace UIFramework
 {
 	/// <summary>
-	/// UI's own preferences go here 
+	/// UI's own preferences go here
 	/// </summary>
 	internal static class Preferences
 	{
@@ -59,14 +59,14 @@ namespace UIFramework
 		internal static MelonPreferences_Entry<int> DemoInt;
 		internal static MelonPreferences_Entry<string> DemoString;
 
-		internal static RefreshInhibitor InhibitRefresh = new RefreshInhibitor { InhibitRefreshOnValueChange = true };
+		internal static RefreshInhibitor InhibitRefresh = new() { InhibitRefreshOnValueChange = true };
 
 		internal static MelonPreferences_Category TestEmptyDisplayName;
 		internal static MelonPreferences_Entry<string> TestEmptyDisplayPref;
 
 
 		internal static MelonPreferences_Category TestBooleans;
-		internal static List<MelonPreferences_Entry<bool>> TestBoolList = new List<MelonPreferences_Entry<bool>>();
+		internal static List<MelonPreferences_Entry<bool>> TestBoolList = new();
 
 		internal static void InitializePrefs()
 		{
@@ -80,7 +80,7 @@ namespace UIFramework
 			AutoHideOnInactivity = CatUIFramework.CreateEntry("AutohideOnInactivity", true, "(Deprecated)Auto Hide on Inactivity", "Hide the UI if mouse and keyboard are inactive", true);
 			FadeTimer = CatUIFramework.CreateEntry("FadeTimer", 10, "Fade Out Time", "Fade UI after this many seconds.\nSet 0 to disable", false, false);
 			InactivityTimeout = CatUIFramework.CreateEntry("InactivityTimeout", 30, "Inactivity Time Out", "Hide UI After this many seconds.\nSet 0 to disable", false, false);
-			
+
 			
 			VrInputToggle = CatUIFramework.CreateEntry("VrInputToggle", false, "Toggle with VR buttons", "Toggle UI window by pressing both trigger and primary (A/X) on both hands", true);
 
@@ -90,11 +90,11 @@ namespace UIFramework
 				"<sup>*If you have ModUI, VR Input matches ModUI. UI Framework will be visible when ModUI is visible\n</sup>");
 
 			HijackModUI = CatUIFramework.CreateEntry("HijackModUI", false, "Force Hide ModButtonView UI", "If enabled, UI Framework will find the ModUI object and hide it whenever UI Framework is also hidden.\n" +
-				"<size=75%>*Might cause unintended effects. Next ModUI toggle will need to be done twice</size>");
+				"<size=75%>*Might cause unintended effects. Next ModUI Toggle will need to be done twice</size>");
 
 
 			EnableDebugMode = CatUIFramework.CreateEntry("EnableDebugMode", false, "Enable Debug Logs", "Enables or disables debug logs for UIFramework.", false, false, new UserEditNotifier { OnUserEdit = UpdateCategoryVis });
-			
+
 			Footprint = MelonPreferences.CreateCategory("UIF_Footprint", "Footprint Settings", true);
 			Footprint.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
 
@@ -150,14 +150,14 @@ namespace UIFramework
 
 			UI.CreateButtonEntry(Demo, "Add Entry", "Dropdown Test", "this should add another entry to the dropdown demo", AddDropdownDemo);
 
-			DropdownTest = Demo.CreateEntry("DropdownDemo", -1, "Dropdown Demo", "Dynamic dropdown test. Add items by clicking the button", false, false, 
+			DropdownTest = Demo.CreateEntry("DropdownDemo", -1, "Dropdown Demo", "Dynamic dropdown test. Add items by clicking the button", false, false,
 				demoDropdownDescriptor.WithDropdownItemList(demoItems));
 			DropdownSelection = Demo.CreateEntry("SelectedDropdownItem", DropdownTest.Value, "Selected Item", "The item selected in the dropdown demo");
-			ShowReactivity = Demo.CreateEntry("Entry_Reactivity", false, "Show hidden Entry", "This is a demo preference to hide the reactivity demo button in the demo category.", false, false, 
-				new UserEditNotifier 
+			ShowReactivity = Demo.CreateEntry("Entry_Reactivity", false, "Show hidden Entry", "This is a demo preference to hide the reactivity demo button in the demo category.", false, false,
+				new UserEditNotifier
 					{ OnUserEdit = HideReaction });
-			DemoCounting = Demo.CreateEntry("EnableCount", false, "Enable counting demo", "This is a demo for how the UI can update by a change of values in the background", false, false, 
-				new UserEditNotifier 
+			DemoCounting = Demo.CreateEntry("EnableCount", false, "Enable counting demo", "This is a demo for how the UI can update by a change of values in the background", false, false,
+				new UserEditNotifier
 					{ OnUserEdit = (newVal) => { DemoCounting.EditedValue = (bool)newVal; UI.RequestRefresh(Core.Instance); } });
 			DemoInt = Demo.CreateEntry("DemoInt", 0, "Demo Int", "This is a demo int Preference", false, false, InhibitRefresh);
 			InhibitRefreshForCount = Demo.CreateEntry("InhibitDemoCount", true, "Inhibit Count Refresh", "Inhibit refreshing the UI when the demo int counts up", false, false, new UserEditNotifier { OnUserEdit = UpdateInhibitDemo });
@@ -177,25 +177,23 @@ namespace UIFramework
 				InactivityTimeout.Value = 0;
 			}
 
-
 			CatUIFramework.DeleteEntry("AutohideOnInactivity");
-
 			DropdownTest.OnEntryValueChanged.Subscribe(ItemSelectionChanged);
 		}
-		static List<DropdownItem> demoItems = new List<DropdownItem> { new DropdownItem("zero", 0), new DropdownItem("one", 1) };
+		static List<DropdownItem> demoItems = new() { new DropdownItem("zero", 0), new DropdownItem("one", 1) };
 
 
 		public static DynamicDropdownDescriptor demoDropdownDescriptor = new();
 		internal static void AddDropdownDemo()
 		{
 			int nextItem = demoDropdownDescriptor.GetDropdownItems().Count;
-			string nextName = new string('+', nextItem);
+			string nextName = new('+', nextItem);
 
 			demoDropdownDescriptor.AddDropdownItem(new DropdownItem(" - " + nextName, nextItem));
 
 			//demoDropdownDescriptor.SetDropdownItems(demoItems);
 		}
-		
+
 		internal static void ItemSelectionChanged(int old, int neew)
 		{
 			Debug.Log($"Selected Item: {neew}");

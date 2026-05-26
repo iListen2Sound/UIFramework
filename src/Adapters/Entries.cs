@@ -38,7 +38,7 @@ namespace UIFramework.Adapters
 		protected virtual EntryState EntryStatus { get; set; }
 
 		/// <summary>
-		/// Runs when the model property has been set. 
+		/// Runs when the model property has been set
 		/// </summary>
 
 
@@ -101,7 +101,7 @@ namespace UIFramework.Adapters
 		{
 			string wrappedEntry = $"temp = {input.Trim()}";
 
-			TomlParser parser = new TomlParser();
+			TomlParser parser = new();
 			TomlDocument inputToml = parser.Parse(wrappedEntry);
 			TomlValue inputVal = inputToml.GetValue("temp");
 
@@ -116,9 +116,6 @@ namespace UIFramework.Adapters
 	[RegisterTypeInIl2Cpp]
 	public abstract class DataEntryAdapter : PrefEntryAdapterBase
 	{
-
-
-		
 		//public override void ModelSet() { base.ModelSet(); }
 
 		private protected DataEntryModelBase DataEntry => (DataEntryModelBase)EntryModel;
@@ -164,7 +161,7 @@ namespace UIFramework.Adapters
 
 
 	/// <summary>
-	/// Base controller for text fields 
+	/// Base controller for text fields
 	/// </summary>
 	[RegisterTypeInIl2Cpp]
 	public class TextEntryAdapter : DataEntryAdapter
@@ -184,7 +181,7 @@ namespace UIFramework.Adapters
 
 		Type boxedValueType = null;
 
-		/// <inheritdoc/>/// 
+		/// <inheritdoc/>///
 		protected override void DisplayData(object boxedValue)
 		{
 			if (BehaviorDescriptor is not null)
@@ -194,7 +191,6 @@ namespace UIFramework.Adapters
 				TextField.readOnly = BehaviorDescriptor.IsReadOnly;
 				TextField.asteriskChar = BehaviorDescriptor.PaswordChar;
 			}
-
 
 			boxedValueType = boxedValue.GetType();
 			if (boxedValueType == typeof(string))
@@ -206,7 +202,7 @@ namespace UIFramework.Adapters
 				try
 				{
 					TextField.text = ToTomlString(boxedValue);
-					
+
 				}
 				catch (Exception ex)
 				{
@@ -271,9 +267,9 @@ namespace UIFramework.Adapters
 	[RegisterTypeInIl2Cpp]
 	public class NumericEntryAdapter : TextEntryAdapter
 	{
-		protected Button _addButton =>
+		protected Button AddButton =>
 			gameObject.transform.Find("Data/ButtonGroup/Add").gameObject.GetComponent<Button>();
-		protected Button _subtractButton =>
+		protected Button SubtractButton =>
 			gameObject.transform.Find("Data/ButtonGroup/Sub").gameObject.GetComponent<Button>();
 
 
@@ -297,7 +293,6 @@ namespace UIFramework.Adapters
 			}
 		}
 
-		
 
 		protected virtual INumberBoxDescriptor NumericSettings => UiExtension as INumberBoxDescriptor;
 
@@ -305,8 +300,8 @@ namespace UIFramework.Adapters
 		{
 			base.Start();
 
-			_addButton.onClick.AddListener((UnityAction)Increment);
-			_subtractButton.onClick.AddListener((UnityAction)Decrement);
+			AddButton.onClick.AddListener((UnityAction)Increment);
+			SubtractButton.onClick.AddListener((UnityAction)Decrement);
 
 		}
 
@@ -323,8 +318,8 @@ namespace UIFramework.Adapters
 
 			if (BehaviorDescriptor?.IsReadOnly == true)
 			{
-				_addButton.interactable = false;
-				_subtractButton.interactable = false;
+				AddButton.interactable = false;
+				SubtractButton.interactable = false;
 			}
 
 		}
@@ -345,7 +340,6 @@ namespace UIFramework.Adapters
 	public class NumSliderAdapter : TextEntryAdapter
 	{
 		protected Slider Slider => gameObject.transform.Find("Data/SliderControl").gameObject.GetComponent<UnityEngine.UI.Slider>();
-		protected TMP_InputField _textField => gameObject.transform.Find("Data/TextControl").gameObject.GetComponent<TMP_InputField>();
 		protected virtual ISliderDescriptor SliderSettings => UiExtension as ISliderDescriptor;
 
 		protected override void DisplayData(object boxedValue)
@@ -355,9 +349,9 @@ namespace UIFramework.Adapters
 			{
 				Slider.interactable = false;
 			}
-				
-			_textField.onEndEdit.AddListener((UnityAction<string>)EditEnd);
-			_textField.onSelect.AddListener((UnityAction<string>)EditStart);
+
+			TextField.onEndEdit.AddListener((UnityAction<string>)EditEnd);
+			TextField.onSelect.AddListener((UnityAction<string>)EditStart);
 
 			Slider.minValue = SliderSettings?.Min ?? 0;
 			Slider.maxValue = SliderSettings?.Max ?? 100;
@@ -367,20 +361,20 @@ namespace UIFramework.Adapters
 			if (boxedValue is int or byte or short or long or sbyte or ushort or uint or ulong)
 			{
 				Slider.wholeNumbers = true;
-				_textField.contentType = TMP_InputField.ContentType.IntegerNumber;
-				_textField.text = Slider.value.ToString("F0");
+				TextField.contentType = TMP_InputField.ContentType.IntegerNumber;
+				TextField.text = Slider.value.ToString("F0");
 			}
 			else
 			{
 				Slider.wholeNumbers = false;
-				_textField.contentType = TMP_InputField.ContentType.DecimalNumber;
-				_textField.text = Slider.value.ToString("F" + SliderSettings?.DecimalPlaces);
+				TextField.contentType = TMP_InputField.ContentType.DecimalNumber;
+				TextField.text = Slider.value.ToString("F" + SliderSettings?.DecimalPlaces);
 			}
 		}
 
 		protected void OnValueChanged(float newValue)
 		{
-			_textField.text = newValue.ToString(_textField.contentType == TMP_InputField.ContentType.IntegerNumber ? "F0" : "F" + SliderSettings?.DecimalPlaces);
+			TextField.text = newValue.ToString(TextField.contentType == TMP_InputField.ContentType.IntegerNumber ? "F0" : "F" + SliderSettings?.DecimalPlaces);
 			//ApplyValueToPref();
 			//Debug.Log($"Slider value changed to {newValue}", true);
 		}
@@ -391,11 +385,11 @@ namespace UIFramework.Adapters
 		}
 		protected override void EditStart(string s)
 		{
-			_textField.textComponent.fontStyle = FontStyles.Normal;
+			TextField.textComponent.fontStyle = FontStyles.Normal;
 		}
 		protected override void EditEnd(string s)
 		{
-			_textField.textComponent.fontStyle = FontStyles.Italic;
+			TextField.textComponent.fontStyle = FontStyles.Italic;
 
 			if (float.TryParse(s, out float result))
 			{
@@ -409,7 +403,7 @@ namespace UIFramework.Adapters
 			else
 			{
 				Debug.Log($"Invalid input for slider: {s}", false, 2);
-				_textField.text = Slider.value.ToString(_textField.contentType == TMP_InputField.ContentType.IntegerNumber ? "F0" : "F" + SliderSettings?.DecimalPlaces);
+				TextField.text = Slider.value.ToString(TextField.contentType == TMP_InputField.ContentType.IntegerNumber ? "F0" : "F" + SliderSettings?.DecimalPlaces);
 			}
 		}
 
@@ -419,9 +413,10 @@ namespace UIFramework.Adapters
 		{
 			EventTrigger trigger = Slider.gameObject.AddComponent<EventTrigger>();
 
-			EventTrigger.Entry entry = new EventTrigger.Entry();
-			entry.eventID = EventTriggerType.PointerUp;
-
+			EventTrigger.Entry entry = new()
+			{
+				eventID = EventTriggerType.PointerUp
+			};
 			entry.callback.AddListener((UnityAction<BaseEventData>)PointerUP);
 
 			trigger.triggers.Add(entry);
@@ -435,19 +430,19 @@ namespace UIFramework.Adapters
 	}
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	[RegisterTypeInIl2Cpp]
 	public class BoolToggleAdapter : DataEntryAdapter
 	{
-		protected Toggle toggle => this.gameObject.transform.Find("Data/ToggleControl").gameObject.GetComponent<Toggle>();
+		protected Toggle Toggle => this.gameObject.transform.Find("Data/ToggleControl").gameObject.GetComponent<Toggle>();
 		//protected override DataEntryModelBase DataEntry => (DataEntryModelBase)EntryModel;
 		public bool EnteredValue => this.gameObject.transform.Find("Data/ToggleControl").gameObject.GetComponent<Toggle>().isOn;
 		/// <inheritdoc/>
 		protected override void DisplayData(object boxedValue)
 		{
-			toggle.isOn = (bool)boxedValue;
-			toggle.onValueChanged.AddListener((UnityAction<bool>)OnValueChanged);
+			Toggle.isOn = (bool)boxedValue;
+			Toggle.onValueChanged.AddListener((UnityAction<bool>)OnValueChanged);
 
 		}
 
@@ -500,13 +495,11 @@ namespace UIFramework.Adapters
 	}
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	[RegisterTypeInIl2Cpp]
 	public class EnumDropdownAdapter : DropDownAdapterBase
 	{
-
-
 		protected Type prefEnum;
 
 		protected override void GetDropdownData()
@@ -522,7 +515,6 @@ namespace UIFramework.Adapters
 				enumNames.Add(attr?.GetName() ?? value.ToString());
 				_indexToValueMap.Add(Convert.ToInt32(value));
 			}
-
 
 			dropdown.ClearOptions();
 			dropdown.AddOptions(enumNames);
@@ -593,15 +585,15 @@ namespace UIFramework.Adapters
 	{
 		GameObject _buttonGo;
 		Button _buttonComponent;
-		IButtonDescriptor _buttonDescrictor => DataEntry?.UiExtension as IButtonDescriptor;
+		IButtonDescriptor ButtonDescriptor => DataEntry?.UiExtension as IButtonDescriptor;
 		protected override void DisplayData(object boxedValue)
 		{
 			_buttonGo = this.gameObject.transform.Find("Data/ButtonControl").gameObject;
 
 			_buttonComponent = _buttonGo.GetComponent<Button>();
-			_buttonComponent.onClick.AddListener((UnityAction)_buttonDescrictor?.Handler);
+			_buttonComponent.onClick.AddListener((UnityAction)ButtonDescriptor?.Handler);
 			TextMeshProUGUI buttonText = _buttonGo.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-			buttonText.text = _buttonDescrictor?.ButtonText ?? "Button";
+			buttonText.text = ButtonDescriptor?.ButtonText ?? "Button";
 
 		}
 	}
@@ -631,7 +623,7 @@ namespace UIFramework.Adapters
 	#region no support
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	/*[RegisterTypeInIl2Cpp]
 	public class PrefMulti : DataEntryAdapter

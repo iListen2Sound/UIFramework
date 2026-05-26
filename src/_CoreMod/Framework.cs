@@ -15,16 +15,16 @@ namespace UIFramework
 		internal static RootModel ModelInstance = new();
 		internal static GameObject MainWindow;
 		public static bool IsVisible { get => MainWindow.activeSelf; internal set => MainWindow.SetActive(value); }
-		
+
 		internal static WindowCoordinator WindowInstance;
 
 		private static CanvasGroup CanvasGroup => MainWindow.GetComponent<CanvasGroup>();
-		
+
 		
 
 
 		/// <summary>
-		/// Registers a mod or plugin to UI Framework with its categories. 
+		/// Registers a mod or plugin to UI Framework with its categories.
 		/// </summary>
 		/// <param name="melonInstance"></param>
 		/// <param name="categories"></param>
@@ -49,10 +49,9 @@ namespace UIFramework
 			return newModModel;
 		}
 
-		
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		internal static void InitializeUIObjects()
 		{
@@ -72,13 +71,13 @@ namespace UIFramework
 		/// <param name="handler"></param>
 		/// <remarks>Released</remarks>
 		public static void CreateButtonEntry(MelonPreferences_Category category, string buttonText, string displayName, string description, Action handler)
-			
+
 		{
-			ButtonAsEntry button = new ButtonAsEntry { Handler = handler, ButtonText = buttonText, DisplayName = displayName, Description = description };
+			ButtonAsEntry button = new() { Handler = handler, ButtonText = buttonText, DisplayName = displayName, Description = description };
 			category.CreateEntry<ButtonAsEntry>($"PlaceHolder{buttonText + displayName + description}", button, displayName, description, false, true, button);
 		}
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		internal static void BuildUI()
 		{
@@ -86,7 +85,6 @@ namespace UIFramework
 
 		}
 
-		
 		internal static void RequestRefresh(ModModelBase modModel)
 		{
 			Debug.Log("RefreshRequested in Framework.cs RequestRefresh(ModModelBase modModel)", true, 1);
@@ -103,7 +101,7 @@ namespace UIFramework
 			ModModelBase model = ModelInstance.GetModModel(melonInstance.Info.Name);
 			WindowInstance?.RequestRefresh(model);
 		}
-		
+
 		internal static void Fade()
 		{
 			CanvasGroup.alpha = 0.25f;
@@ -142,7 +140,7 @@ namespace UIFramework
 		public bool IsEnabled{get; set;}
 		public bool IsHidden{get; set;}
 		public bool IsReadOnly{get; set;}
-		
+
 		//text fields
 		public bool IsPasswordField{get; set;}
 		public bool IsRightToLeft{get; set;}
@@ -151,7 +149,7 @@ namespace UIFramework
 		//universal
 		public Color DisplayNameColor {get; set;}
 		public Color DescriptionColor {get; set;}
-		
+
 		public Color EntryBaseColor{get; set;}
 		public Color EntryDataSectionColor{get; set;}
 
@@ -170,7 +168,7 @@ namespace UIFramework
 		Default,
 		[Display(Name = "Text Field", Description = "Basic text field input")]
 		TextField,
-		[Display(Name = "Toggle", Description = "A simple on/off toggle")]
+		[Display(Name = "Toggle", Description = "A simple on/off Toggle")]
 		Toggle,
 		[Display(Name = "Int input", Description = "An Input for inputing Numeric Integers")]
 		NumericInt,
@@ -219,5 +217,5 @@ namespace UIFramework
 			return NewModModel;
 		}
 	}
-	
+
 }

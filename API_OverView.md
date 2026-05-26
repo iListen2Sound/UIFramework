@@ -182,7 +182,7 @@ MySlider = MyCategory.CreateEntry("MySlider", 0, "My Slider", "Example Slider", 
 -----
 ### Implemented Extensions
 
-### TextInputs
+### TextInput Customization (New in 0.10.3)
 #### Interface: `ITextInputBehaviorDescriptor`
 #### Default Implementation: `TextInputBehaviorDescriptor`
 This lets you control the behavior of TextInputs. Giving you control of these properties:
@@ -217,7 +217,7 @@ MySlider = MyCategory.CreateEntry("MySlider", 0.5f, "My Slider", "Float Slider",
 ```
 
 -----
-### NumberBox
+### NumberBox (New in 0.10.0)
 ##### Interface: `INumberBoxDescriptor`
 ##### Default Implementation: `NumberBoxDescriptor`
 
@@ -227,7 +227,7 @@ MyNumBox = MyCategory.CreateEntry("MyNumBox", 0.5f, "My Number Box", "Float Numb
 ```
 
 -----
-#### Dynamically Editable Dropdowns
+#### Dynamically Editable Dropdowns (New in 0.9.0)
 #### Interface: `IDynamicDropdownDescriptor`
 #### Default Implementation: `DynamicDropdownDescriptor`
 
@@ -274,7 +274,7 @@ DropdownTest = Category.CreateEntry("DropdownTest", "Default Value", "Dropdown T
 ```
 
 -----
-#### User Edit Notifiers
+#### User Edit Notifiers (New in 0.9.0)
 ##### Interface: `IUserEditedNotifier`
 ##### Default Implementation: `UserEditDefaultNotifier`
 This doesn't change the UIs presentation but it does notify you when the user inputs a new value into the UI e.g. when they're done editing a text input, clicked a toggle or finished moving a slider. It also provides you with the new value
@@ -302,7 +302,7 @@ UI.CreateButtonEntry(MelonPreferences_Category category, string buttonText, stri
 This method will handle the implementation for you and it will show the button in the entries list.
 
 -----
-#### Custom Entry Presentations
+#### Custom Entry Presentations (New in 0.10.0)
 ##### Interface: `ICustomViewProvider`
 ##### Default Implementation: `CustomViewProvider`
 Lets you assign a custom prefab to represent your entry in the UI through its `EntryViewPrefab` property. 

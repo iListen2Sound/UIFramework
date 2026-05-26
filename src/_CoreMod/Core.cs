@@ -26,12 +26,12 @@ namespace UIFramework
 		/// <summary></summary>
 		public const string Author = "Reverb && Spice";
 		/// <summary></summary>
-		public const string Version = "0.10.3";	
+		public const string Version = "0.10.3";
 	}
 
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Core : MelonMod
 	{
@@ -42,7 +42,7 @@ namespace UIFramework
 		internal GameObject ModUIWindow;
 		internal bool lastModUIState = false;
 
-		internal Stopwatch displayTime = new Stopwatch();
+		internal Stopwatch displayTime = new();
 
 		internal int inactiveTimeLimit => (Preferences.InactivityTimeout?.Value * 1000) ?? 30000;
 
@@ -55,7 +55,7 @@ namespace UIFramework
 			rightPrimary.AddBinding("<XRController>{RightHand}/primaryButton");
 			leftGrip.AddBinding("<XRController>{LeftHand}/Trigger");
 			leftPrimary.AddBinding("<XRController>{LeftHand}/primaryButton");
-			map.Enable();	
+			map.Enable();
 			Instance = this;
 			MelonPreferences.OnPreferencesSaved.Subscribe(MelPrefsSaved);
 			Prefabs.LoadAssetBundle();
@@ -102,7 +102,7 @@ namespace UIFramework
 		}
 		/// <summary>
 		/// The actual coroutine that toggles the UI. Has to be in a coroutine to allow for a delay if ModUI is present.
-		/// If ModUI is present, it matches UI Framework with ModUI. 
+		/// If ModUI is present, it matches UI Framework with ModUI.
 		/// A delay is needed to make sure ModUI's new state has been apllied first before it's copied
 		/// </summary>
 		/// <param name="matchModUI"></param>
@@ -140,7 +140,7 @@ namespace UIFramework
 			UI.MainWindow.GetComponent<WindowCoordinator>().DragHandle.ClampToBounds();
 		}
 		/// <summary>
-		/// Runs after mod UI keyboard toggle to make sure lastModUIState variable is correct
+		/// Runs after mod UI keyboard Toggle to make sure lastModUIState variable is correct
 		/// </summary>
 		/// <returns></returns>
 		private IEnumerator SyncModUIState()
@@ -151,7 +151,7 @@ namespace UIFramework
 
 		#region Baumritter-generated
 		//VR input variables
-		private static InputActionMap map = new InputActionMap("Tha Map");
+		private static InputActionMap map = new("Tha Map");
 		private static InputAction rightGrip = map.AddAction("Right Trigger");
 		private static InputAction rightPrimary = map.AddAction("Right Primary");
 		private static InputAction leftGrip = map.AddAction("Left Trigger");
@@ -296,14 +296,13 @@ namespace UIFramework
 		}
 #pragma warning restore CS1591
 
-		
 
 		/// <summary>
 		/// Called on first gymload to build the UI and find the modUI window.
 		/// </summary>
 		internal void FirstGymLoad()
 		{
-			
+
 			MelonCoroutines.Start(FindModUI());
 
 
@@ -321,7 +320,6 @@ namespace UIFramework
 			MelonCategoryModel tester = (MelonCategoryModel)MyModel.GetSubmodel(Preferences.TestBooleans.Identifier);
 
 
-			
 
 			UI.InitializeUIObjects();
 			UI.MainWindow.SetActive(false);

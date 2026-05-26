@@ -2,7 +2,8 @@
 ### New in 0.10.3
 <details><summary>New feature: Added Text Input Behaviour Descriptors</summary>
 
-This lets you set `ContentType`, `CharacterLimits`, and `IsReadOnly` properties 
+This lets you set `ContentType`, `CharacterLimit`, and `IsReadOnly` properties.
+You also get a `PasswordChar` property that you can use when you set your content type to password
 </details>
 
 ### New in 0.10.1/2
