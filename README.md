@@ -91,7 +91,7 @@ UI.RegisterMelon(this, TestCategory1, TestCategory2...);
 ### Type Support: Whatever works with Tomlet
 <details> <summary>Expanded Type Support details</summary>
 
-Support is no longer limited to the types mentioned above. Serialization and parsing is now handled by [Tomlet](https://github.com/SamboyCoding/Tomlet). 
+Serialization and parsing is now handled by [Tomlet](https://github.com/SamboyCoding/Tomlet). 
 This means that it supports types described in [Toml 1.0.0](https://toml.io/en/v1.0.0) and whatever Tomlet supports. [You can even make your own custom mappers](https://github.com/SamboyCoding/Tomlet/blob/master/README.md#creating-your-own-mappers)
 
 Caveat: Types handled by Tomlet will be presented as regular text inputs and they might not always look good. Numerics will have the appropriate filters.

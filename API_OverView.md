@@ -34,9 +34,11 @@ if (!Directory.Exists(USER_DATA))
 TestCategory1.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
 TestCategory2.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
 ```
-<details><summary> A note on custom file paths</summary>
-Please make sure the directory exists before setting the file path. If the directory doesn't exist, it will fail silently and your settings won't save with no explanation
-</details>
+
+> [!WARNING]
+> Please make sure the directory exists before setting the file path. 
+If the directory doesn't exist, it might fail silently and your settings won't save with no explanation
+
 
 ### Entries
 Entries are the actual settings that you want to save. 
@@ -69,6 +71,8 @@ TestEntry11.Value = "New Value";
 ### Events
 - `MelonPreferences_Entry.OnEntryValueChanged`: Event that fires when the value is changed (Value is applied when you hit the save button in the UI Framework window). Provides oldValue and newValue parameters so you can monitor if it's been changed from the previous values. 
 Must be subscribed with via the `.Subscribe()` method instead of `+=`
+- `MelonPreferences.OnPreferencesSaved`: Event that fires whenever preferences are saved.
+This fires regardless of which category triggers it. You have to filter for your file path to only respond to your category saving
 
 -----
 ## UI Framework
