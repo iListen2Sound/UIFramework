@@ -87,7 +87,6 @@ Add `[assembly: MelonAdditionalDependencies("UIFramework")]` to your AssemblyInf
 ```cs
 UI.RegisterMelon(this, TestCategory1, TestCategory2...);
 ```
-~~Right now, support is limited to common types like `string`, `int`, `bool`, `double`, `float`, and `enums` without the flags attribute. Working on expanding this.~~
 
 ### Type Support: Whatever works with Tomlet
 <details> <summary>Expanded Type Support details</summary>
@@ -111,9 +110,7 @@ private void MyModSaved()
 ```cs
 UI.RegisterMelon(this, OBSAutoRecorderSettings, TestCategory1, TestCategory2...).OnModSaved += MyModSaved;
 ```
-<sup>Casting to melonbase isn't necessary but it forces your compiler to use the newer MelonBase registration instead of the obsolete MelonMod registration
-In the future, all mods will be registered as MelonBase by default and the cast won't be needed. 
-But the cast makes sure that your mod won't break when the old MelonMod registration gets removed</sup>
+<sup>I moved registration from UI.Register() to UI.RegisterMelon.</sup>
 
 
 ### Optional: Custom display names
@@ -125,8 +122,7 @@ in the UI. Line breaks are supported.
 -----
 
 # Advanced Usage
-I moved this section the [API Overview](https://github.com/Reverb-And-Spice/UIFramework/blob/main/API_OverView.md#ui-presentation-control-validator-extensions)
-
+I moved this section to the [API Overview](https://github.com/Reverb-And-Spice/UIFramework/blob/main/API_OverView.md#ui-presentation-control-validator-extensions)
 
 -----
 
@@ -148,17 +144,8 @@ This mod is in active development. The plan is to increase extensibility.
 So while advanced API usage will have a lot of changes for the time that this mod is in [Version 0.x.x](https://semver.org/#spec-item-4),
 mods that implement the basic use case of this framework don't have to worry about breaking in the future (as long as I don't mess up too bad). 
 
-### Oops (0.6.2)
-Well, so much for always be backwards compatible. In order to support plugins, I'm having to change .Register to use MelonBase as the instance instead of MelonMod
-Currently, I have an obsolete bridging function for backwards compatibility. 
-But that will be removed in a future version if I'm confident that enough mods have migrated that it won't be too big of a problem. 
-
-In order to make your mod future proof, explicitly cast your MelonMod instance to MelonBase in your next update. 
-You don't need to publish that update now for this small change but it makes it so that when the old function does become actually deprecated, you won't need to push an update specific to it.
-
-```cs
-UI.Register((MelonBase)this, TestCategory1, TestCategory2);
-```
+### Oops (0.10.0)
+Keeping track of multiple overloads of .Register was getting cluttered. I moved registration to .RegisterMelon instead.
 
 Okay, so for real this time: **<ins>Basic MelonPreferences registration is stable and should always be backwards compatible.</ins>** 
 
