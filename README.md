@@ -140,7 +140,7 @@ https://melonwiki.xyz/#/modders/preferences?id=melon-preferences
 
 # Ongoing Development Disclosure
 This mod is in active development. The plan is to increase extensibility. 
-**<ins>~~Basic MelonPreferences registration is stable and should always be backwards compatible.~~</ins>** 
+**<ins>Basic MelonPreferences registration is mostly stable and should be backwards compatible.</ins>** 
 So while advanced API usage will have a lot of changes for the time that this mod is in [Version 0.x.x](https://semver.org/#spec-item-4),
 mods that implement the basic use case of this framework don't have to worry about breaking in the future (as long as I don't mess up too bad). 
 
@@ -150,5 +150,6 @@ Keeping track of multiple overloads of .Register was getting cluttered. I moved 
 Okay, so for real this time: **<ins>Basic MelonPreferences registration is stable and should always be backwards compatible.</ins>** 
 
 ### XML Documentation File
+[Download Here](https://github.com/iListen2Sound/UIFramework/blob/main/UIFramework.xml)
 You can place the .xml documentation file for UIFramework in the same folder as the dll to get intellisense documentation for the API. 
 It is currently incomplete, however but I do add to it every update.
