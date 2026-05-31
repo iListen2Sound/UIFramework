@@ -70,10 +70,10 @@ Drop the dll in your mods folder.
 
 ~~Changing a value of an entry automatically updates the value of the preference and is applied. How that preference's parent mod reacts depends on the modder's implementation.~~
 
-<sup>* the above is no longer true as of 0.8.0. Values will not update until the saved button has been clicked</sup>
+<sup>* the above is no longer true as of 0.8.0. Values will not update until the save button has been clicked</sup>
 
 
-The save button writes it to the file for permanent storage. Closing your game might also save preferences to file automatically depending on whether it's closed from the game window or through Steam. **Stopping through Steam doesn't save because it force closes it.**
+The save button writes it to the file for permanent storage. Closing your game might also save preferences to file automatically depending on whether it's closed from the game window or through Steam. **Stopping through Steam doesn't save because it force closes the game.**
 
 ------
 
@@ -83,7 +83,7 @@ A (more) detailed API Overview exists over at https://github.com/Reverb-And-Spic
 ## Basic Registration
 Add `[assembly: MelonAdditionalDependencies("UIFramework")]` to your AssemblyInfo. This prevents your mod from calling on UIFramework before it's been initialized.
 
-[Define](#If-you-havent-used-melonpreferences-before) your MelonPreferences in `OnInitializeMelon` and then register them to the UI.
+[Define](#if-you-havent-used-melonpreferences-before) your MelonPreferences in `OnInitializeMelon` and then register them to the UI.
 ```cs
 UI.RegisterMelon(this, TestCategory1, TestCategory2...);
 ```
@@ -94,7 +94,7 @@ UI.RegisterMelon(this, TestCategory1, TestCategory2...);
 Serialization and parsing is now handled by [Tomlet](https://github.com/SamboyCoding/Tomlet). 
 This means that it supports types described in [Toml 1.0.0](https://toml.io/en/v1.0.0) and whatever Tomlet supports. [You can even make your own custom mappers](https://github.com/SamboyCoding/Tomlet/blob/master/README.md#creating-your-own-mappers)
 
-Caveat: Types handled by Tomlet will be presented as regular text inputs and they might not always look good. Numerics will have the appropriate filters.
+Caveat: Types handled by Tomlet will be presented as regular text inputs and they might not always look good. Numeric types will have the appropriate filters.
 I do plan to continue expanding the number of custom UI presenters like I did with enums and booleans.
  </details>
 
@@ -126,7 +126,7 @@ I moved this section to the [API Overview](https://github.com/Reverb-And-Spice/U
 
 -----
 
-## If you haven't used melonpreferences before
+## If you haven't used MelonPreferences before
 
 I detail usage and creation here: 
 https://github.com/Reverb-And-Spice/UIFramework/blob/main/API_OverView.md#melonpreferences
@@ -142,7 +142,7 @@ https://melonwiki.xyz/#/modders/preferences?id=melon-preferences
 This mod is in active development. The plan is to increase extensibility. 
 **<ins>Basic MelonPreferences registration is mostly stable and should be backwards compatible.</ins>** 
 So while advanced API usage will have a lot of changes for the time that this mod is in [Version 0.x.x](https://semver.org/#spec-item-4),
-mods that implement the basic use case of this framework don't have to worry about breaking in the future (as long as I don't mess up too bad). 
+mods that implement the basic use case of this framework don't have to worry about breaking in the future (as long as I don't mess up too badly). 
 
 ### Oops (0.10.0)
 Keeping track of multiple overloads of .Register was getting cluttered. I moved registration to .RegisterMelon instead.
