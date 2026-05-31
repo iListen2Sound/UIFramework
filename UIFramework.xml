@@ -16,7 +16,7 @@
         </member>
         <member name="P:UIFramework.Adapters.PrefEntryAdapterBase.EntryModel">
             <summary>
-            Runs when the model property has been set
+            The model for the entry
             </summary>
         </member>
         <member name="M:UIFramework.Adapters.PrefEntryAdapterBase.PreSaveAction">
@@ -68,8 +68,20 @@
             </summary>
             <remarks>Released</remarks>
         </member>
-        <member name="M:UIFramework.Adapters.DataEntryAdapter.ValidationCheck">
-            <inheritdoc/>
+        <member name="P:UIFramework.Adapters.DataEntryAdapter.DataEntry">
+            <summary>
+            Model for the data entry
+            </summary>
+        </member>
+        <member name="F:UIFramework.Adapters.DataEntryAdapter.CurrentBoxedValue">
+            <summary>
+            The boxed value loaded from the model when it was first set
+            </summary>
+        </member>
+        <member name="P:UIFramework.Adapters.DataEntryAdapter.UiExtension">
+            <summary>
+            Reference to the UI Extension
+            </summary>
         </member>
         <member name="M:UIFramework.Adapters.DataEntryAdapter.PreSaveAction">
             <inheritdoc/>
@@ -105,33 +117,259 @@
             Sets the placeholder text in the TextField
             </summary>
         </member>
+        <member name="P:UIFramework.Adapters.TextEntryAdapter.BehaviorDescriptor">
+            <summary>
+            A reference to the UI Extension as a behavior descriptor
+            </summary>
+        </member>
         <member name="M:UIFramework.Adapters.TextEntryAdapter.DisplayData(System.Object)">
-            <inheritdoc/>///
+            <summary>
+            <inheritdoc/>
+            Assigns the behavior descriptor properties if present. 
+            </summary>
         </member>
         <member name="M:UIFramework.Adapters.TextEntryAdapter.ParseThenSubmit">
             <summary>
             Parse the contents in the text field through toml then submit it.
             </summary>
         </member>
-        <member name="T:UIFramework.Adapters.BoolToggleAdapter">
+        <member name="M:UIFramework.Adapters.TextEntryAdapter.EditStart(System.String)">
+            <summary>
+            Sets the text to non-italicized font style when editing. 
+            Replaces the need for managing the placeholder text
+            </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.TextEntryAdapter.EditEnd(System.String)">
+            <summary>
+            Sets the text to italicized when done editing
+            </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.TextEntryAdapter.Start">
+            <summary>
+            Unity callback. Subscribes EditStart and EditEnd to the appropriate events
+            </summary>
+        </member>
+        <member name="T:UIFramework.Adapters.NumericEntryAdapter">
+            <summary>
+            Entry adapter for a numeric view. Derives from text inputs
+            </summary>
+        </member>
+        <member name="P:UIFramework.Adapters.NumericEntryAdapter.AddButton">
+            <summary>
+            Button for incrementing
+            </summary>
+        </member>
+        <member name="P:UIFramework.Adapters.NumericEntryAdapter.SubtractButton">
+            <summary>
+            Button for decrementing
+            </summary>
+        </member>
+        <member name="P:UIFramework.Adapters.NumericEntryAdapter.IncrementStep">
+            <summary>
+            Gets the defined numeric steps from the descriptor. 
+            If it doesn't exist, or is zero, it goes back to the default depending on the numeric type.
+            </summary>
+        </member>
+        <member name="P:UIFramework.Adapters.NumericEntryAdapter.NumericSettings">
+            <summary>
+            UI Extension as NumberboxDescriptor NumericSettings
+            </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.NumericEntryAdapter.Start">
+            <summary>
+            <inheritdoc/>
+            Subscribes the button click events to increment/decrement specifically.
+            </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.NumericEntryAdapter.Increment">
+            <summary>
+            Increment button event
+            </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.NumericEntryAdapter.Decrement">
+            <summary>
+            Decerement button event
+            </summary>
+        </member>
+        <member name="T:UIFramework.Adapters.NumSliderAdapter">
+            <summary>
+            <inheritdoc/>
+            Adapter for slider entries. Inherits from Text inputs
+            </summary>
+        </member>
+        <member name="P:UIFramework.Adapters.NumSliderAdapter.Slider">
+            <summary>
+            Control component for slider
+            </summary>
+        </member>
+        <member name="P:UIFramework.Adapters.NumSliderAdapter.SliderSettings">
              <summary>
-            
+            UI Extension for the slider descriptor
              </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.NumSliderAdapter.DisplayData(System.Object)">
+            <summary>
+            <inheritdoc/>
+            Gets the data from the model then set the value of the slider to match
+            </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.NumSliderAdapter.OnValueChanged(System.Single)">
+             <summary>
+            Updates the text input with the slider's values
+             </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.NumSliderAdapter.SubmitSliderValue">
+            <summary>
+            Submits the slider's value to the model
+            </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.NumSliderAdapter.EditStart(System.String)">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.NumSliderAdapter.EditEnd(System.String)">
+            <summary>
+            <inheritdoc/>
+            After editing the text input, apply the value in it to the slider position
+            </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.NumSliderAdapter.AddPointerUp">
+            <summary>
+            Adds a pointer up event toe the slider which does the actual submission
+            </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.NumSliderAdapter.PointerUP(UnityEngine.EventSystems.BaseEventData)">
+            <summary>
+            Only submit the slider value after the user stops dragging it
+            Otherwise, UI will continously try to refresh making the user only
+            able to edit one frame.
+            </summary>
+        </member>
+        <member name="T:UIFramework.Adapters.BoolToggleAdapter">
+            <summary>
+            <inheritdoc/>
+            Adapter for booleans shown as toggles
+            </summary>
+        </member>
+        <member name="P:UIFramework.Adapters.BoolToggleAdapter.Toggle">
+            <summary>
+            The actual toggle control component
+            </summary>
+        </member>
+        <member name="P:UIFramework.Adapters.BoolToggleAdapter.EnteredValue">
+            <summary>
+            Gets the value of the toggle
+            </summary>
         </member>
         <member name="M:UIFramework.Adapters.BoolToggleAdapter.DisplayData(System.Object)">
             <inheritdoc/>
         </member>
-        <member name="T:UIFramework.Adapters.EnumDropdownAdapter">
-             <summary>
-            
-             </summary>
+        <member name="T:UIFramework.Adapters.DropDownAdapterBase">
+            <summary>
+            The base class for dropdown adapters
+            </summary>
         </member>
-        <member name="M:UIFramework.Adapters.EnumDropdownAdapter.EditCheck">
+        <member name="F:UIFramework.Adapters.DropDownAdapterBase._indexToValueMap">
+            <summary>
+            List of ints serving to map the selected index to the the actual entry value of that index in the dropdown
+            </summary>
+        </member>
+        <member name="F:UIFramework.Adapters.DropDownAdapterBase.dropdown">
+            <summary>
+            The actual dropdown control
+            </summary>
+        </member>
+        <member name="P:UIFramework.Adapters.DropDownAdapterBase.EntryValue">
+            <summary>
+            The value of the model entry
+            </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.DropDownAdapterBase.DisplayData(System.Object)">
+            <summary>
             <inheritdoc/>
-            <inheritdoc/>
+            Sets the dropdown object and the EntryValue from the model
+            Also calls the select dropdown item method
+            Adds the OnValueChanged listener
+            </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.DropDownAdapterBase.OnValueChanged(System.Int32)">
+            <summary>
+            Submits the dropdown selection
+            </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.DropDownAdapterBase.SubmitDropdownValue">
+            <summary>
+            Virtual overridable method for submitting values
+            </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.DropDownAdapterBase.GetDropdownData">
+            <summary>
+            Virtual Overridable Method for gettting dropdown data. Difference between dynamic vs enum dropdowns
+            </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.DropDownAdapterBase.SelectDropDownItem(System.Object)">
+            <summary>
+            Virtual overridable method for selecting dropdown data. Difference between dynamic vs enum dropdowns
+            </summary>
+        </member>
+        <member name="T:UIFramework.Adapters.EnumDropdownAdapter">
+            <summary>
+            Dropdown Adapter for enums
+            </summary>
+        </member>
+        <member name="F:UIFramework.Adapters.EnumDropdownAdapter.prefEnum">
+            <summary>
+            The enum type of the model value
+            </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.EnumDropdownAdapter.GetDropdownData">
+            <summary>
+            Gets the data from the enum to populate the dropdown
+            </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.EnumDropdownAdapter.SelectDropDownItem(System.Object)">
+            <summary>
+            Takes the boxedValue from the model and sets the dropdown value accordingly
+            This allows for enum selections that might not be in order 4
+            or doesn't start at 0
+            </summary>
         </member>
         <member name="M:UIFramework.Adapters.EnumDropdownAdapter.SubmitDropdownValue">
-            <inheritdoc/>
+            <summary>
+            Take the int from _indexToValue map corresponding to the index of the selection of the dropdown.
+            Convert that to an enum then submit it to the model
+            </summary>
+        </member>
+        <member name="T:UIFramework.Adapters.DynamicDopdownAdapter">
+            <summary>
+            Dropdown adapter for dynamic dropdowns
+            </summary>
+        </member>
+        <member name="P:UIFramework.Adapters.DynamicDopdownAdapter.DropdownContents">
+            <summary>
+            Get the UI Extension as a dynamic dropdown descriptor
+            </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.DynamicDopdownAdapter.GetDropdownData">
+            <summary>
+            Gets the data from the dynamic dropdown descriptor to populate the dropdown
+            </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.DynamicDopdownAdapter.SelectDropDownItem(System.Object)">
+            <summary>
+            Select the display name from dropdown contents that corresponds to the model boxed value
+            </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.DynamicDopdownAdapter.SubmitDropdownValue">
+            <summary>
+            Submit the value represented by the selected item in the dropdown
+            </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.DynamicDopdownAdapter.OnDestroy">
+            <summary>
+            Unsubscribe from the dropdown descriptor when this view gets destroyed
+            </summary>
         </member>
         <member name="M:UIFramework.Adapters.ButtonModelAdapter.DisplayContents">
             <inheritdoc/>

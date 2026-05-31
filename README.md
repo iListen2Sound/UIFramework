@@ -1,4 +1,5 @@
-<sup><sup> btw: The changelog doubles as a feature list </sup></sup>
+
+btw: [The changelog](https://github.com/iListen2Sound/UIFramework/blob/main/_Misc/ThunderstorePackage/Template/CHANGELOG.md) doubles as a feature list
 ### New in 0.10.3
 <details><summary>New feature: Added Text Input Behaviour Descriptors</summary>
 
@@ -140,7 +141,7 @@ https://melonwiki.xyz/#/modders/preferences?id=melon-preferences
 
 # Ongoing Development Disclosure
 This mod is in active development. The plan is to increase extensibility. 
-**<ins>Basic MelonPreferences registration is mostly stable and should be backwards compatible.</ins>** 
+**<ins>Basic MelonPreferences registration is mostly    stable and should be backwards compatible.</ins>** 
 So while advanced API usage will have a lot of changes for the time that this mod is in [Version 0.x.x](https://semver.org/#spec-item-4),
 mods that implement the basic use case of this framework don't have to worry about breaking in the future (as long as I don't mess up too bad). 
 
