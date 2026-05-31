@@ -1,5 +1,5 @@
 # UI Framework API overview
-UI Framework builds a UI for modders' configuration for their mods. Particularly MelonPreferences but hopefully expanded to more
+UI Framework builds a UI for modders' configuration for their mods. Particularly MelonPreferences, but hopefully it will be expanded to more
 ## MelonPreferences
 MelonPreferences are the built-in configuration and persistent storage system in MelonLoader. 
 
@@ -7,17 +7,17 @@ MelonPreferences are the built-in configuration and persistent storage system in
 
 ### Categories
 Categories are a base MelonPreferences feature to group entries together. 
-#### Variable declarotion
+#### Variable declaration
 ```cs 
 private MelonPreferences_Category TestCategory1;
 private MelonPreferences_Category TestCategory2;
 ```
-#### Intantiation
-You can have make your categories have a different display name to its actual identifier
-Please prefix your category identifiers with your mod name
+#### Instantiation
+You can make your categories have a different display name from its actual identifier
+Please prefix your category identifiers with your mod's name
 
 ```cs
-//* Please prefix your categories with your mod's name
+// Please prefix your categories with your mod's name
 TestCategory1 = MelonPreferences.CreateCategory("MyMod_TestCat1", "DisplayName 1");
 TestCategory2 = MelonPreferences.CreateCategory("MyMod_TestCat2", "DisplayName 2");
 ```
@@ -59,7 +59,7 @@ TestEntry21 = TestCategory2.CreateEntry("Entry 2-1", "0.5126", "Display Name 3",
 TestEntry22 = TestCategory2.CreateEntry("Entry 2-2", true, "Display Name 4", "Test bool");
 ```
 
-#### Acessing and modifying values:
+#### Accessing and modifying values:
 Entries are objects. You need to access their Value property to get or set the actual value. 
 ```cs
 string value1 = TestEntry11.Value;
@@ -81,13 +81,13 @@ This fires regardless of which category triggers it. You have to filter for your
 Once you have your MelonPreferences set up, registering to UI Framework is simple.
 Just call 
 ```cs
-UI.RegisterMelon(MelonBase modInstance, params MelonPreferences_Category[])
+UI.RegisterMelon(modInstance, params MelonPreferences_Category[])
 ```
 So `UI.RegisterMelon(this, TestCategory1, TestCategory2);`
 if you're calling it from your main MelonMod class.
 
 Your categories will display as tabs in the order that you put them in the parameter array 
-and your entries will show in the order thatw you created them.
+and your entries will show in the order that you created them.
 
 
 **For most usage, this will be enough.**
@@ -138,7 +138,7 @@ public class CustomValidator : ValueValidator
     }
 }
 ```
-But UI Framework already has its own default implementation that validates everything in the `UIFramework.UiExtensions` namespace as `DevaultValidator`.
+But UI Framework already has its own default implementation that validates everything in the `UIFramework.UiExtensions` namespace as `DefaultValidator`.
 </details>
 
 -----
@@ -169,7 +169,7 @@ But you can easily combine `ISliderDescriptor` and `IUserEditedNotifier` to make
 You do that by inheriting both into your custom validator
 
 ```cs
-//Assuming you still don't wanna do validation, you can just inherit from the DefaultValidatorClass
+//Assuming you still don't want to do validation, you can just inherit from the DefaultValidatorClass
 public class NotifyingSlider : DefaultValidator, ISliderDEscriptor, IUserEditedNotifier
 {
     public float Min {get; set;}
@@ -241,7 +241,7 @@ which is prone to errors.
 
 - DropdownItem: This is a simple class used to describe a dropdown option. It has a DisplayName and a Value property.
 The DisplayName is what the user sees in the dropdown and <u>***the Value property is the actual value that gets stored***</u> when the user
-selects that option, not the DropdownItem.
+selects that option, not the DropdownItem itself.
 - Item list: The list of `DropdownItem` objects that get displayed in the dropdown. 
 
 ***Creating a DropdownDescriptor***
