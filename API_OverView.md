@@ -110,6 +110,21 @@ public enum Example
 }
 ```
 -----
+
+## UI Refresh Request
+You can request a refresh from the UI through the MelonModel object which is returned by the `UI.RegisterMelon()` function and can be assigned to a variable
+```cs
+MelonModel MyModel = UI.RegisterMelon(this, myCategory1, myCategory2);
+```
+If you want to refresh the UI if, for example, you updated an EditedValue through code and you want the UI to reflect that change, you can call 
+```cs
+MyModel.RequestUpdateUI();
+```
+And this will cause UI Framework to update all the UI elements on the next `Update()` if your mod is the currently selected one.
+
+-----
+
+
 ## UI Presentation control: Validator Extensions
 
 UI Framework piggybacks off of the existing MelonPreferences custom validator system. 
