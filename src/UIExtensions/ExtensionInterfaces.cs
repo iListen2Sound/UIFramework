@@ -28,7 +28,7 @@ namespace UIFramework.UiExtensions
 		/// Character that shows instead on password fields
 		/// Maps to TMP_InputField.asteriskChar
 		/// </summary>
-		public char PaswordChar { get; set; }
+		public char PasswordChar { get; set; }
 		/// <summary>
 		/// Number of characters to limit the text input to.
 		/// Maps to TMP_InputField.characterLimit
@@ -150,6 +150,15 @@ namespace UIFramework.UiExtensions
 		///
 		/// </summary>
 		public int DecimalPlaces { get; set; }
+		/// <summary>
+		/// Added in 0.10.3. Defualt implementation so it doesn't break existing implementations.
+		/// 
+		/// </summary>
+		public Action<float> OnSliderValueChanged	
+		{
+			get => (value) => { };
+			set { }
+		}
 	}
 
 

@@ -23,7 +23,7 @@ namespace UIFramework.UiExtensions
 	{
 		public TMP_InputField.ContentType ContentType { get; set; } = TMP_InputField.ContentType.Standard;
 		/// <inheritdoc/>
-		public char PaswordChar { get; set; } = '•';
+		public char PasswordChar { get; set; } = '•';
 		/// <inheritdoc/>
 		public int CharacterLimit { get; set; } = 0;
 		/// <inheritdoc/>
@@ -118,6 +118,10 @@ namespace UIFramework.UiExtensions
 		/// Decimal Places. Defaults 5
 		/// </summary>
 		public int DecimalPlaces { get; set; } = 1;
+		/// <summary>
+		/// Triggered when the slider value changes.
+		/// </summary>
+		public Action<float> OnSliderValueChanged { get; set; }
 
 		///<inheritdoc/>
 		public Action<object> OnUserEdit { get; set;  }

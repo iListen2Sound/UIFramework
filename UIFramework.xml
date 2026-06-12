@@ -745,7 +745,7 @@
         <member name="T:UIFramework.UiExtensions.TextInputBehaviorDescriptor">
             <inheritdoc cref="T:UIFramework.UiExtensions.ITextInputBehaviorDescriptor"/>
         </member>
-        <member name="P:UIFramework.UiExtensions.TextInputBehaviorDescriptor.PaswordChar">
+        <member name="P:UIFramework.UiExtensions.TextInputBehaviorDescriptor.PasswordChar">
             <inheritdoc/>
         </member>
         <member name="P:UIFramework.UiExtensions.TextInputBehaviorDescriptor.CharacterLimit">
@@ -818,6 +818,11 @@
             Decimal Places. Defaults 5
             </summary>
         </member>
+        <member name="P:UIFramework.UiExtensions.SliderDescriptor.OnSliderValueChanged">
+            <summary>
+            Triggered when the slider value changes.
+            </summary>
+        </member>
         <member name="P:UIFramework.UiExtensions.SliderDescriptor.OnUserEdit">
             <inheritdoc/>
         </member>
@@ -875,7 +880,7 @@
             </summary>
             <remarks>Implemented</remarks>
         </member>
-        <member name="P:UIFramework.UiExtensions.ITextInputBehaviorDescriptor.PaswordChar">
+        <member name="P:UIFramework.UiExtensions.ITextInputBehaviorDescriptor.PasswordChar">
             <summary>
             Character that shows instead on password fields
             Maps to TMP_InputField.asteriskChar
@@ -984,6 +989,12 @@
              <summary>
             
              </summary>
+        </member>
+        <member name="P:UIFramework.UiExtensions.ISliderDescriptor.OnSliderValueChanged">
+            <summary>
+            Added in 0.10.3. Defualt implementation so it doesn't break existing implementations.
+            
+            </summary>
         </member>
         <member name="T:UIFramework.UiExtensions.IUserEditedNotifier">
             <summary>

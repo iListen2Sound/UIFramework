@@ -7,6 +7,11 @@ This lets you set `ContentType`, `CharacterLimit`, and `IsReadOnly` properties.
 You also get a `PasswordChar` property that you can use when you set your content type to password
 </details>
 
+<details><summary>New feature: Added OnSliderValueChanged event </summary>
+The ISliderDescriptor now has an OnSliderValueChanged event that you can subscribe to 
+if you wanna be notified of
+</details>
+
 ### New in 0.10.1/2
 <details><summary>New feature: Made resize handles visible</summary>
 

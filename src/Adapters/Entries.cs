@@ -191,7 +191,7 @@ namespace UIFramework.Adapters
 				TextField.contentType = BehaviorDescriptor.ContentType;
 				TextField.characterLimit = BehaviorDescriptor.CharacterLimit;
 				TextField.readOnly = BehaviorDescriptor.IsReadOnly;
-				TextField.asteriskChar = BehaviorDescriptor.PaswordChar;
+				TextField.asteriskChar = BehaviorDescriptor.PasswordChar;
 			}
 
 			boxedValueType = boxedValue.GetType();
@@ -421,6 +421,7 @@ namespace UIFramework.Adapters
 		protected void OnValueChanged(float newValue)
 		{
 			TextField.text = newValue.ToString(TextField.contentType == TMP_InputField.ContentType.IntegerNumber ? "F0" : "F" + SliderSettings?.DecimalPlaces);
+			SliderSettings?.OnSliderValueChanged?.Invoke((float)newValue);
 			//ApplyValueToPref();
 			//Debug.Log($"Slider value changed to {newValue}", true);
 		}
