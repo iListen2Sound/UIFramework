@@ -4,7 +4,7 @@ using MelonLoader.Preferences;
 using UIFramework.Models;
 using UnityEngine;
 
-namespace UIFramework.UIExtensions;
+namespace UIFramework.UiExtensions;
 
 /// <summary>
 /// Default implementation of IRefreshInhibitor

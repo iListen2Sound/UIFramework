@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace UIFramework.UIExtensions;
+namespace UIFramework.UiExtensions;
 
 /// <summary>
 /// Describes properties for text inputs that define its behavior.

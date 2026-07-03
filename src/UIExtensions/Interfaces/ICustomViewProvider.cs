@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace UIFramework.UIExtensions;
+namespace UIFramework.UiExtensions;
 
 /// <summary>
 /// Provide your own custom entry presentation.

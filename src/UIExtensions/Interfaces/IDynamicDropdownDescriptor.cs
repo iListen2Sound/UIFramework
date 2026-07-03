@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace UIFramework.UIExtensions;
+namespace UIFramework.UiExtensions;
 
 ///	<summary>
 /// Presents the entry as a dropdown and describes the options within it.

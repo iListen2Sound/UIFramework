@@ -4,7 +4,7 @@ using MelonLoader.Preferences;
 using UIFramework.Models;
 using UnityEngine;
 
-namespace UIFramework.UIExtensions;
+namespace UIFramework.UiExtensions;
 
 /// <inheritdoc cref="ITextInputBehaviorDescriptor"/>
 public class TextInputBehaviorDescriptor : DefaultValidator, ITextInputBehaviorDescriptor

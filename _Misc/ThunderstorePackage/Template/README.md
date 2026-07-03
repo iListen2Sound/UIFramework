@@ -1,6 +1,9 @@
 
 btw: [The changelog](https://github.com/iListen2Sound/UIFramework/blob/main/_Misc/ThunderstorePackage/Template/CHANGELOG.md) doubles as a feature list
+
 ### New in 0.10.3
+<details><summary> README changes</summary></details>
+
 <details><summary>New feature: Added Text Input Behaviour Descriptors</summary>
 
 This lets you set `ContentType`, `CharacterLimit`, and `IsReadOnly` properties.
@@ -87,7 +90,6 @@ The save button writes it to the file for permanent storage. Closing your game m
 
 A (more) detailed API Overview exists over at https://github.com/Reverb-And-Spice/UIFramework/blob/main/API_OverView.md
 ## Basic Registration
-Add `[assembly: MelonAdditionalDependencies("UIFramework")]` to your AssemblyInfo. This prevents your mod from calling on UIFramework before it's been initialized.
 
 [Define](#if-you-havent-used-melonpreferences-before) your MelonPreferences in `OnInitializeMelon` and then register them to the UI.
 ```cs

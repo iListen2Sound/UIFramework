@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 
-namespace UIFramework.UIExtensions;
+namespace UIFramework.UiExtensions;
 ///<summary>
 /// Empty Marker Interface to signify that a class is a UI extension
 ///</summary>
