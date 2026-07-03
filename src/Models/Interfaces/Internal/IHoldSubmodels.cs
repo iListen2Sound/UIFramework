@@ -1,5 +1,3 @@
-using UnityEngine;
-using UIFramework.Adapters;
 namespace UIFramework.Models;
 /// <summary>
 /// Models that contain submodels. Generally these are mods and categories representing tabs

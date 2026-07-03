@@ -1,5 +1,4 @@
 using UnityEngine;
-using UIFramework.Adapters;
 namespace UIFramework.Models;
 /// <summary>
 /// Implemented by all models

@@ -1,7 +1,6 @@
-using MelonLoader;
-using UnityEngine;
-using UIFramework.UiExtensions;
 using UIFramework.Adapters;
+using UIFramework.UiExtensions;
+using UnityEngine;
 namespace UIFramework.Models;
 
 /// <summary>

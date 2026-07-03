@@ -1,9 +1,9 @@
 ﻿using Il2CppTMPro;
 using MelonLoader;
 using MelonLoader.Logging;
+using UIFramework.Models;
 using UnityEngine.Events;
 using UnityEngine.UI;
-using UIFramework.Models;
 namespace UIFramework.Adapters;
 
 [RegisterTypeInIl2Cpp]

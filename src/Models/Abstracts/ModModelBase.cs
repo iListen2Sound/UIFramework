@@ -1,7 +1,5 @@
 using MelonLoader;
 using UnityEngine;
-using UIFramework.UiExtensions;
-using UIFramework.Adapters;
 namespace UIFramework.Models;
 
 public abstract class ModModelBase : SelectableModelBase

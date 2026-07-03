@@ -1,5 +1,3 @@
-using UnityEngine;
-using UIFramework.Adapters;
 namespace UIFramework.Models;
 /// <summary>
 /// Goes on the main panel. Contains controls for manipulating preferences or just general UI controls

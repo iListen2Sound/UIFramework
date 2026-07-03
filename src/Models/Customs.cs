@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using UIFramework.Adapters;
+﻿using UIFramework.Adapters;
+using UnityEngine;
 
 
 namespace UIFramework.Models

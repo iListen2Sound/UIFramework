@@ -374,11 +374,6 @@
             <param name="targetType"></param>
             <returns></returns>
         </member>
-        <member name="T:UIFramework.Adapters.EntryState">
-             <summary>
-            
-             </summary>
-        </member>
         <member name="T:UIFramework.Adapters.CategoryListAdapter">
              <summary>
             

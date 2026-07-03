@@ -1,5 +1,3 @@
-using UnityEngine;
-using UIFramework.Adapters;
 namespace UIFramework.Models;
 /// <summary>
 /// implemented by models that store data
