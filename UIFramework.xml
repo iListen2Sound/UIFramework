@@ -4,63 +4,24 @@
         <name>UIFramework</name>
     </assembly>
     <members>
-        <member name="P:UIFramework.Adapters.PrefEntryAdapterBase.DescriptionText">
+        <member name="T:UIFramework.Adapters.BoolToggleAdapter">
             <summary>
-            Sets the description text
+            <inheritdoc/>
+            Adapter for booleans shown as toggles
             </summary>
         </member>
-        <member name="P:UIFramework.Adapters.PrefEntryAdapterBase.DisplayName">
+        <member name="P:UIFramework.Adapters.BoolToggleAdapter.Toggle">
             <summary>
-            Sets the identifier text
+            The actual toggle control component
             </summary>
         </member>
-        <member name="P:UIFramework.Adapters.PrefEntryAdapterBase.EntryModel">
+        <member name="P:UIFramework.Adapters.BoolToggleAdapter.EnteredValue">
             <summary>
-            The model for the entry
+            Gets the value of the toggle
             </summary>
         </member>
-        <member name="M:UIFramework.Adapters.PrefEntryAdapterBase.PreSaveAction">
-            <summary>
-            This is called when the Save button is pressed. Override to create custom behaviour.
-            </summary>
-            <remarks>Generally MelonPreferences are saved from the category, not the indivial entries.</remarks>
-        </member>
-        <member name="M:UIFramework.Adapters.PrefEntryAdapterBase.ModelSet">
-            <summary>
-            Called when the model has been set. Calls DisplayMetadata and DisplayContents in that order
-            </summary>
-        </member>
-        <member name="M:UIFramework.Adapters.PrefEntryAdapterBase.DisplayMetadata">
-            <summary>
-            Displays the entry model's display name and description by invoking DisplayEntryInfo.
-            </summary>
-        </member>
-        <member name="M:UIFramework.Adapters.PrefEntryAdapterBase.DisplayEntryInfo(System.String,System.String)">
-            <summary>
-            Displays the name and description on to the View object
-            </summary>
-            <param name="displayName"></param>
-            <param name="description"></param>
-        </member>
-        <member name="M:UIFramework.Adapters.PrefEntryAdapterBase.DisplayContents">
-            <summary>
-            Displays actual data content
-            </summary>
-        </member>
-        <member name="M:UIFramework.Adapters.PrefEntryAdapterBase.ToTomlString(System.Object)">
-            <summary>
-            Serializes an object into the toml string representation of that object
-            </summary>
-            <param name="input"></param>
-            <returns></returns>
-        </member>
-        <member name="M:UIFramework.Adapters.PrefEntryAdapterBase.FromTomlString(System.String,System.Type)">
-            <summary>
-            Parses a toml string into an object of type with its value.
-            </summary>
-            <param name="input"></param>
-            <param name="targetType"></param>
-            <returns></returns>
+        <member name="M:UIFramework.Adapters.BoolToggleAdapter.DisplayData(System.Object)">
+            <inheritdoc/>
         </member>
         <member name="T:UIFramework.Adapters.DataEntryAdapter">
             <summary>
@@ -102,52 +63,114 @@
             <param name="value"></param>
             <returns></returns>
         </member>
-        <member name="T:UIFramework.Adapters.TextEntryAdapter">
+        <member name="T:UIFramework.Adapters.DynamicDopdownAdapter">
             <summary>
-            Base controller for text fields
+            Dropdown adapter for dynamic dropdowns
             </summary>
         </member>
-        <member name="P:UIFramework.Adapters.TextEntryAdapter.TextField">
+        <member name="P:UIFramework.Adapters.DynamicDopdownAdapter.DropdownContents">
             <summary>
-            Returns the textfield
+            Get the UI Extension as a dynamic dropdown descriptor
             </summary>
         </member>
-        <member name="P:UIFramework.Adapters.TextEntryAdapter.PlaceHolderText">
+        <member name="M:UIFramework.Adapters.DynamicDopdownAdapter.GetDropdownData">
             <summary>
-            Sets the placeholder text in the TextField
+            Gets the data from the dynamic dropdown descriptor to populate the dropdown
             </summary>
         </member>
-        <member name="P:UIFramework.Adapters.TextEntryAdapter.BehaviorDescriptor">
+        <member name="M:UIFramework.Adapters.DynamicDopdownAdapter.SelectDropDownItem(System.Object)">
             <summary>
-            A reference to the UI Extension as a behavior descriptor
+            Select the display name from dropdown contents that corresponds to the model boxed value
             </summary>
         </member>
-        <member name="M:UIFramework.Adapters.TextEntryAdapter.DisplayData(System.Object)">
+        <member name="M:UIFramework.Adapters.DynamicDopdownAdapter.SubmitDropdownValue">
+            <summary>
+            Submit the value represented by the selected item in the dropdown
+            </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.DynamicDopdownAdapter.OnDestroy">
+            <summary>
+            Unsubscribe from the dropdown descriptor when this view gets destroyed
+            </summary>
+        </member>
+        <member name="T:UIFramework.Adapters.EnumDropdownAdapter">
+            <summary>
+            Dropdown Adapter for enums
+            </summary>
+        </member>
+        <member name="F:UIFramework.Adapters.EnumDropdownAdapter.prefEnum">
+            <summary>
+            The enum type of the model value
+            </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.EnumDropdownAdapter.GetDropdownData">
+            <summary>
+            Gets the data from the enum to populate the dropdown
+            </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.EnumDropdownAdapter.SelectDropDownItem(System.Object)">
+            <summary>
+            Takes the boxedValue from the model and sets the dropdown value accordingly
+            This allows for enum selections that might not be in order 4
+            or doesn't start at 0
+            </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.EnumDropdownAdapter.SubmitDropdownValue">
+            <summary>
+            Take the int from _indexToValue map corresponding to the index of the selection of the dropdown.
+            Convert that to an enum then submit it to the model
+            </summary>
+        </member>
+        <member name="T:UIFramework.Adapters.DropDownAdapterBase">
+            <summary>
+            The base class for dropdown adapters
+            </summary>
+        </member>
+        <member name="F:UIFramework.Adapters.DropDownAdapterBase._indexToValueMap">
+            <summary>
+            List of ints serving to map the selected index to the the actual entry value of that index in the dropdown
+            </summary>
+        </member>
+        <member name="F:UIFramework.Adapters.DropDownAdapterBase.dropdown">
+            <summary>
+            The actual dropdown control
+            </summary>
+        </member>
+        <member name="P:UIFramework.Adapters.DropDownAdapterBase.EntryValue">
+            <summary>
+            The value of the model entry
+            </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.DropDownAdapterBase.DisplayData(System.Object)">
             <summary>
             <inheritdoc/>
-            Assigns the behavior descriptor properties if present. 
+            Sets the dropdown object and the EntryValue from the model
+            Also calls the select dropdown item method
+            Adds the OnValueChanged listener
             </summary>
         </member>
-        <member name="M:UIFramework.Adapters.TextEntryAdapter.ParseThenSubmit">
+        <member name="M:UIFramework.Adapters.DropDownAdapterBase.OnValueChanged(System.Int32)">
             <summary>
-            Parse the contents in the text field through toml then submit it.
+            Submits the dropdown selection
             </summary>
         </member>
-        <member name="M:UIFramework.Adapters.TextEntryAdapter.EditStart(System.String)">
+        <member name="M:UIFramework.Adapters.DropDownAdapterBase.SubmitDropdownValue">
             <summary>
-            Sets the text to non-italicized font style when editing. 
-            Replaces the need for managing the placeholder text
+            Virtual overridable method for submitting values
             </summary>
         </member>
-        <member name="M:UIFramework.Adapters.TextEntryAdapter.EditEnd(System.String)">
+        <member name="M:UIFramework.Adapters.DropDownAdapterBase.GetDropdownData">
             <summary>
-            Sets the text to italicized when done editing
+            Virtual Overridable Method for gettting dropdown data. Difference between dynamic vs enum dropdowns
             </summary>
         </member>
-        <member name="M:UIFramework.Adapters.TextEntryAdapter.Start">
+        <member name="M:UIFramework.Adapters.DropDownAdapterBase.SelectDropDownItem(System.Object)">
             <summary>
-            Unity callback. Subscribes EditStart and EditEnd to the appropriate events
+            Virtual overridable method for selecting dropdown data. Difference between dynamic vs enum dropdowns
             </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.ButtonModelAdapter.DisplayContents">
+            <inheritdoc/>
         </member>
         <member name="T:UIFramework.Adapters.NumericEntryAdapter">
             <summary>
@@ -246,135 +269,117 @@
             able to edit one frame.
             </summary>
         </member>
-        <member name="T:UIFramework.Adapters.BoolToggleAdapter">
+        <member name="T:UIFramework.Adapters.TextEntryAdapter">
+            <summary>
+            Base controller for text fields
+            </summary>
+        </member>
+        <member name="P:UIFramework.Adapters.TextEntryAdapter.TextField">
+            <summary>
+            Returns the textfield
+            </summary>
+        </member>
+        <member name="P:UIFramework.Adapters.TextEntryAdapter.PlaceHolderText">
+            <summary>
+            Sets the placeholder text in the TextField
+            </summary>
+        </member>
+        <member name="P:UIFramework.Adapters.TextEntryAdapter.BehaviorDescriptor">
+            <summary>
+            A reference to the UI Extension as a behavior descriptor
+            </summary>
+        </member>
+        <member name="M:UIFramework.Adapters.TextEntryAdapter.DisplayData(System.Object)">
             <summary>
             <inheritdoc/>
-            Adapter for booleans shown as toggles
+            Assigns the behavior descriptor properties if present. 
             </summary>
         </member>
-        <member name="P:UIFramework.Adapters.BoolToggleAdapter.Toggle">
+        <member name="M:UIFramework.Adapters.TextEntryAdapter.ParseThenSubmit">
             <summary>
-            The actual toggle control component
+            Parse the contents in the text field through toml then submit it.
             </summary>
         </member>
-        <member name="P:UIFramework.Adapters.BoolToggleAdapter.EnteredValue">
+        <member name="M:UIFramework.Adapters.TextEntryAdapter.EditStart(System.String)">
             <summary>
-            Gets the value of the toggle
+            Sets the text to non-italicized font style when editing. 
+            Replaces the need for managing the placeholder text
             </summary>
         </member>
-        <member name="M:UIFramework.Adapters.BoolToggleAdapter.DisplayData(System.Object)">
-            <inheritdoc/>
-        </member>
-        <member name="T:UIFramework.Adapters.DropDownAdapterBase">
+        <member name="M:UIFramework.Adapters.TextEntryAdapter.EditEnd(System.String)">
             <summary>
-            The base class for dropdown adapters
+            Sets the text to italicized when done editing
             </summary>
         </member>
-        <member name="F:UIFramework.Adapters.DropDownAdapterBase._indexToValueMap">
+        <member name="M:UIFramework.Adapters.TextEntryAdapter.Start">
             <summary>
-            List of ints serving to map the selected index to the the actual entry value of that index in the dropdown
+            Unity callback. Subscribes EditStart and EditEnd to the appropriate events
             </summary>
         </member>
-        <member name="F:UIFramework.Adapters.DropDownAdapterBase.dropdown">
+        <member name="P:UIFramework.Adapters.PrefEntryAdapterBase.DescriptionText">
             <summary>
-            The actual dropdown control
+            Sets the description text
             </summary>
         </member>
-        <member name="P:UIFramework.Adapters.DropDownAdapterBase.EntryValue">
+        <member name="P:UIFramework.Adapters.PrefEntryAdapterBase.DisplayName">
             <summary>
-            The value of the model entry
+            Sets the identifier text
             </summary>
         </member>
-        <member name="M:UIFramework.Adapters.DropDownAdapterBase.DisplayData(System.Object)">
+        <member name="P:UIFramework.Adapters.PrefEntryAdapterBase.EntryModel">
             <summary>
-            <inheritdoc/>
-            Sets the dropdown object and the EntryValue from the model
-            Also calls the select dropdown item method
-            Adds the OnValueChanged listener
+            The model for the entry
             </summary>
         </member>
-        <member name="M:UIFramework.Adapters.DropDownAdapterBase.OnValueChanged(System.Int32)">
+        <member name="M:UIFramework.Adapters.PrefEntryAdapterBase.PreSaveAction">
             <summary>
-            Submits the dropdown selection
+            This is called when the Save button is pressed. Override to create custom behaviour.
             </summary>
+            <remarks>Generally MelonPreferences are saved from the category, not the indivial entries.</remarks>
         </member>
-        <member name="M:UIFramework.Adapters.DropDownAdapterBase.SubmitDropdownValue">
+        <member name="M:UIFramework.Adapters.PrefEntryAdapterBase.ModelSet">
             <summary>
-            Virtual overridable method for submitting values
+            Called when the model has been set. Calls DisplayMetadata and DisplayContents in that order
             </summary>
         </member>
-        <member name="M:UIFramework.Adapters.DropDownAdapterBase.GetDropdownData">
+        <member name="M:UIFramework.Adapters.PrefEntryAdapterBase.DisplayMetadata">
             <summary>
-            Virtual Overridable Method for gettting dropdown data. Difference between dynamic vs enum dropdowns
+            Displays the entry model's display name and description by invoking DisplayEntryInfo.
             </summary>
         </member>
-        <member name="M:UIFramework.Adapters.DropDownAdapterBase.SelectDropDownItem(System.Object)">
+        <member name="M:UIFramework.Adapters.PrefEntryAdapterBase.DisplayEntryInfo(System.String,System.String)">
             <summary>
-            Virtual overridable method for selecting dropdown data. Difference between dynamic vs enum dropdowns
+            Displays the name and description on to the View object
             </summary>
+            <param name="displayName"></param>
+            <param name="description"></param>
         </member>
-        <member name="T:UIFramework.Adapters.EnumDropdownAdapter">
+        <member name="M:UIFramework.Adapters.PrefEntryAdapterBase.DisplayContents">
             <summary>
-            Dropdown Adapter for enums
+            Displays actual data content
             </summary>
         </member>
-        <member name="F:UIFramework.Adapters.EnumDropdownAdapter.prefEnum">
+        <member name="M:UIFramework.Adapters.PrefEntryAdapterBase.ToTomlString(System.Object)">
             <summary>
-            The enum type of the model value
+            Serializes an object into the toml string representation of that object
             </summary>
+            <param name="input"></param>
+            <returns></returns>
         </member>
-        <member name="M:UIFramework.Adapters.EnumDropdownAdapter.GetDropdownData">
+        <member name="M:UIFramework.Adapters.PrefEntryAdapterBase.FromTomlString(System.String,System.Type)">
             <summary>
-            Gets the data from the enum to populate the dropdown
+            Parses a toml string into an object of type with its value.
             </summary>
-        </member>
-        <member name="M:UIFramework.Adapters.EnumDropdownAdapter.SelectDropDownItem(System.Object)">
-            <summary>
-            Takes the boxedValue from the model and sets the dropdown value accordingly
-            This allows for enum selections that might not be in order 4
-            or doesn't start at 0
-            </summary>
-        </member>
-        <member name="M:UIFramework.Adapters.EnumDropdownAdapter.SubmitDropdownValue">
-            <summary>
-            Take the int from _indexToValue map corresponding to the index of the selection of the dropdown.
-            Convert that to an enum then submit it to the model
-            </summary>
-        </member>
-        <member name="T:UIFramework.Adapters.DynamicDopdownAdapter">
-            <summary>
-            Dropdown adapter for dynamic dropdowns
-            </summary>
-        </member>
-        <member name="P:UIFramework.Adapters.DynamicDopdownAdapter.DropdownContents">
-            <summary>
-            Get the UI Extension as a dynamic dropdown descriptor
-            </summary>
-        </member>
-        <member name="M:UIFramework.Adapters.DynamicDopdownAdapter.GetDropdownData">
-            <summary>
-            Gets the data from the dynamic dropdown descriptor to populate the dropdown
-            </summary>
-        </member>
-        <member name="M:UIFramework.Adapters.DynamicDopdownAdapter.SelectDropDownItem(System.Object)">
-            <summary>
-            Select the display name from dropdown contents that corresponds to the model boxed value
-            </summary>
-        </member>
-        <member name="M:UIFramework.Adapters.DynamicDopdownAdapter.SubmitDropdownValue">
-            <summary>
-            Submit the value represented by the selected item in the dropdown
-            </summary>
-        </member>
-        <member name="M:UIFramework.Adapters.DynamicDopdownAdapter.OnDestroy">
-            <summary>
-            Unsubscribe from the dropdown descriptor when this view gets destroyed
-            </summary>
-        </member>
-        <member name="M:UIFramework.Adapters.ButtonModelAdapter.DisplayContents">
-            <inheritdoc/>
+            <param name="input"></param>
+            <param name="targetType"></param>
+            <returns></returns>
         </member>
         <member name="T:UIFramework.Adapters.EntryState">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="T:UIFramework.Adapters.CategoryListAdapter">
              <summary>
             
              </summary>
@@ -423,11 +428,6 @@
             
              </summary>
         </member>
-        <member name="T:UIFramework.Adapters.CategoryListAdapter">
-             <summary>
-            
-             </summary>
-        </member>
         <member name="T:UIFramework.Adapters.PrefListAdapter">
             <summary>
             Main body of the UI. Lists individual preferences
@@ -441,21 +441,21 @@
         <member name="M:UIFramework.Adapters.PrefListAdapter.DiscardAction">
             <inheritdoc/>
         </member>
-        <member name="M:UIFramework.Adapters.TabButtonController.OnSelect">
+        <member name="T:UIFramework.Adapters.CategoryTabView">
             <summary>
-            Runs when the button is clicked. Implement this in inheriting classes.
             </summary>
-            <exception cref="T:System.NotImplementedException"></exception>
-            <remarks>IL2CPP does not like abstract methods 😭</remarks>
         </member>
         <member name="T:UIFramework.Adapters.ModButtonView">
              <summary>
             
              </summary>
         </member>
-        <member name="T:UIFramework.Adapters.CategoryTabView">
+        <member name="M:UIFramework.Adapters.TabButtonController.OnSelect">
             <summary>
+            Runs when the button is clicked. Implement this in inheriting classes.
             </summary>
+            <exception cref="T:System.NotImplementedException"></exception>
+            <remarks>IL2CPP does not like abstract methods 😭</remarks>
         </member>
         <member name="T:UIFramework.Adapters.WindowCoordinator">
              <summary>
