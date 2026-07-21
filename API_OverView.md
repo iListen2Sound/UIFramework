@@ -59,12 +59,7 @@ TestEntry21 = TestCategory2.CreateEntry("Entry 2-1", "0.5126", "Display Name 3",
 TestEntry22 = TestCategory2.CreateEntry("Entry 2-2", true, "Display Name 4", "Test bool");
 ```
 
-#### Accessing and modifying values:
-Entries are objects. You need to access their Value property to get or set the actual value. 
-```cs
-string value1 = TestEntry11.Value;
-TestEntry11.Value = "New Value";
-```
+
 </details>
 
 
@@ -73,6 +68,15 @@ TestEntry11.Value = "New Value";
 Must be subscribed with via the `.Subscribe()` method instead of `+=`
 - `MelonPreferences.OnPreferencesSaved`: Event that fires whenever preferences are saved.
 This fires regardless of which category triggers it. You have to filter for your file path to only respond to your category saving
+
+### Accessing and modifying values:
+- `MelonPreferences_Entry.Value`: Entries are objects. You need to access their Value property to get or set the actual value. If you add a validator, the validator will check if the newly entered value is valid. If not, it does not get assigned to the property.
+```cs
+string value1 = TestEntry11.Value;
+TestEntry11.Value = "New Value";
+```
+- `MelonPreferences_Entry.EditedValue`: This is the temporary storage for values the user has entered into UI Framework. Clicking save will commit the `EditedValue` into the `Value`. Data stored in the `EditedValue` property doesn't go through validation. 
+
 
 -----
 ## UI Framework
